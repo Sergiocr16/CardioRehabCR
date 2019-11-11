@@ -1,0 +1,25 @@
+{
+  "cardioRehabCrApp": {
+    "incomeDiagnosisPatient": {
+      "home": {
+        "title": "Income Diagnosis Patients",
+        "createLabel": "Crear nuevo Income Diagnosis Patient",
+        "createOrEditLabel": "Crear o editar Income Diagnosis Patient",
+        "notFound": "No Income Diagnosis Patients found"
+      },
+      "created": "Un nuevo Income Diagnosis Patient ha sido creado con el identificador {{ param }}",
+      "updated": "Un Income Diagnosis Patient ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Income Diagnosis Patient ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Income Diagnosis Patient {{ id }}?"
+      },
+      "detail": {
+        "title": "Income Diagnosis Patient"
+      },
+      "description": "Description",
+      "incomeDiagnosisId": "Income Diagnosis Id",
+      "exist": "Exist",
+      "initialAssessment": "Initial Assessment"
+    }
+  }
+}

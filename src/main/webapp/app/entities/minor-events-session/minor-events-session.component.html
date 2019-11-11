@@ -1,0 +1,68 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="cardioRehabCrApp.minorEventsSession.home.title">Minor Events Sessions</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-minor-events-session" [routerLink]="['/minor-events-session/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="cardioRehabCrApp.minorEventsSession.home.createLabel">
+            Create a new Minor Events Session
+            </span>
+        </button>
+    </h2>
+    <jhi-alert-error></jhi-alert-error>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="alert alert-warning" *ngIf="minorEventsSessions?.length === 0">
+        <span jhiTranslate="cardioRehabCrApp.minorEventsSession.home.notFound">No minorEventsSessions found</span>
+    </div>
+    <div class="table-responsive" *ngIf="minorEventsSessions?.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
+            <th scope="col"  jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="description"><span jhiTranslate="cardioRehabCrApp.minorEventsSession.description">Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="minorEventId"><span jhiTranslate="cardioRehabCrApp.minorEventsSession.minorEventId">Minor Event Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="exist"><span jhiTranslate="cardioRehabCrApp.minorEventsSession.exist">Exist</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="sessionId"><span jhiTranslate="cardioRehabCrApp.minorEventsSession.session">Session</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+            <tr *ngFor="let minorEventsSession of minorEventsSessions ;trackBy: trackId">
+                <td><a [routerLink]="['/minor-events-session', minorEventsSession.id, 'view' ]">{{minorEventsSession.id}}</a></td>
+                <td>{{minorEventsSession.description}}</td>
+                <td>{{minorEventsSession.minorEventId}}</td>
+                <td>{{minorEventsSession.exist}}</td>
+                <td>
+                    <div *ngIf="minorEventsSession.sessionId">
+                        <a [routerLink]="['/session', minorEventsSession.sessionId , 'view' ]" >{{minorEventsSession.sessionId}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button type="submit"
+                                [routerLink]="['/minor-events-session', minorEventsSession.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/minor-events-session', minorEventsSession.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/minor-events-session', { outlets: { popup: minorEventsSession.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
