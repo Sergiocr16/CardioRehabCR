@@ -1,0 +1,68 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="cardioRehabCrApp.mayorEvent.home.title">Mayor Events</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-mayor-event" [routerLink]="['/mayor-event/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="cardioRehabCrApp.mayorEvent.home.createLabel">
+            Create a new Mayor Event
+            </span>
+        </button>
+    </h2>
+    <jhi-alert-error></jhi-alert-error>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="alert alert-warning" *ngIf="mayorEvents?.length === 0">
+        <span jhiTranslate="cardioRehabCrApp.mayorEvent.home.notFound">No mayorEvents found</span>
+    </div>
+    <div class="table-responsive" *ngIf="mayorEvents?.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
+            <th scope="col"  jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="description"><span jhiTranslate="cardioRehabCrApp.mayorEvent.description">Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="code"><span jhiTranslate="cardioRehabCrApp.mayorEvent.code">Code</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="deleted"><span jhiTranslate="cardioRehabCrApp.mayorEvent.deleted">Deleted</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="rehabilitationCenterId"><span jhiTranslate="cardioRehabCrApp.mayorEvent.rehabilitationCenter">Rehabilitation Center</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+            <tr *ngFor="let mayorEvent of mayorEvents ;trackBy: trackId">
+                <td><a [routerLink]="['/mayor-event', mayorEvent.id, 'view' ]">{{mayorEvent.id}}</a></td>
+                <td>{{mayorEvent.description}}</td>
+                <td>{{mayorEvent.code}}</td>
+                <td>{{mayorEvent.deleted}}</td>
+                <td>
+                    <div *ngIf="mayorEvent.rehabilitationCenterId">
+                        <a [routerLink]="['/rehabilitation-center', mayorEvent.rehabilitationCenterId , 'view' ]" >{{mayorEvent.rehabilitationCenterId}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button type="submit"
+                                [routerLink]="['/mayor-event', mayorEvent.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/mayor-event', mayorEvent.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/mayor-event', { outlets: { popup: mayorEvent.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

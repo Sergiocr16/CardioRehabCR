@@ -14,6 +14,42 @@
     <property name="uuidType" value="varchar(36)" dbms="h2, mysql, mariadb"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163526_added_entity_Patient.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163527_added_entity_InitialAssessment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163528_added_entity_IncomeDiagnosisPatient.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163529_added_entity_IncomeDiagnosis.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163530_added_entity_Comorbiditie.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163531_added_entity_ComorbiditiesPatient.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163532_added_entity_RehabilitationCenter.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163533_added_entity_RehabilitationGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163534_added_entity_Session.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163535_added_entity_MinorEvent.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163536_added_entity_NonSpecificPain.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163537_added_entity_MayorEvent.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163538_added_entity_DepressiveSymptom.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163539_added_entity_NonSpecificPainsSession.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163540_added_entity_DepressiveSymptomsSession.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163541_added_entity_MinorEventsSession.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163542_added_entity_MayorEventsSession.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163543_added_entity_FinalAssessment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163544_added_entity_AppUser.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20191111163527_added_entity_constraints_InitialAssessment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163528_added_entity_constraints_IncomeDiagnosisPatient.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163529_added_entity_constraints_IncomeDiagnosis.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163530_added_entity_constraints_Comorbiditie.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163531_added_entity_constraints_ComorbiditiesPatient.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163533_added_entity_constraints_RehabilitationGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163534_added_entity_constraints_Session.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163535_added_entity_constraints_MinorEvent.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163536_added_entity_constraints_NonSpecificPain.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163537_added_entity_constraints_MayorEvent.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163538_added_entity_constraints_DepressiveSymptom.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163539_added_entity_constraints_NonSpecificPainsSession.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163540_added_entity_constraints_DepressiveSymptomsSession.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163541_added_entity_constraints_MinorEventsSession.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163542_added_entity_constraints_MayorEventsSession.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163543_added_entity_constraints_FinalAssessment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163544_added_entity_constraints_AppUser.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>
