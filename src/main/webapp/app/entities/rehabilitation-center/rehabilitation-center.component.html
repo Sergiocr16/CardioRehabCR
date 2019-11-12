@@ -1,3 +1,4 @@
+<jhi-no-content [text]="'El texto'" [icon]="'menu'"></jhi-no-content>
 <div>
     <h2 id="page-heading">
         <span jhiTranslate="cardioRehabCrApp.rehabilitationCenter.home.title">Rehabilitation Centers</span>
@@ -48,9 +49,7 @@
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/rehabilitation-center', { outlets: { popup: rehabilitationCenter.id + '/delete'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
+                                (click)="delete(rehabilitationCenter.id)"
                                 class="btn btn-danger btn-sm">
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>

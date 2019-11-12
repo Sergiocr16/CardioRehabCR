@@ -1,6 +1,7 @@
 package com.aditum.cardiorehabcr.web.rest;
 
 import com.aditum.cardiorehabcr.service.AppUserService;
+import com.aditum.cardiorehabcr.service.impl.AppUserServiceImpl;
 import com.aditum.cardiorehabcr.web.rest.errors.BadRequestAlertException;
 import com.aditum.cardiorehabcr.service.dto.AppUserDTO;
 
@@ -39,9 +40,9 @@ public class AppUserResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final AppUserService appUserService;
+    private final AppUserServiceImpl appUserService;
 
-    public AppUserResource(AppUserService appUserService) {
+    public AppUserResource(AppUserServiceImpl appUserService) {
         this.appUserService = appUserService;
     }
 
@@ -114,6 +115,11 @@ public class AppUserResource {
         return ResponseUtil.wrapOrNotFound(appUserDTO);
     }
 
+    @GetMapping("/app-users/current-user/")
+    public ResponseEntity<AppUserDTO> getAppUserByCurrentUser() {
+        Optional<AppUserDTO> appUserDTO = appUserService.findLoggedIn();
+        return ResponseUtil.wrapOrNotFound(appUserDTO);
+    }
     /**
      * {@code DELETE  /app-users/:id} : delete the "id" appUser.
      *

@@ -164,3 +164,85 @@ ui bootstrap tweaks
 }
 
 /* jhipster-needle-scss-add-main JHipster will add new css style */
+
+/* ==========================================================================
+MY CSS
+========================================================================== */
+
+//SCROLL
+@media only screen and (max-width: 600px) {
+  ::-webkit-scrollbar {
+    width: 0px !important;
+  }
+}
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #bdbdbd;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #8d8d8d;
+}
+
+.flexcroll {
+  scrollbar-face-color: #367cd2;
+  scrollbar-shadow-color: #ffffff;
+  scrollbar-highlight-color: #ffffff;
+  scrollbar-3dlight-color: #ffffff;
+  scrollbar-darkshadow-color: #ffffff;
+  scrollbar-track-color: #ffffff;
+  scrollbar-arrow-color: #ffffff;
+}
+//
+.text-icon {
+  vertical-align: middle !important;
+  margin-right: 5px;
+}
+button {
+  outline: none !important;
+}
+
+.big-icon {
+  font-size: 35px !important;
+}
+.no-padding {
+  padding: 0 !important;
+}
+.isDisabled {
+  color: currentColor;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+.app-sidebar {
+  position: fixed;
+  position: -webkit-fixed; /* For macOS/iOS Safari */
+  top: 0;
+  z-index: 3; /* Ensure that your app's content doesn't overlap the toolbar */
+}
+.app-toolbar {
+  position: sticky;
+  position: -webkit-sticky; /* For macOS/iOS Safari */
+  top: 0; /* Sets the sticky toolbar to be on top */
+  z-index: 2; /* Ensure that your app's content doesn't overlap the toolbar */
+}
+
+.circle-icon {
+  background: #f7f7f7;
+  padding: 40px;
+  border-radius: 50%;
+  font-size: 60px;
+  color: #a9a7a7;
+}
+.mat-progress-bar {
+  z-index: 4;
+}
