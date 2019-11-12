@@ -1,0 +1,18 @@
+<form role="form" (ngSubmit)="login()" [formGroup]="loginForm" fxLayout="column" fxLayoutAlign="center center">
+    <mat-form-field>
+        <input matInput type="text" class="form-control" name="username" id="username" placeholder="Nombre de usuario"
+               formControlName="username">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput type="password" name="password" id="password" placeholder="Contraseña"
+               formControlName="password">
+    </mat-form-field>
+    <div class="form-check">
+        <label class="form-check-label" for="rememberMe">
+            <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe"
+                   formControlName="rememberMe">
+            <span jhiTranslate="login.form.rememberme">Remember me</span>
+        </label>
+    </div>
+    <button type="submit" class="btn btn-primary" jhiTranslate="login.form.button">Sign in</button>
+</form>

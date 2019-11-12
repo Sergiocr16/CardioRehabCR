@@ -52,3 +52,12 @@ Logo styles
   background: url('../../../content/images/logo-jhipster.png') no-repeat center center;
   background-size: contain;
 }
+
+.active {
+  color: #b71c1c !important;
+  background: #b71c1c1c !important;
+}
+.mat-nav-side-menu a {
+  color: #37474f;
+  background: white;
+}

@@ -5,6 +5,7 @@ import com.aditum.cardiorehabcr.domain.AppUser;
 import com.aditum.cardiorehabcr.repository.AppUserRepository;
 import com.aditum.cardiorehabcr.service.AppUserService;
 import com.aditum.cardiorehabcr.service.dto.AppUserDTO;
+import com.aditum.cardiorehabcr.service.impl.AppUserServiceImpl;
 import com.aditum.cardiorehabcr.service.mapper.AppUserMapper;
 import com.aditum.cardiorehabcr.web.rest.errors.ExceptionTranslator;
 
@@ -55,7 +56,7 @@ public class AppUserResourceIT {
     private AppUserMapper appUserMapper;
 
     @Autowired
-    private AppUserService appUserService;
+    private AppUserServiceImpl appUserService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -200,7 +201,7 @@ public class AppUserResourceIT {
             .andExpect(jsonPath("$.[*].authorityType").value(hasItem(DEFAULT_AUTHORITY_TYPE)))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)));
     }
-    
+
     @Test
     @Transactional
     public void getAppUser() throws Exception {
