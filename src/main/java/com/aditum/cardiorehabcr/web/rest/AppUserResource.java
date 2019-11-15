@@ -120,6 +120,12 @@ public class AppUserResource {
         Optional<AppUserDTO> appUserDTO = appUserService.findLoggedIn();
         return ResponseUtil.wrapOrNotFound(appUserDTO);
     }
+
+    @GetMapping("/app-users/by-user/{userId}")
+    public ResponseEntity<AppUserDTO> getAppUserByUserId(@PathVariable Long userId ) {
+        Optional<AppUserDTO> appUserDTO = appUserService.findOneByUserId(userId);
+        return ResponseUtil.wrapOrNotFound(appUserDTO);
+    }
     /**
      * {@code DELETE  /app-users/:id} : delete the "id" appUser.
      *

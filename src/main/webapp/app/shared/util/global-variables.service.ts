@@ -6,6 +6,7 @@ import { filter, map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
 import { AppUser } from 'app/shared/model/app-user.model';
 import { Subject } from 'rxjs';
+
 @Injectable({ providedIn: 'root' })
 export class GlobalVariablesService implements OnInit, AfterContentChecked {
   title = '';
@@ -13,6 +14,8 @@ export class GlobalVariablesService implements OnInit, AfterContentChecked {
   rehabCenter;
 
   isLoading = false;
+  isInForm = false;
+  isSaving;
 
   account: Account;
   userApp = new Subject<any>();
@@ -26,9 +29,11 @@ export class GlobalVariablesService implements OnInit, AfterContentChecked {
   }
 
   ngOnInit(): void {}
+
   ngAfterContentChecked() {
     // this.cdRef.detectChanges();
   }
+
   public setTitle(title) {
     this.title = title;
   }
@@ -39,6 +44,18 @@ export class GlobalVariablesService implements OnInit, AfterContentChecked {
 
   public loaded() {
     this.isLoading = false;
+  }
+
+  public enteringForm() {
+    this.isInForm = true;
+  }
+
+  public setFormStatus(isSaving) {
+    this.isSaving = isSaving;
+  }
+
+  public leavingForm() {
+    this.isInForm = false;
   }
 
   public defineGlobalRehabCenter() {
