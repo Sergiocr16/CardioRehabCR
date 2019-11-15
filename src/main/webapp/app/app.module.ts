@@ -31,8 +31,10 @@ import { ConfirmDialogComponent } from './shared/util/confirm-dialog/confirm-dia
     // jhipster-needle-angular-add-module JHipster will add new module here
     CardioRehabCrEntityModule,
     CardioRehabCrAppRoutingModule,
+    FlexLayoutModule,
     BrowserAnimationsModule
   ],
+  exports: [],
   declarations: [
     JhiMainComponent,
     LoginComponent,

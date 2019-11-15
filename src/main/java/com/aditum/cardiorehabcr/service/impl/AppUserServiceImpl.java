@@ -88,7 +88,17 @@ public class AppUserServiceImpl implements AppUserService {
         return appUserRepository.findByUserIsCurrentUser().get(0)
             .map(appUserMapper::toDto);
     }
-
+    /**
+     * Get one appUser  logged in.
+     *
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<AppUserDTO> findOneByUserId(Long userId) {
+        log.debug("Request to get AppUser Logged In");
+        return appUserRepository.findAppUserByUserId(userId)
+            .map(appUserMapper::toDto);
+    }
     /**
      * Delete the appUser by id.
      *

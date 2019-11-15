@@ -26,6 +26,10 @@ export class AppUserService {
   find(id: number): Observable<EntityResponseType> {
     return this.http.get<IAppUser>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
+
+  findByUser(userId: number): Observable<EntityResponseType> {
+    return this.http.get<IAppUser>(`${this.resourceUrl}/by-user/${userId}`, { observe: 'response' });
+  }
   findByCurrentUser(): Observable<EntityResponseType> {
     return this.http.get<IAppUser>(`${this.resourceUrl}/current-user/`, { observe: 'response' });
   }
