@@ -69,7 +69,7 @@ export const rehabilitationGroupRoute: Routes = [
       rehabilitationGroup: RehabilitationGroupResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_SUPERADMIN'],
       pageTitle: 'cardioRehabCrApp.rehabilitationGroup.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -84,7 +84,7 @@ export const rehabilitationGroupPopupRoute: Routes = [
       rehabilitationGroup: RehabilitationGroupResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_SUPERADMIN'],
       pageTitle: 'cardioRehabCrApp.rehabilitationGroup.home.title'
     },
     canActivate: [UserRouteAccessService],

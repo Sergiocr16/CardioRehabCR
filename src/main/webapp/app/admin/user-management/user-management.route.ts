@@ -7,6 +7,7 @@ import { UserService } from 'app/core/user/user.service';
 import { UserManagementComponent } from './user-management.component';
 import { UserManagementDetailComponent } from './user-management-detail.component';
 import { UserManagementUpdateComponent } from './user-management-update.component';
+import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 
 @Injectable({ providedIn: 'root' })
 export class UserManagementResolve implements Resolve<any> {
@@ -31,7 +32,8 @@ export const userManagementRoute: Routes = [
     data: {
       pageTitle: 'userManagement.home.title',
       defaultSort: 'id,asc'
-    }
+    },
+    canActivate: [UserRouteAccessService]
   },
   {
     path: ':login/view',

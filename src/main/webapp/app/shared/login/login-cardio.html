@@ -1,18 +1,53 @@
-<form role="form" (ngSubmit)="login()" [formGroup]="loginForm" fxLayout="column" fxLayoutAlign="center center">
-    <mat-form-field>
-        <input matInput type="text" class="form-control" name="username" id="username" placeholder="Nombre de usuario"
-               formControlName="username">
-    </mat-form-field>
-    <mat-form-field>
-        <input matInput type="password" name="password" id="password" placeholder="Contraseña"
-               formControlName="password">
-    </mat-form-field>
-    <div class="form-check">
-        <label class="form-check-label" for="rememberMe">
-            <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe"
-                   formControlName="rememberMe">
-            <span jhiTranslate="login.form.rememberme">Remember me</span>
-        </label>
+
+
+<div flex  fxLayout="row" style="height: 100vh;">
+    <div fxFlex="50" layout-align="center" style="padding: 70px;" >
+       <h5 class="text-center">
+            <img mat-card-image src="https://res.cloudinary.com/aditum/image/upload/v1573798868/Sin_t%C3%ADtulo-3.png" height="250">
+
+       </h5>
+
+        <form class="no-outline" role="form" (ngSubmit)="login()" [formGroup]="loginForm" fxLayout="column">
+
+
+<!--            <mat-form-field class="no-outline">-->
+<!--                <input matInput type="text" class="form-control no-outline" name="username" id="username" placeholder="Nombre de usuario"-->
+<!--                       formControlName="username">-->
+<!--            </mat-form-field>-->
+            <mat-form-field appearance="outline">
+                <mat-label>Nombre de usuario</mat-label>
+                <input matInput  type="text" name="username" id="username"  formControlName="username">
+                <mat-icon matSuffix>account_circle</mat-icon>
+
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="margin-top-10">
+                <mat-label>Contraseña</mat-label>
+                <input matInput type="password" name="password" id="password"  formControlName="password">
+                <mat-icon matSuffix>lock</mat-icon>
+
+            </mat-form-field>
+<!--            <mat-form-field >-->
+<!--                <input matInput type="password" class="form-control" name="password" id="password" placeholder="Contraseña"-->
+<!--                       formControlName="password">-->
+<!--            </mat-form-field>-->
+<!--            <div class="form-check">-->
+<!--                <label class="form-check-label" for="rememberMe">-->
+<!--                    <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe"-->
+<!--                           formControlName="rememberMe">-->
+<!--                    <span  class="font-size-16" jhiTranslate="login.form.rememberme">Remember me</span>-->
+<!--                </label>-->
+<!--            </div>-->
+            <button type="submit" class="btn btn-primary margin-top-30 font-size-18" jhiTranslate="login.form.button">Sign in</button>
+        </form>
     </div>
-    <button type="submit" class="btn btn-primary" jhiTranslate="login.form.button">Sign in</button>
-</form>
+    <div fxFlex="50" flex-xs="0" hidden-xs  style="background-image: url(content/images/login2.jpg) ;
+        background-size: cover;
+        background-position-x: center;">
+
+    </div>
+
+</div>
+
+
+
+

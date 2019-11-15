@@ -20,7 +20,6 @@ import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
 import { ErrorComponent } from './layouts/error/error.component';
 // Angular material
-import { JhMaterialModule } from './shared/util/jhi-material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmDialogComponent } from './shared/util/confirm-dialog/confirm-dialog.component';
 @NgModule({
@@ -32,11 +31,8 @@ import { ConfirmDialogComponent } from './shared/util/confirm-dialog/confirm-dia
     // jhipster-needle-angular-add-module JHipster will add new module here
     CardioRehabCrEntityModule,
     CardioRehabCrAppRoutingModule,
-    FlexLayoutModule,
-    JhMaterialModule,
     BrowserAnimationsModule
   ],
-  exports: [JhMaterialModule],
   declarations: [
     JhiMainComponent,
     LoginComponent,

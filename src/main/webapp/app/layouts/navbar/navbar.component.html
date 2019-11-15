@@ -1,14 +1,14 @@
-<mat-nav-list class="no-padding">
+<mat-nav-list class="no-padding" *jhiHasAnyAuthority="'ROLE_SUPERADMIN'">
     <a mat-list-item class="isDisabled">
         CONFIGURACIÓN </a>
     <mat-nav-list class="mat-nav-side-menu">
-        <a mat-list-item routerLink="rehabilitation-center" routerLinkActive="active"
+        <a mat-list-item routerLink="admin/user-management" routerLinkActive="active"
            [routerLinkActiveOptions]="{ exact: true }">
+            <mat-icon class="text-icon">supervised_user_circle</mat-icon>
+            Gestión de usuarios </a>
+        <a mat-list-item routerLink="rehabilitation-center"  routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
             <mat-icon class="text-icon">local_hospital</mat-icon>
-            Centro de Rehabilitación </a>
-        <a mat-list-item routerLink="rehabilitation-group">
-            <mat-icon class="text-icon">local_hospital</mat-icon>
-            Grupo de rehabilitación </a>
+            Centros de rehabilitación </a>
         <a *ngIf="swaggerEnabled" mat-list-item routerLink="admin/docs" routerLinkActive="active"
            [routerLinkActiveOptions]="{ exact: true }">
             <fa-icon icon="book" fixedWidth="true"></fa-icon>
@@ -17,16 +17,15 @@
     </mat-nav-list>
 </mat-nav-list>
 <mat-divider></mat-divider>
-<mat-divider></mat-divider>
 
-<mat-nav-list class="no-padding">
+<mat-nav-list class="no-padding" *jhiHasAnyAuthority="'ROLE_ADMIN'">
     <a mat-list-item class="isDisabled">
         CONFIGURACIÓN </a>
     <mat-nav-list class="mat-nav-side-menu">
-        <a mat-list-item routerLink="rehabilitation-center" routerLinkActive="active"
+        <a mat-list-item routerLink="admin/user-management" routerLinkActive="active"
            [routerLinkActiveOptions]="{ exact: true }">
-            <mat-icon class="text-icon">local_hospital</mat-icon>
-            Centro de Rehabilitación </a>
+            <mat-icon class="text-icon">supervised_user_circle</mat-icon>
+            Gestión de usuarios </a>
         <a mat-list-item routerLink="rehabilitation-center">
             <mat-icon class="text-icon">local_hospital</mat-icon>
             Centro de Rehabilitación </a>
@@ -36,6 +35,57 @@
             Centro de Rehabilitación </a>
     </mat-nav-list>
 </mat-nav-list>
+
+
+
+<!--<li>&ndash;&gt;-->
+<!--                            <a class="dropdown-item" routerLink="admin/user-management" routerLinkActive="active" (click)="collapseNavbar()">-->
+<!--                                <fa-icon icon="user" fixedWidth="true"></fa-icon>-->
+<!--                                <span jhiTranslate="global.menu.admin.userManagement">User management</span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a class="dropdown-item" routerLink="admin/tracker" routerLinkActive="active" (click)="collapseNavbar()">-->
+<!--                                <fa-icon icon="eye" fixedWidth="true"></fa-icon>-->
+<!--                                <span jhiTranslate="global.menu.admin.tracker">User tracker</span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a class="dropdown-item" routerLink="admin/metrics" routerLinkActive="active" (click)="collapseNavbar()">-->
+<!--                                <fa-icon icon="tachometer-alt" fixedWidth="true"></fa-icon>-->
+<!--                                <span jhiTranslate="global.menu.admin.metrics">Metrics</span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a class="dropdown-item" routerLink="admin/health" routerLinkActive="active" (click)="collapseNavbar()">-->
+<!--                                <fa-icon icon="heart" fixedWidth="true"></fa-icon>-->
+<!--                                <span jhiTranslate="global.menu.admin.health">Health</span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a class="dropdown-item" routerLink="admin/configuration" routerLinkActive="active" (click)="collapseNavbar()">-->
+<!--                                <fa-icon icon="list" fixedWidth="true"></fa-icon>-->
+<!--                                <span jhiTranslate="global.menu.admin.configuration">Configuration</span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a class="dropdown-item" routerLink="admin/audits" routerLinkActive="active" (click)="collapseNavbar()">-->
+<!--                                <fa-icon icon="bell" fixedWidth="true"></fa-icon>-->
+<!--                                <span jhiTranslate="global.menu.admin.audits">Audits</span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a class="dropdown-item" routerLink="admin/logs" routerLinkActive="active" (click)="collapseNavbar()">-->
+<!--                                <fa-icon icon="tasks" fixedWidth="true"></fa-icon>-->
+<!--                                <span jhiTranslate="global.menu.admin.logs">Logs</span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        <li *ngIf="swaggerEnabled">-->
+<!--                            <a class="dropdown-item" routerLink="admin/docs" routerLinkActive="active" (click)="collapseNavbar()">-->
+<!--                                <fa-icon icon="book" fixedWidth="true"></fa-icon>-->
+<!--                                <span jhiTranslate="global.menu.admin.apidocs">API</span>-->
+<!--                            </a>-->
+<!--                        </li>-->
 
 
 <!--<nav class="navbar navbar-primary navbar-expand-md bg-primary">-->
