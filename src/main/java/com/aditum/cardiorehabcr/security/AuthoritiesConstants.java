@@ -9,7 +9,7 @@ public final class AuthoritiesConstants {
 
     public static final String USER = "ROLE_USER";
 
-    public static final String SUPERADMIN = "ROLE_SUPERADMIN";
+    public static final String ADMINAPP = "ROLE_MANAGER";
 
     public static final String CONSULTANT = "ROLE_CONSULTANT";
 

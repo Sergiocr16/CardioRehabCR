@@ -20,6 +20,7 @@ export class JhiMainComponent implements OnInit {
   layoutGap = '64';
   fixedInViewport = true;
   title = '';
+
   constructor(
     private gv: GlobalVariablesService,
     private jhiLanguageHelper: JhiLanguageHelper,
@@ -111,5 +112,17 @@ export class JhiMainComponent implements OnInit {
 
   public isLoading() {
     return this.gv.isLoading;
+  }
+
+  public isInForm() {
+    return this.gv.isInForm;
+  }
+
+  public isSaving() {
+    return this.gv.isSaving;
+  }
+
+  public previousState() {
+    window.history.back();
   }
 }

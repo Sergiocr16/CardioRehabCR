@@ -16,4 +16,5 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     @Query("select appUser from AppUser appUser where appUser.user.login = ?#{principal.username}")
     List<Optional<AppUser>> findByUserIsCurrentUser();
 
+    Optional<AppUser> findAppUserByUserId(Long userId);
 }
