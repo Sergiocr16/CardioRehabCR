@@ -54,15 +54,15 @@ export class UserManagementUpdateComponent implements OnInit, OnDestroy {
     this.isSaving = false;
     this.route.data.subscribe(({ user }) => {
       this.user = user.body ? user.body : user;
-      // if(user.body){
-      this.appUserService.findByUser(user.id).subscribe(appUser => {
-        this.appUser = appUser.body;
+      if (user.id != null) {
+        this.appUserService.findByUser(user.id).subscribe(appUser => {
+          this.appUser = appUser.body;
+          this.updateForm(this.user, this.appUser);
+        });
+      } else {
+        this.appUser = { id: null };
         this.updateForm(this.user, this.appUser);
-      });
-      // }else{
-      //   this.appUser = {};
-      //   this.updateForm(this.user, this.appUser);
-      // }
+      }
       this.title = !this.user.id ? 'Crear un usuario' : 'Editar un usuario';
       this.modalSuccessMessage = !this.user.id ? 'Usuario creado correctamente.' : 'Usuario editado correctamente.';
       this.global.setTitle(this.title);
@@ -133,21 +133,46 @@ export class UserManagementUpdateComponent implements OnInit, OnDestroy {
     appUser.rehabilitationCenterId = this.editForm.get(['rehabilitationCenterId']).value;
     // appUser.name = this.editForm.get(['firstName']).value;
     // appUser.lastName = this.editForm.get(['lastName']).value;
-    // appUser.authorityType = this.editForm.get(['authorities']).value;
-    // appUser.status = this.editForm.get(['activated']).value;
-    // appUser.userLogin = this.editForm.get(['login']).value;
-    // appUser.userId = user.id;
+    appUser.authorityType = this.defineAuthority(this.editForm.get(['authorities']).value);
+    appUser.status = this.editForm.get(['activated']).value ? 1 : 0;
+    appUser.userLogin = this.editForm.get(['login']).value;
+    appUser.userId = user.id;
+  }
+
+  private defineAuthority(authorities) {
+    switch (authorities[0]) {
+      case 'ROLE_ADMIN':
+        return 1;
+      case 'ROLE_MANAGER':
+        return 2;
+      case 'ROLE_USER':
+        return 3;
+      case 'ROLE_CONSULTANT':
+        return 4;
+    }
   }
 
   private onSaveSuccess(result) {
-    this.appUserService.update(this.appUser).subscribe(
-      response => {
-        this.isSaving = false;
-        this.modal.message(this.modalSuccessMessage);
-        this.previousState();
-      },
-      () => this.onSaveError()
-    );
+    if (this.appUser.id !== null) {
+      this.appUserService.update(this.appUser).subscribe(
+        response => {
+          this.isSaving = false;
+          this.modal.message(this.modalSuccessMessage);
+          this.previousState();
+        },
+        () => this.onSaveError()
+      );
+    } else {
+      this.appUser.userId = result.id;
+      this.appUserService.create(this.appUser).subscribe(
+        response => {
+          this.isSaving = false;
+          this.modal.message(this.modalSuccessMessage);
+          this.previousState();
+        },
+        () => this.onSaveError()
+      );
+    }
   }
 
   protected onError(errorMessage: string) {
