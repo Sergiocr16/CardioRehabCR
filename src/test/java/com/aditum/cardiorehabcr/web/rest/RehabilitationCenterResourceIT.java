@@ -5,6 +5,7 @@ import com.aditum.cardiorehabcr.domain.RehabilitationCenter;
 import com.aditum.cardiorehabcr.repository.RehabilitationCenterRepository;
 import com.aditum.cardiorehabcr.service.RehabilitationCenterService;
 import com.aditum.cardiorehabcr.service.dto.RehabilitationCenterDTO;
+import com.aditum.cardiorehabcr.service.impl.RehabilitationCenterServiceImpl;
 import com.aditum.cardiorehabcr.service.mapper.RehabilitationCenterMapper;
 import com.aditum.cardiorehabcr.web.rest.errors.ExceptionTranslator;
 
@@ -55,7 +56,7 @@ public class RehabilitationCenterResourceIT {
     private RehabilitationCenterMapper rehabilitationCenterMapper;
 
     @Autowired
-    private RehabilitationCenterService rehabilitationCenterService;
+    private RehabilitationCenterServiceImpl rehabilitationCenterService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -200,7 +201,7 @@ public class RehabilitationCenterResourceIT {
             .andExpect(jsonPath("$.[*].deleted").value(hasItem(DEFAULT_DELETED.booleanValue())))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)));
     }
-    
+
     @Test
     @Transactional
     public void getRehabilitationCenter() throws Exception {

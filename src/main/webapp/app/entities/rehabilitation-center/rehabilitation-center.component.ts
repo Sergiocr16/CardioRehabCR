@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { GlobalVariablesService } from '../../shared/util/global-variables.service';
 import { ModalService } from 'app/shared/util/modal.service';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -12,6 +12,7 @@ import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { RehabilitationCenterService } from './rehabilitation-center.service';
+import { IComorbiditie } from 'app/shared/model/comorbiditie.model';
 
 @Component({
   selector: 'jhi-rehabilitation-center',
@@ -107,9 +108,23 @@ export class RehabilitationCenterComponent implements OnInit, OnDestroy {
     }
   }
 
-  delete(id) {
+  delete(rehabilitationCenter) {
     this.modal.confirmDialog('delete', () => {
-      this.modal.message('Borrando');
+      rehabilitationCenter.deleted = true;
+      this.subscribeToSaveResponse(this.rehabilitationCenterService.update(rehabilitationCenter));
     });
+  }
+
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IRehabilitationCenter>>) {
+    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+  }
+
+  protected onSaveSuccess() {
+    this.reset();
+    this.modal.message('El centro de rehabilitación se ha eliminado correctamente.');
+  }
+
+  protected onSaveError() {
+    this.modal.message('Ups! Sucedió un error.');
   }
 }

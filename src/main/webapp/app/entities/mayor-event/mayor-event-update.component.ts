@@ -11,6 +11,8 @@ import { IMayorEvent, MayorEvent } from 'app/shared/model/mayor-event.model';
 import { MayorEventService } from './mayor-event.service';
 import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
 import { RehabilitationCenterService } from 'app/entities/rehabilitation-center/rehabilitation-center.service';
+import { ModalService } from 'app/shared/util/modal.service';
+import { GlobalVariablesService } from 'app/shared/util/global-variables.service';
 
 @Component({
   selector: 'jhi-mayor-event-update',
@@ -18,7 +20,9 @@ import { RehabilitationCenterService } from 'app/entities/rehabilitation-center/
 })
 export class MayorEventUpdateComponent implements OnInit {
   isSaving: boolean;
-
+  title;
+  modalSuccessMessage;
+  mayorEvent: MayorEvent;
   rehabilitationcenters: IRehabilitationCenter[];
 
   editForm = this.fb.group({
@@ -34,14 +38,21 @@ export class MayorEventUpdateComponent implements OnInit {
     protected mayorEventService: MayorEventService,
     protected rehabilitationCenterService: RehabilitationCenterService,
     protected activatedRoute: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    protected modal: ModalService,
+    private global: GlobalVariablesService
   ) {}
 
   ngOnInit() {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ mayorEvent }) => {
       this.updateForm(mayorEvent);
+
+      this.title = !this.mayorEvent.id ? 'Crear un evento mayor' : 'Editar  un evento mayor';
+      this.modalSuccessMessage = !this.mayorEvent.id ? 'Evento mayor creado correctamente.' : 'Evento mayor editado correctamente.';
+      this.global.setTitle(this.title);
     });
+    this.global.enteringForm();
     this.rehabilitationCenterService
       .query()
       .pipe(
@@ -53,7 +64,13 @@ export class MayorEventUpdateComponent implements OnInit {
         (res: HttpErrorResponse) => this.onError(res.message)
       );
   }
+  setInvalidForm(isSaving) {
+    this.global.setFormStatus(isSaving);
+  }
 
+  ngOnDestroy() {
+    this.global.leavingForm();
+  }
   updateForm(mayorEvent: IMayorEvent) {
     this.editForm.patchValue({
       id: mayorEvent.id,

@@ -1,22 +1,3 @@
-<mat-nav-list class="no-padding" *jhiHasAnyAuthority="'ROLE_SUPERADMIN'">
-    <a mat-list-item class="isDisabled">
-        CONFIGURACIÓN </a>
-    <mat-nav-list class="mat-nav-side-menu">
-        <a mat-list-item routerLink="admin/user-management" routerLinkActive="active"
-           [routerLinkActiveOptions]="{ exact: true }">
-            <mat-icon class="text-icon">supervised_user_circle</mat-icon>
-            Gestión de usuarios </a>
-        <a mat-list-item routerLink="rehabilitation-center"  routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-            <mat-icon class="text-icon">local_hospital</mat-icon>
-            Centros de rehabilitación </a>
-        <a *ngIf="swaggerEnabled" mat-list-item routerLink="admin/docs" routerLinkActive="active"
-           [routerLinkActiveOptions]="{ exact: true }">
-            <fa-icon icon="book" fixedWidth="true"></fa-icon>
-            <span jhiTranslate="global.menu.admin.apidocs">API</span>
-        </a>
-    </mat-nav-list>
-</mat-nav-list>
-<mat-divider></mat-divider>
 
 <mat-nav-list class="no-padding" *jhiHasAnyAuthority="'ROLE_ADMIN'">
     <a mat-list-item class="isDisabled">
@@ -26,13 +7,22 @@
            [routerLinkActiveOptions]="{ exact: true }">
             <mat-icon class="text-icon">supervised_user_circle</mat-icon>
             Gestión de usuarios </a>
-        <a mat-list-item routerLink="rehabilitation-center">
-            <mat-icon class="text-icon">local_hospital</mat-icon>
-            Centro de Rehabilitación </a>
         <a mat-list-item routerLink="rehabilitation-center" routerLinkActive="active"
            [routerLinkActiveOptions]="{ exact: true }">
-            <mat-icon class="text-icon">local_hospital</mat-icon>
+            <mat-icon class="text-icon">location_city</mat-icon>
             Centro de Rehabilitación </a>
+        <a mat-list-item routerLink="comorbiditie" routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: true }">
+            <mat-icon class="text-icon">local_hospital</mat-icon>
+            Comorbilidades </a>
+        <a mat-list-item routerLink="mayor-event" routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: true }">
+            <mat-icon class="text-icon">arrow_upward</mat-icon>
+            Eventos mayores </a>
+        <a mat-list-item routerLink="minor-event" routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: true }">
+            <mat-icon class="text-icon">arrow_downward</mat-icon>
+            Eventos menores </a>
     </mat-nav-list>
 </mat-nav-list>
 

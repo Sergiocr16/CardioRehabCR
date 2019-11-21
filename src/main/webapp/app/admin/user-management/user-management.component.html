@@ -4,7 +4,7 @@
         <span class="primary-color table-title" >Usuarios</span>
 
     </h2>
-    <div class="table-responsive margin-top-20"  *ngIf="users" >
+    <div class="table-responsive "  *ngIf="users" >
         <table class="table table-bordered tableMaterialDesign" aria-describedby="user-management-page-heading">
             <thead style="background-color: #fafafa;" class="text-center">
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">

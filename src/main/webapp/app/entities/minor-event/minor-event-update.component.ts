@@ -11,6 +11,8 @@ import { IMinorEvent, MinorEvent } from 'app/shared/model/minor-event.model';
 import { MinorEventService } from './minor-event.service';
 import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
 import { RehabilitationCenterService } from 'app/entities/rehabilitation-center/rehabilitation-center.service';
+import { ModalService } from 'app/shared/util/modal.service';
+import { GlobalVariablesService } from 'app/shared/util/global-variables.service';
 
 @Component({
   selector: 'jhi-minor-event-update',
@@ -18,7 +20,9 @@ import { RehabilitationCenterService } from 'app/entities/rehabilitation-center/
 })
 export class MinorEventUpdateComponent implements OnInit {
   isSaving: boolean;
-
+  title;
+  modalSuccessMessage;
+  minorEvent: MinorEvent;
   rehabilitationcenters: IRehabilitationCenter[];
 
   editForm = this.fb.group({
@@ -34,6 +38,8 @@ export class MinorEventUpdateComponent implements OnInit {
     protected minorEventService: MinorEventService,
     protected rehabilitationCenterService: RehabilitationCenterService,
     protected activatedRoute: ActivatedRoute,
+    protected modal: ModalService,
+    private global: GlobalVariablesService,
     private fb: FormBuilder
   ) {}
 
@@ -41,7 +47,12 @@ export class MinorEventUpdateComponent implements OnInit {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ minorEvent }) => {
       this.updateForm(minorEvent);
+
+      this.title = !this.minorEvent.id ? 'Crear un evento menor' : 'Editar  un evento menor';
+      this.modalSuccessMessage = !this.minorEvent.id ? 'Evento menor creado correctamente.' : 'Evento menor editado correctamente.';
+      this.global.setTitle(this.title);
     });
+    this.global.enteringForm();
     this.rehabilitationCenterService
       .query()
       .pipe(
@@ -53,7 +64,13 @@ export class MinorEventUpdateComponent implements OnInit {
         (res: HttpErrorResponse) => this.onError(res.message)
       );
   }
+  setInvalidForm(isSaving) {
+    this.global.setFormStatus(isSaving);
+  }
 
+  ngOnDestroy() {
+    this.global.leavingForm();
+  }
   updateForm(minorEvent: IMinorEvent) {
     this.editForm.patchValue({
       id: minorEvent.id,

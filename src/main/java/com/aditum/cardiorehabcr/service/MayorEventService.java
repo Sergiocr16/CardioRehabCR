@@ -26,7 +26,7 @@ public interface MayorEventService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<MayorEventDTO> findAll(Pageable pageable);
+    Page<MayorEventDTO> findAll(Pageable pageable, Long rehabilitationId);
 
 
     /**
