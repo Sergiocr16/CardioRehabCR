@@ -55,9 +55,9 @@ public class MayorEventServiceImpl implements MayorEventService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<MayorEventDTO> findAll(Pageable pageable) {
+    public Page<MayorEventDTO> findAll(Pageable pageable, Long rehabilitationId) {
         log.debug("Request to get all MayorEvents");
-        return mayorEventRepository.findAll(pageable)
+        return mayorEventRepository.findByRehabilitationCenterIdAndAndDeleted(pageable,rehabilitationId, false)
             .map(mayorEventMapper::toDto);
     }
 

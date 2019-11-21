@@ -5,6 +5,7 @@ import com.aditum.cardiorehabcr.domain.MayorEvent;
 import com.aditum.cardiorehabcr.repository.MayorEventRepository;
 import com.aditum.cardiorehabcr.service.MayorEventService;
 import com.aditum.cardiorehabcr.service.dto.MayorEventDTO;
+import com.aditum.cardiorehabcr.service.impl.MayorEventServiceImpl;
 import com.aditum.cardiorehabcr.service.mapper.MayorEventMapper;
 import com.aditum.cardiorehabcr.web.rest.errors.ExceptionTranslator;
 
@@ -52,7 +53,7 @@ public class MayorEventResourceIT {
     private MayorEventMapper mayorEventMapper;
 
     @Autowired
-    private MayorEventService mayorEventService;
+    private MayorEventServiceImpl mayorEventService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -193,7 +194,7 @@ public class MayorEventResourceIT {
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].deleted").value(hasItem(DEFAULT_DELETED.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getMayorEvent() throws Exception {

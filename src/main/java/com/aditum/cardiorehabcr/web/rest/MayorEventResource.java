@@ -1,6 +1,7 @@
 package com.aditum.cardiorehabcr.web.rest;
 
 import com.aditum.cardiorehabcr.service.MayorEventService;
+import com.aditum.cardiorehabcr.service.impl.MayorEventServiceImpl;
 import com.aditum.cardiorehabcr.web.rest.errors.BadRequestAlertException;
 import com.aditum.cardiorehabcr.service.dto.MayorEventDTO;
 
@@ -39,9 +40,9 @@ public class MayorEventResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final MayorEventService mayorEventService;
+    private final MayorEventServiceImpl mayorEventService;
 
-    public MayorEventResource(MayorEventService mayorEventService) {
+    public MayorEventResource(MayorEventServiceImpl mayorEventService) {
         this.mayorEventService = mayorEventService;
     }
 
@@ -94,9 +95,9 @@ public class MayorEventResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of mayorEvents in body.
      */
     @GetMapping("/mayor-events")
-    public ResponseEntity<List<MayorEventDTO>> getAllMayorEvents(Pageable pageable) {
+    public ResponseEntity<List<MayorEventDTO>> getAllMayorEvents(Pageable pageable, Long rehabilitationId) {
         log.debug("REST request to get a page of MayorEvents");
-        Page<MayorEventDTO> page = mayorEventService.findAll(pageable);
+        Page<MayorEventDTO> page = mayorEventService.findAll(pageable,rehabilitationId);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

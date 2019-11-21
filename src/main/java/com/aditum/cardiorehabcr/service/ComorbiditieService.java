@@ -26,7 +26,7 @@ public interface ComorbiditieService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<ComorbiditieDTO> findAll(Pageable pageable);
+    Page<ComorbiditieDTO> findAll(Pageable pageable, Long rehabilitationId);
 
 
     /**

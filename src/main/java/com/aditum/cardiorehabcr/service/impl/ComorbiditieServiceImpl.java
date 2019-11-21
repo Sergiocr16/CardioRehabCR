@@ -55,9 +55,9 @@ public class ComorbiditieServiceImpl implements ComorbiditieService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<ComorbiditieDTO> findAll(Pageable pageable) {
+    public Page<ComorbiditieDTO> findAll(Pageable pageable, Long rehabilitationId) {
         log.debug("Request to get all Comorbidities");
-        return comorbiditieRepository.findAll(pageable)
+        return comorbiditieRepository.findByRehabilitationCenterIdAndAndDeleted(pageable,rehabilitationId,false)
             .map(comorbiditieMapper::toDto);
     }
 

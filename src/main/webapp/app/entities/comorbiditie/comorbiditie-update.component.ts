@@ -9,22 +9,27 @@ import { filter, map } from 'rxjs/operators';
 import { JhiAlertService } from 'ng-jhipster';
 import { IComorbiditie, Comorbiditie } from 'app/shared/model/comorbiditie.model';
 import { ComorbiditieService } from './comorbiditie.service';
+import { GlobalVariablesService } from 'app/shared/util/global-variables.service';
 import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
 import { RehabilitationCenterService } from 'app/entities/rehabilitation-center/rehabilitation-center.service';
+import { ModalService } from 'app/shared/util/modal.service';
 
 @Component({
   selector: 'jhi-comorbiditie-update',
   templateUrl: './comorbiditie-update.component.html'
 })
 export class ComorbiditieUpdateComponent implements OnInit {
+  comorbiditie: Comorbiditie;
   isSaving: boolean;
-
+  title;
+  modalSuccessMessage;
   rehabilitationcenters: IRehabilitationCenter[];
 
   editForm = this.fb.group({
     id: [],
     description: [null, [Validators.required]],
     deleted: [],
+
     rehabilitationCenterId: []
   });
 
@@ -33,14 +38,22 @@ export class ComorbiditieUpdateComponent implements OnInit {
     protected comorbiditieService: ComorbiditieService,
     protected rehabilitationCenterService: RehabilitationCenterService,
     protected activatedRoute: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    protected modal: ModalService,
+    private global: GlobalVariablesService
   ) {}
 
   ngOnInit() {
     this.isSaving = false;
+
     this.activatedRoute.data.subscribe(({ comorbiditie }) => {
       this.updateForm(comorbiditie);
+
+      this.title = !this.comorbiditie.id ? 'Crear una comorbilidad' : 'Editar  una comorbilidad';
+      this.modalSuccessMessage = !this.comorbiditie.id ? 'Comorbilidad creada correctamente.' : 'Comorbilidad editada correctamente.';
+      this.global.setTitle(this.title);
     });
+    this.global.enteringForm();
     this.rehabilitationCenterService
       .query()
       .pipe(
@@ -52,7 +65,13 @@ export class ComorbiditieUpdateComponent implements OnInit {
         (res: HttpErrorResponse) => this.onError(res.message)
       );
   }
+  setInvalidForm(isSaving) {
+    this.global.setFormStatus(isSaving);
+  }
 
+  ngOnDestroy() {
+    this.global.leavingForm();
+  }
   updateForm(comorbiditie: IComorbiditie) {
     this.editForm.patchValue({
       id: comorbiditie.id,
@@ -98,6 +117,7 @@ export class ComorbiditieUpdateComponent implements OnInit {
   protected onSaveError() {
     this.isSaving = false;
   }
+
   protected onError(errorMessage: string) {
     this.jhiAlertService.error(errorMessage, null, null);
   }

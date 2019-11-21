@@ -57,7 +57,7 @@ export const rehabilitationCenterRoute: Routes = [
       rehabilitationCenter: RehabilitationCenterResolve
     },
     data: {
-      authorities: ['ROLE_SUPERADMIN'],
+      authorities: ['ROLE_ADMIN'],
       pageTitle: 'cardioRehabCrApp.rehabilitationCenter.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -69,7 +69,7 @@ export const rehabilitationCenterRoute: Routes = [
       rehabilitationCenter: RehabilitationCenterResolve
     },
     data: {
-      authorities: ['ROLE_SUPERADMIN'],
+      authorities: ['ROLE_ADMIN'],
       pageTitle: 'cardioRehabCrApp.rehabilitationCenter.home.title'
     },
     canActivate: [UserRouteAccessService]

@@ -6,9 +6,6 @@
 
     <jhi-no-content *ngIf="rehabilitationCenters?.length === 0" [text]="'No hay centros de rehabilitación registrados'"
                     [icon]="'menu'"></jhi-no-content>
-    <jhi-alert-error></jhi-alert-error>
-    <jhi-alert></jhi-alert>
-    <br/>
 
     <div class="table-responsive" *ngIf="rehabilitationCenters?.length > 0">
         <table class="table table-bordered tableMaterialDesign" aria-describedby="page-heading">
@@ -54,7 +51,7 @@
                                 <mat-icon>create</mat-icon>
                                 <span jhiTranslate="entity.action.edit">Editar</span>
                             </button>
-                            <button (click)="delete(rehabilitationCenter.id)" mat-menu-item id="logout">
+                            <button (click)="delete(rehabilitationCenter)" mat-menu-item id="logout">
                                 <mat-icon>delete</mat-icon>
                                 <span jhiTranslate="entity.action.delete">Eliminar</span>
                             </button>
@@ -76,14 +73,17 @@
             </tbody>
         </table>
     </div>
-    <div *ngIf="rehabilitationCenters">
+    <div  *ngIf="rehabilitationCenters?.length > 0">
         <div class="row justify-content-center">
             <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
         </div>
         <div class="row justify-content-center">
             <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
         </div>
+
     </div>
+
+
 
 </div>
 <button [routerLink]="['/rehabilitation-center/new']" mat-fab class="md-fab-bottom-right"

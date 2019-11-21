@@ -1,6 +1,7 @@
 package com.aditum.cardiorehabcr.web.rest;
 
 import com.aditum.cardiorehabcr.service.MinorEventService;
+import com.aditum.cardiorehabcr.service.impl.MinorEventServiceImpl;
 import com.aditum.cardiorehabcr.web.rest.errors.BadRequestAlertException;
 import com.aditum.cardiorehabcr.service.dto.MinorEventDTO;
 
@@ -39,9 +40,9 @@ public class MinorEventResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final MinorEventService minorEventService;
+    private final MinorEventServiceImpl minorEventService;
 
-    public MinorEventResource(MinorEventService minorEventService) {
+    public MinorEventResource(MinorEventServiceImpl minorEventService) {
         this.minorEventService = minorEventService;
     }
 
@@ -94,9 +95,9 @@ public class MinorEventResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of minorEvents in body.
      */
     @GetMapping("/minor-events")
-    public ResponseEntity<List<MinorEventDTO>> getAllMinorEvents(Pageable pageable) {
+    public ResponseEntity<List<MinorEventDTO>> getAllMinorEvents(Pageable pageable, Long rehabilitationId) {
         log.debug("REST request to get a page of MinorEvents");
-        Page<MinorEventDTO> page = minorEventService.findAll(pageable);
+        Page<MinorEventDTO> page = minorEventService.findAll(pageable,rehabilitationId);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

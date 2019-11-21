@@ -179,6 +179,7 @@ MY CSS
 ========================================================================== */
 .tableMaterialDesign {
   margin-bottom: 50px;
+  margin-top: 15px;
 }
 
 .tableMaterialDesign table,
@@ -210,7 +211,6 @@ MY CSS
 }
 
 .table-title {
-  color: #311b92;
   font-size: 25px;
   font-weight: 500;
 }
@@ -230,6 +230,9 @@ MY CSS
 }
 .font-size-18 {
   font-size: 18px !important;
+}
+.background-white {
+  background-color: white;
 }
 
 .no-outline {

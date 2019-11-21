@@ -26,7 +26,7 @@ public interface MinorEventService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<MinorEventDTO> findAll(Pageable pageable);
+    Page<MinorEventDTO> findAll(Pageable pageable,Long rehabilitationId);
 
 
     /**

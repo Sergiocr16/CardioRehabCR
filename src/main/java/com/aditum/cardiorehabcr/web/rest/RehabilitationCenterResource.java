@@ -1,6 +1,7 @@
 package com.aditum.cardiorehabcr.web.rest;
 
 import com.aditum.cardiorehabcr.service.RehabilitationCenterService;
+import com.aditum.cardiorehabcr.service.impl.RehabilitationCenterServiceImpl;
 import com.aditum.cardiorehabcr.web.rest.errors.BadRequestAlertException;
 import com.aditum.cardiorehabcr.service.dto.RehabilitationCenterDTO;
 
@@ -39,9 +40,9 @@ public class RehabilitationCenterResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final RehabilitationCenterService rehabilitationCenterService;
+    private final RehabilitationCenterServiceImpl rehabilitationCenterService;
 
-    public RehabilitationCenterResource(RehabilitationCenterService rehabilitationCenterService) {
+    public RehabilitationCenterResource(RehabilitationCenterServiceImpl rehabilitationCenterService) {
         this.rehabilitationCenterService = rehabilitationCenterService;
     }
 

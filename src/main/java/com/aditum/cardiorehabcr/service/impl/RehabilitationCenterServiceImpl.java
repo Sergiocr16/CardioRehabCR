@@ -57,7 +57,7 @@ public class RehabilitationCenterServiceImpl implements RehabilitationCenterServ
     @Transactional(readOnly = true)
     public Page<RehabilitationCenterDTO> findAll(Pageable pageable) {
         log.debug("Request to get all RehabilitationCenters");
-        return rehabilitationCenterRepository.findAll(pageable)
+        return rehabilitationCenterRepository.findByDeleted(pageable,false)
             .map(rehabilitationCenterMapper::toDto);
     }
 
