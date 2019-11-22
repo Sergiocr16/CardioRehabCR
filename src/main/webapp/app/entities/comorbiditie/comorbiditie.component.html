@@ -10,7 +10,9 @@
 
 
         <div>
-
+            <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+            </mat-form-field>
             <div class="table-responsive" *ngIf="comorbidities?.length > 0">
                 <table class="table table-bordered tableMaterialDesign" aria-describedby="page-heading">
                     <thead class="bold" style="background-color: #fafafa;">

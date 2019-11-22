@@ -49,8 +49,8 @@ export class ComorbiditieUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ comorbiditie }) => {
       this.updateForm(comorbiditie);
 
-      this.title = !this.comorbiditie.id ? 'Crear una comorbilidad' : 'Editar  una comorbilidad';
-      this.modalSuccessMessage = !this.comorbiditie.id ? 'Comorbilidad creada correctamente.' : 'Comorbilidad editada correctamente.';
+      this.title = !comorbiditie.id ? 'Crear una comorbilidad' : 'Editar  una comorbilidad';
+      this.modalSuccessMessage = !comorbiditie.id ? 'Comorbilidad creada correctamente.' : 'Comorbilidad editada correctamente.';
       this.global.setTitle(this.title);
     });
     this.global.enteringForm();

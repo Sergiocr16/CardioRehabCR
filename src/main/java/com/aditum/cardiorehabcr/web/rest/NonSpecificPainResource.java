@@ -1,6 +1,7 @@
 package com.aditum.cardiorehabcr.web.rest;
 
 import com.aditum.cardiorehabcr.service.NonSpecificPainService;
+import com.aditum.cardiorehabcr.service.impl.NonSpecificPainServiceImpl;
 import com.aditum.cardiorehabcr.web.rest.errors.BadRequestAlertException;
 import com.aditum.cardiorehabcr.service.dto.NonSpecificPainDTO;
 
@@ -39,9 +40,9 @@ public class NonSpecificPainResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final NonSpecificPainService nonSpecificPainService;
+    private final NonSpecificPainServiceImpl nonSpecificPainService;
 
-    public NonSpecificPainResource(NonSpecificPainService nonSpecificPainService) {
+    public NonSpecificPainResource(NonSpecificPainServiceImpl nonSpecificPainService) {
         this.nonSpecificPainService = nonSpecificPainService;
     }
 
@@ -94,9 +95,9 @@ public class NonSpecificPainResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of nonSpecificPains in body.
      */
     @GetMapping("/non-specific-pains")
-    public ResponseEntity<List<NonSpecificPainDTO>> getAllNonSpecificPains(Pageable pageable) {
+    public ResponseEntity<List<NonSpecificPainDTO>> getAllNonSpecificPains(Pageable pageable, Long rehabilitationId) {
         log.debug("REST request to get a page of NonSpecificPains");
-        Page<NonSpecificPainDTO> page = nonSpecificPainService.findAll(pageable);
+        Page<NonSpecificPainDTO> page = nonSpecificPainService.findAll(pageable,rehabilitationId);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

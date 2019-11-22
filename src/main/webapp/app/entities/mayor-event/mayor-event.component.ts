@@ -69,9 +69,11 @@ export class MayorEventComponent implements OnInit, OnDestroy {
         size: this.itemsPerPage,
         sort: this.sort()
       })
-      .subscribe((res: HttpResponse<IRehabilitationCenter[]>) => this.paginateRehabilitationCenters(res.body, res.headers));
+      .subscribe((res: HttpResponse<IRehabilitationCenter[]>) => this.getRehabilitationCenter(res.body));
   }
-
+  protected getRehabilitationCenter(data: IRehabilitationCenter[]) {
+    this.rehabilitationCenters = this.global.paginateRehabilitationCenters(data);
+  }
   reset() {
     this.page = 0;
     this.mayorEvents = [];

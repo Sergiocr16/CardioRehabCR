@@ -5,6 +5,7 @@ import com.aditum.cardiorehabcr.domain.NonSpecificPain;
 import com.aditum.cardiorehabcr.repository.NonSpecificPainRepository;
 import com.aditum.cardiorehabcr.service.NonSpecificPainService;
 import com.aditum.cardiorehabcr.service.dto.NonSpecificPainDTO;
+import com.aditum.cardiorehabcr.service.impl.NonSpecificPainServiceImpl;
 import com.aditum.cardiorehabcr.service.mapper.NonSpecificPainMapper;
 import com.aditum.cardiorehabcr.web.rest.errors.ExceptionTranslator;
 
@@ -52,7 +53,7 @@ public class NonSpecificPainResourceIT {
     private NonSpecificPainMapper nonSpecificPainMapper;
 
     @Autowired
-    private NonSpecificPainService nonSpecificPainService;
+    private NonSpecificPainServiceImpl nonSpecificPainService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -193,7 +194,7 @@ public class NonSpecificPainResourceIT {
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].deleted").value(hasItem(DEFAULT_DELETED.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getNonSpecificPain() throws Exception {

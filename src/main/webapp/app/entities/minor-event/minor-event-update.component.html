@@ -1,9 +1,8 @@
 
-
 <mat-card class="mat-card-form margin-top-10">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
         <span ng-hide="true">{{setInvalidForm(isSaving)}}</span>
-        <div id="myMinorEventsLabel"  class="form-title primary-color"
+        <div id="myComorbilityLabel"  class="form-title primary-color"
              fxHide.xs="true">
             {{title}}
         </div>
@@ -72,4 +71,3 @@
 
     </form>
 </mat-card>
-

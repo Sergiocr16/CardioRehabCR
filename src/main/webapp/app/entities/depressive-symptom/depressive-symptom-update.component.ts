@@ -11,6 +11,8 @@ import { IDepressiveSymptom, DepressiveSymptom } from 'app/shared/model/depressi
 import { DepressiveSymptomService } from './depressive-symptom.service';
 import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
 import { RehabilitationCenterService } from 'app/entities/rehabilitation-center/rehabilitation-center.service';
+import { ModalService } from 'app/shared/util/modal.service';
+import { GlobalVariablesService } from 'app/shared/util/global-variables.service';
 
 @Component({
   selector: 'jhi-depressive-symptom-update',
@@ -18,7 +20,9 @@ import { RehabilitationCenterService } from 'app/entities/rehabilitation-center/
 })
 export class DepressiveSymptomUpdateComponent implements OnInit {
   isSaving: boolean;
-
+  title;
+  modalSuccessMessage;
+  depressiveSymptom: DepressiveSymptom;
   rehabilitationcenters: IRehabilitationCenter[];
 
   editForm = this.fb.group({
@@ -34,6 +38,8 @@ export class DepressiveSymptomUpdateComponent implements OnInit {
     protected depressiveSymptomService: DepressiveSymptomService,
     protected rehabilitationCenterService: RehabilitationCenterService,
     protected activatedRoute: ActivatedRoute,
+    protected modal: ModalService,
+    private global: GlobalVariablesService,
     private fb: FormBuilder
   ) {}
 
@@ -41,7 +47,14 @@ export class DepressiveSymptomUpdateComponent implements OnInit {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ depressiveSymptom }) => {
       this.updateForm(depressiveSymptom);
+
+      this.title = !depressiveSymptom.id ? 'Crear un síntoma depresivo menor' : 'Editar  un síntoma depresivo menor';
+      this.modalSuccessMessage = !depressiveSymptom.id
+        ? 'Síntoma depresivo creado correctamente.'
+        : 'Síntoma depresivo editado correctamente.';
+      this.global.setTitle(this.title);
     });
+    this.global.enteringForm();
     this.rehabilitationCenterService
       .query()
       .pipe(
@@ -53,7 +66,13 @@ export class DepressiveSymptomUpdateComponent implements OnInit {
         (res: HttpErrorResponse) => this.onError(res.message)
       );
   }
+  setInvalidForm(isSaving) {
+    this.global.setFormStatus(isSaving);
+  }
 
+  ngOnDestroy() {
+    this.global.leavingForm();
+  }
   updateForm(depressiveSymptom: IDepressiveSymptom) {
     this.editForm.patchValue({
       id: depressiveSymptom.id,
