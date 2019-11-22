@@ -1,6 +1,7 @@
 package com.aditum.cardiorehabcr.web.rest;
 
 import com.aditum.cardiorehabcr.service.InitialAssessmentService;
+import com.aditum.cardiorehabcr.service.impl.InitialAssessmentServiceImpl;
 import com.aditum.cardiorehabcr.web.rest.errors.BadRequestAlertException;
 import com.aditum.cardiorehabcr.service.dto.InitialAssessmentDTO;
 
@@ -39,9 +40,9 @@ public class InitialAssessmentResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final InitialAssessmentService initialAssessmentService;
+    private final InitialAssessmentServiceImpl initialAssessmentService;
 
-    public InitialAssessmentResource(InitialAssessmentService initialAssessmentService) {
+    public InitialAssessmentResource(InitialAssessmentServiceImpl initialAssessmentService) {
         this.initialAssessmentService = initialAssessmentService;
     }
 
@@ -111,6 +112,13 @@ public class InitialAssessmentResource {
     public ResponseEntity<InitialAssessmentDTO> getInitialAssessment(@PathVariable Long id) {
         log.debug("REST request to get InitialAssessment : {}", id);
         Optional<InitialAssessmentDTO> initialAssessmentDTO = initialAssessmentService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(initialAssessmentDTO);
+    }
+
+    @GetMapping("/initial-assessments/by-patient/{patientId}")
+    public ResponseEntity<InitialAssessmentDTO> getInitialAssessmentByPatient(@PathVariable Long patientId) {
+        log.debug("REST request to get InitialAssessment : {}", patientId);
+        Optional<InitialAssessmentDTO> initialAssessmentDTO = initialAssessmentService.findOneByPatient(patientId);
         return ResponseUtil.wrapOrNotFound(initialAssessmentDTO);
     }
 

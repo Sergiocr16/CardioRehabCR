@@ -23,7 +23,9 @@ export class GlobalVariablesService implements OnInit, AfterContentChecked {
   constructor(private accountService: AccountService, private appUserService: AppUserService) {
     this.accountService.getAuthenticationState().subscribe(data => {
       if (data) {
-        this.defineGlobalRehabCenter();
+        if (data.authorities[0] !== 'ROLE_ADMIN') {
+          this.defineGlobalRehabCenter();
+        }
       }
     });
   }

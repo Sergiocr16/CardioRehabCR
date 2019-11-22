@@ -342,6 +342,23 @@ button {
   white-space: nowrap;
 }
 
+.form-title-middle {
+  background: whitesmoke;
+  color: rgba(0, 0, 0, 0.87);
+  height: 64px;
+  font: 500 20px/32px Roboto, 'Helvetica Neue', sans-serif;
+  display: flex;
+  box-sizing: border-box;
+  padding: 0 16px;
+  width: calc(100% + 32px);
+  margin: -16px;
+  margin-bottom: 16px;
+  flex-direction: row;
+  align-items: center;
+  white-space: nowrap;
+  margin-top: 10px;
+}
+
 .primary-color {
   color: mat-color($cardiorehab-primary) !important;
 }
@@ -354,5 +371,5 @@ button {
   margin-bottom: 3px;
 }
 .mat-form-field-hint-wrapper {
-  margin-top: -9px;
+  //margin-top: -9px;
 }

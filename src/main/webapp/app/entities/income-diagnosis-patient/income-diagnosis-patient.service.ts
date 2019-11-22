@@ -31,7 +31,10 @@ export class IncomeDiagnosisPatientService {
     const options = createRequestOption(req);
     return this.http.get<IIncomeDiagnosisPatient[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
-
+  findByAssesment(req?: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http.get<IIncomeDiagnosisPatient[]>(`${this.resourceUrl}/by-asessment/`, { params: options, observe: 'response' });
+  }
   delete(id: number): Observable<HttpResponse<any>> {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }

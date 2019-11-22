@@ -26,7 +26,9 @@ export class InitialAssessmentService {
   find(id: number): Observable<EntityResponseType> {
     return this.http.get<IInitialAssessment>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
-
+  findByPatient(patientId: number): Observable<EntityResponseType> {
+    return this.http.get<IInitialAssessment>(`${this.resourceUrl}/by-patient/${patientId}`, { observe: 'response' });
+  }
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<IInitialAssessment[]>(this.resourceUrl, { params: options, observe: 'response' });

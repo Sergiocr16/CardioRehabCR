@@ -1,5 +1,6 @@
 package com.aditum.cardiorehabcr.service.impl;
 
+import com.aditum.cardiorehabcr.service.ComorbiditieService;
 import com.aditum.cardiorehabcr.service.ComorbiditiesPatientService;
 import com.aditum.cardiorehabcr.domain.ComorbiditiesPatient;
 import com.aditum.cardiorehabcr.repository.ComorbiditiesPatientRepository;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -28,10 +31,14 @@ public class ComorbiditiesPatientServiceImpl implements ComorbiditiesPatientServ
 
     private final ComorbiditiesPatientMapper comorbiditiesPatientMapper;
 
-    public ComorbiditiesPatientServiceImpl(ComorbiditiesPatientRepository comorbiditiesPatientRepository, ComorbiditiesPatientMapper comorbiditiesPatientMapper) {
+    private final ComorbiditieService comorbiditieService;
+
+    public ComorbiditiesPatientServiceImpl(ComorbiditieService comorbiditieService,ComorbiditiesPatientRepository comorbiditiesPatientRepository, ComorbiditiesPatientMapper comorbiditiesPatientMapper) {
         this.comorbiditiesPatientRepository = comorbiditiesPatientRepository;
         this.comorbiditiesPatientMapper = comorbiditiesPatientMapper;
+        this.comorbiditieService = comorbiditieService;
     }
+
 
     /**
      * Save a comorbiditiesPatient.
@@ -42,8 +49,13 @@ public class ComorbiditiesPatientServiceImpl implements ComorbiditiesPatientServ
     @Override
     public ComorbiditiesPatientDTO save(ComorbiditiesPatientDTO comorbiditiesPatientDTO) {
         log.debug("Request to save ComorbiditiesPatient : {}", comorbiditiesPatientDTO);
+
         ComorbiditiesPatient comorbiditiesPatient = comorbiditiesPatientMapper.toEntity(comorbiditiesPatientDTO);
         comorbiditiesPatient = comorbiditiesPatientRepository.save(comorbiditiesPatient);
+        Optional<ComorbiditiesPatient> comorbiditiesPatientOld = comorbiditiesPatientRepository.findFirstByInitialAssessmentIdAndComorbiditietId(comorbiditiesPatientDTO.getInitialAssessmentId(),comorbiditiesPatientDTO.getComorbiditietId());
+        if(comorbiditiesPatientOld.isPresent()){
+            this.delete(comorbiditiesPatientOld.get().getId());
+        }
         return comorbiditiesPatientMapper.toDto(comorbiditiesPatient);
     }
 
@@ -61,14 +73,17 @@ public class ComorbiditiesPatientServiceImpl implements ComorbiditiesPatientServ
             .map(comorbiditiesPatientMapper::toDto);
     }
 
+    @Transactional(readOnly = true)
+    public List<ComorbiditiesPatientDTO> findAllByInitialAsessment(Long initialAsessmentId) {
+        log.debug("Request to get all ComorbiditiesPatients");
+        List<ComorbiditiesPatientDTO> formatedComobitites = new ArrayList<>();
+        comorbiditiesPatientRepository.findByInitialAssessmentId(initialAsessmentId).forEach(comorbiditiesPatient -> {
+//            comorbiditiesPatient.setDescription(this.comorbiditieService.findOne(comorbiditiesPatient.getComorbiditietId()).get().getDescription());
+            formatedComobitites.add(this.comorbiditiesPatientMapper.toDto(comorbiditiesPatient));
+        });
+        return formatedComobitites;
+    }
 
-    /**
-     * Get one comorbiditiesPatient by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    @Override
     @Transactional(readOnly = true)
     public Optional<ComorbiditiesPatientDTO> findOne(Long id) {
         log.debug("Request to get ComorbiditiesPatient : {}", id);
