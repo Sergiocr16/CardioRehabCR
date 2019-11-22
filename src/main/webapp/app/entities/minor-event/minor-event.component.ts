@@ -70,7 +70,10 @@ export class MinorEventComponent implements OnInit, OnDestroy {
         size: this.itemsPerPage,
         sort: this.sort()
       })
-      .subscribe((res: HttpResponse<IRehabilitationCenter[]>) => this.paginateRehabilitationCenters(res.body, res.headers));
+      .subscribe((res: HttpResponse<IRehabilitationCenter[]>) => this.getRehabilitationCenter(res.body));
+  }
+  protected getRehabilitationCenter(data: IRehabilitationCenter[]) {
+    this.rehabilitationCenters = this.global.paginateRehabilitationCenters(data);
   }
   reset() {
     this.page = 0;
@@ -140,17 +143,6 @@ export class MinorEventComponent implements OnInit, OnDestroy {
     this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
     for (let i = 0; i < data.length; i++) {
       this.minorEvents.push(data[i]);
-    }
-  }
-
-  protected paginateRehabilitationCenters(data: IRehabilitationCenter[], headers: HttpHeaders) {
-    this.links = this.parseLinks.parse(headers.get('link'));
-    this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
-    for (let i = 0; i < data.length; i++) {
-      this.rehabilitationCenters.push(data[i]);
-    }
-    if (this.rehabilitationCenters.length > 0) {
-      this.rcId = this.rehabilitationCenters[0].id;
     }
   }
 }

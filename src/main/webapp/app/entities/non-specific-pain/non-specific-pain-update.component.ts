@@ -11,6 +11,8 @@ import { INonSpecificPain, NonSpecificPain } from 'app/shared/model/non-specific
 import { NonSpecificPainService } from './non-specific-pain.service';
 import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
 import { RehabilitationCenterService } from 'app/entities/rehabilitation-center/rehabilitation-center.service';
+import { ModalService } from 'app/shared/util/modal.service';
+import { GlobalVariablesService } from 'app/shared/util/global-variables.service';
 
 @Component({
   selector: 'jhi-non-specific-pain-update',
@@ -18,7 +20,9 @@ import { RehabilitationCenterService } from 'app/entities/rehabilitation-center/
 })
 export class NonSpecificPainUpdateComponent implements OnInit {
   isSaving: boolean;
-
+  title;
+  nonSpecificPain: NonSpecificPain;
+  modalSuccessMessage;
   rehabilitationcenters: IRehabilitationCenter[];
 
   editForm = this.fb.group({
@@ -34,6 +38,8 @@ export class NonSpecificPainUpdateComponent implements OnInit {
     protected nonSpecificPainService: NonSpecificPainService,
     protected rehabilitationCenterService: RehabilitationCenterService,
     protected activatedRoute: ActivatedRoute,
+    protected modal: ModalService,
+    private global: GlobalVariablesService,
     private fb: FormBuilder
   ) {}
 
@@ -41,7 +47,14 @@ export class NonSpecificPainUpdateComponent implements OnInit {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ nonSpecificPain }) => {
       this.updateForm(nonSpecificPain);
+
+      this.title = !nonSpecificPain.id ? 'Crear un dolor no identificado ' : 'Editar un dolor no identificado';
+      this.modalSuccessMessage = !nonSpecificPain.id
+        ? 'Dolor no identificado creado correctamente.'
+        : 'Dolor no identificado editado correctamente.';
+      this.global.setTitle(this.title);
     });
+    this.global.enteringForm();
     this.rehabilitationCenterService
       .query()
       .pipe(
@@ -53,7 +66,9 @@ export class NonSpecificPainUpdateComponent implements OnInit {
         (res: HttpErrorResponse) => this.onError(res.message)
       );
   }
-
+  setInvalidForm(isSaving) {
+    this.global.setFormStatus(isSaving);
+  }
   updateForm(nonSpecificPain: INonSpecificPain) {
     this.editForm.patchValue({
       id: nonSpecificPain.id,

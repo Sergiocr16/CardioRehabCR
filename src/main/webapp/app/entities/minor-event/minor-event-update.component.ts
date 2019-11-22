@@ -48,8 +48,8 @@ export class MinorEventUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ minorEvent }) => {
       this.updateForm(minorEvent);
 
-      this.title = !this.minorEvent.id ? 'Crear un evento menor' : 'Editar  un evento menor';
-      this.modalSuccessMessage = !this.minorEvent.id ? 'Evento menor creado correctamente.' : 'Evento menor editado correctamente.';
+      this.title = !minorEvent.id ? 'Crear un evento menor' : 'Editar  un evento menor';
+      this.modalSuccessMessage = !minorEvent.id ? 'Evento menor creado correctamente.' : 'Evento menor editado correctamente.';
       this.global.setTitle(this.title);
     });
     this.global.enteringForm();

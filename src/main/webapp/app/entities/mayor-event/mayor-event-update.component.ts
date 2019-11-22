@@ -48,8 +48,8 @@ export class MayorEventUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ mayorEvent }) => {
       this.updateForm(mayorEvent);
 
-      this.title = !this.mayorEvent.id ? 'Crear un evento mayor' : 'Editar  un evento mayor';
-      this.modalSuccessMessage = !this.mayorEvent.id ? 'Evento mayor creado correctamente.' : 'Evento mayor editado correctamente.';
+      this.title = !mayorEvent.id ? 'Crear un evento mayor' : 'Editar  un evento mayor';
+      this.modalSuccessMessage = !mayorEvent.id ? 'Evento mayor creado correctamente.' : 'Evento mayor editado correctamente.';
       this.global.setTitle(this.title);
     });
     this.global.enteringForm();

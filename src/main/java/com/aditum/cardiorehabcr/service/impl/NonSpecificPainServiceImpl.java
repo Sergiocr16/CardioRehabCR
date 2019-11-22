@@ -55,9 +55,9 @@ public class NonSpecificPainServiceImpl implements NonSpecificPainService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<NonSpecificPainDTO> findAll(Pageable pageable) {
+    public Page<NonSpecificPainDTO> findAll(Pageable pageable, Long rehabilitationId) {
         log.debug("Request to get all NonSpecificPains");
-        return nonSpecificPainRepository.findAll(pageable)
+        return nonSpecificPainRepository.findByRehabilitationCenterIdAndAndDeleted(pageable,rehabilitationId, false)
             .map(nonSpecificPainMapper::toDto);
     }
 

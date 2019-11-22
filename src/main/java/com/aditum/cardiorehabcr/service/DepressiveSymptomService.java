@@ -26,7 +26,7 @@ public interface DepressiveSymptomService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<DepressiveSymptomDTO> findAll(Pageable pageable);
+    Page<DepressiveSymptomDTO> findAll(Pageable pageable, Long rehabilitationId);
 
 
     /**
