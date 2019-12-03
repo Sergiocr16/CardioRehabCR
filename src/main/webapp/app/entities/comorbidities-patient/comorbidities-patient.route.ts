@@ -33,7 +33,7 @@ export const comorbiditiesPatientRoute: Routes = [
     path: '',
     component: ComorbiditiesPatientComponent,
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_MANAGER'],
       pageTitle: 'cardioRehabCrApp.comorbiditiesPatient.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -45,7 +45,7 @@ export const comorbiditiesPatientRoute: Routes = [
       comorbiditiesPatient: ComorbiditiesPatientResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_MANAGER'],
       pageTitle: 'cardioRehabCrApp.comorbiditiesPatient.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -57,7 +57,7 @@ export const comorbiditiesPatientRoute: Routes = [
       comorbiditiesPatient: ComorbiditiesPatientResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_MANAGER'],
       pageTitle: 'cardioRehabCrApp.comorbiditiesPatient.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -69,7 +69,7 @@ export const comorbiditiesPatientRoute: Routes = [
       comorbiditiesPatient: ComorbiditiesPatientResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_MANAGER'],
       pageTitle: 'cardioRehabCrApp.comorbiditiesPatient.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -84,7 +84,7 @@ export const comorbiditiesPatientPopupRoute: Routes = [
       comorbiditiesPatient: ComorbiditiesPatientResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_MANAGER'],
       pageTitle: 'cardioRehabCrApp.comorbiditiesPatient.home.title'
     },
     canActivate: [UserRouteAccessService],

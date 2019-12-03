@@ -13,6 +13,18 @@ import { IPatient, Patient } from 'app/shared/model/patient.model';
 import { PatientService } from './patient.service';
 import { IRehabilitationGroup } from 'app/shared/model/rehabilitation-group.model';
 import { RehabilitationGroupService } from 'app/entities/rehabilitation-group/rehabilitation-group.service';
+import { ModalService } from 'app/shared/util/modal.service';
+import { GlobalVariablesService } from 'app/shared/util/global-variables.service';
+import { IIncomeDiagnosis } from 'app/shared/model/income-diagnosis.model';
+import { IncomeDiagnosisService } from 'app/entities/income-diagnosis/income-diagnosis.service';
+import { ComorbiditieService } from 'app/entities/comorbiditie/comorbiditie.service';
+import { InitialAssessmentService } from 'app/entities/initial-assessment/initial-assessment.service';
+import { IInitialAssessment, InitialAssessment } from 'app/shared/model/initial-assessment.model';
+import { ComorbiditiesPatientService } from 'app/entities/comorbidities-patient/comorbidities-patient.service';
+import { IncomeDiagnosisPatientService } from 'app/entities/income-diagnosis-patient/income-diagnosis-patient.service';
+import { IncomeDiagnosisPatient } from 'app/shared/model/income-diagnosis-patient.model';
+import { ComorbiditiesPatient } from 'app/shared/model/comorbidities-patient.model';
+import { IComorbiditie } from 'app/shared/model/comorbiditie.model';
 
 @Component({
   selector: 'jhi-patient-update',
@@ -20,16 +32,25 @@ import { RehabilitationGroupService } from 'app/entities/rehabilitation-group/re
 })
 export class PatientUpdateComponent implements OnInit {
   isSaving: boolean;
-
+  title;
+  modalSuccessMessage;
   rehabilitationgroups: IRehabilitationGroup[];
-
-  editForm = this.fb.group({
+  incomeDiagnoses = [];
+  comorbidities = [];
+  comorbiditiesDisplay = [];
+  sexArray = ['Masculino', 'Femenino'];
+  smokingOptions = ['Activo', 'Inactivo'];
+  cardiovascularRiskOptions = ['Alto', 'Moderado', 'Bajo'];
+  totalSaved = 0;
+  totaltoSave = 0;
+  initialInfoForm = this.fb.group({
     id: [],
     code: [null, [Validators.required]],
     age: [null, [Validators.required]],
-    sex: [null, [Validators.required]],
+    sex: [[], [Validators.required]],
     ocupation: [null, [Validators.required]],
     lastEventOcurred: [null, [Validators.required]],
+    incomeDiagnoses: [[]],
     deceased: [],
     abandonment: [],
     abandonmentMedicCause: [],
@@ -38,51 +59,234 @@ export class PatientUpdateComponent implements OnInit {
     deleted: []
   });
 
+  diagnosisForm = this.fb.group({
+    id: [],
+    smoking: [[], [Validators.required]],
+    incomeDiagnoses: [[]],
+    comorbidities: [[]],
+    cardiovascularRisk: [[], [Validators.required]]
+  });
+
+  measuresForm = this.fb.group({
+    weight: [null, [Validators.required]],
+    size: [null, [Validators.required]],
+    iMC: [null, [Validators.required]],
+    hbiac: [null, [Validators.required]],
+    baselineFunctionalCapacity: [null, [Validators.required]],
+    lDL: [null, [Validators.required]],
+    hDL: [null, [Validators.required]]
+  });
+
   constructor(
     protected jhiAlertService: JhiAlertService,
     protected patientService: PatientService,
     protected rehabilitationGroupService: RehabilitationGroupService,
     protected activatedRoute: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    protected modal: ModalService,
+    private global: GlobalVariablesService,
+    protected incomeDiagnosisService: IncomeDiagnosisService,
+    protected comorbiditieService: ComorbiditieService,
+    protected initialAssessmentService: InitialAssessmentService,
+    protected comorbiditiesPatientService: ComorbiditiesPatientService,
+    protected incomeDiagnosisPatientService: IncomeDiagnosisPatientService
   ) {}
 
   ngOnInit() {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ patient }) => {
-      this.updateForm(patient);
+      this.updateFormInitialInfo(patient);
+      this.title = patient.id == null ? 'Crear un paciente' : 'Editar un paciente';
+      this.modalSuccessMessage = patient.id == null ? 'Paciente creado correctamente.' : 'Paciente editado correctamente.';
+      this.global.setTitle(this.title);
+      if (patient.id == null) {
+        this.loadDiagnosis();
+        this.loadComorbidities();
+      }
     });
-    this.rehabilitationGroupService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IRehabilitationGroup[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IRehabilitationGroup[]>) => response.body)
-      )
-      .subscribe((res: IRehabilitationGroup[]) => (this.rehabilitationgroups = res), (res: HttpErrorResponse) => this.onError(res.message));
+    this.global.enteringForm();
+
+    // this.rehabilitationGroupService
+    //   .query()
+    //   .pipe(
+    //     filter((mayBeOk: HttpResponse<IRehabilitationGroup[]>) => mayBeOk.ok),
+    //     map((response: HttpResponse<IRehabilitationGroup[]>) => response.body)
+    //   )
+    //   .subscribe((res: IRehabilitationGroup[]) => (this.rehabilitationgroups = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
-  updateForm(patient: IPatient) {
-    this.editForm.patchValue({
+  loadDiagnosis() {
+    this.incomeDiagnosisService
+      .query()
+      .pipe(
+        filter((mayBeOk: HttpResponse<IIncomeDiagnosis[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IIncomeDiagnosis[]>) => response.body)
+      )
+      .subscribe((res: IIncomeDiagnosis[]) => this.formatInconeDiagnoses(res), (res: HttpErrorResponse) => this.onError(res.message));
+  }
+
+  loadComorbidities() {
+    this.comorbiditieService
+      .query()
+      .pipe(
+        filter((mayBeOk: HttpResponse<IIncomeDiagnosis[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IIncomeDiagnosis[]>) => response.body)
+      )
+      .subscribe((res: IIncomeDiagnosis[]) => this.formatComorbidities(res), (res: HttpErrorResponse) => this.onError(res.message));
+  }
+
+  setInvalidForm(isSaving) {
+    this.global.setFormStatus(isSaving);
+  }
+
+  updateForm(patient: IPatient) {}
+
+  formatInconeDiagnoses(incomeDiagnoses) {
+    for (const incomeDiagnose of incomeDiagnoses) {
+      incomeDiagnose.checked = false;
+      this.incomeDiagnoses.push(incomeDiagnose);
+    }
+  }
+
+  formatComorbidities(comorbidities) {
+    for (const comorbiditie of comorbidities) {
+      comorbiditie.checked = false;
+      this.comorbidities.push(comorbiditie);
+    }
+  }
+
+  updateFormInitialInfo(patient: IPatient) {
+    this.initialInfoForm.patchValue({
       id: patient.id,
       code: patient.code,
       age: patient.age,
       sex: patient.sex,
       ocupation: patient.ocupation,
-      lastEventOcurred: patient.lastEventOcurred != null ? patient.lastEventOcurred.format(DATE_TIME_FORMAT) : null,
-      deceased: patient.deceased,
-      abandonment: patient.abandonment,
-      abandonmentMedicCause: patient.abandonmentMedicCause,
-      rehabStatus: patient.rehabStatus,
-      sessionNumber: patient.sessionNumber,
-      deleted: patient.deleted
+      lastEventOcurred: patient.lastEventOcurred != null ? new Date(patient.lastEventOcurred.toDate()) : null
+      // deceased: patient.deceased,
+      // abandonment: patient.abandonment,
+      // abandonmentMedicCause: patient.abandonmentMedicCause,
+      // rehabStatus: patient.rehabStatus,
+      // sessionNumber: patient.sessionNumber,
+      // deleted: patient.deleted
     });
+    this.updateFormDiagnosis(patient);
+  }
+
+  updateFormDiagnosis(patient: IPatient) {
+    if (patient.id) {
+      this.initialAssessmentService
+        .findByPatient(patient.id)
+        .pipe(
+          filter((response: HttpResponse<InitialAssessment>) => response.ok),
+          map((initialAssessment: HttpResponse<InitialAssessment>) => initialAssessment.body)
+        )
+        .subscribe(initialAssesment => {
+          this.diagnosisForm.patchValue({
+            id: initialAssesment.id,
+            smoking: initialAssesment.smoking,
+            incomeDiagnoses: [],
+            comorbidities: [],
+            cardiovascularRisk: initialAssesment.cardiovascularRisk
+          });
+          this.updateFormMeasures(initialAssesment);
+        });
+    }
+  }
+
+  updateFormMeasures(initialAssesment) {
+    this.measuresForm.patchValue({
+      weight: initialAssesment.weight,
+      size: initialAssesment.size,
+      iMC: initialAssesment.iMC,
+      hbiac: initialAssesment.hbiac,
+      baselineFunctionalCapacity: initialAssesment.baselineFunctionalCapacity,
+      lDL: initialAssesment.lDL,
+      hDL: initialAssesment.hDL
+    });
+
+    this.incomeDiagnosisService
+      .query()
+      .pipe(
+        filter((mayBeOk: HttpResponse<IIncomeDiagnosis[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IIncomeDiagnosis[]>) => response.body)
+      )
+      .subscribe(
+        (res: IIncomeDiagnosis[]) => this.formatDiagnosisPatient(res, initialAssesment),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
+
+    this.comorbiditieService
+      .query()
+      .pipe(
+        filter((mayBeOk: HttpResponse<IIncomeDiagnosis[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IIncomeDiagnosis[]>) => response.body)
+      )
+      .subscribe(
+        (res: IIncomeDiagnosis[]) => this.formatComorbiditiePatient(res, initialAssesment),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
   }
 
   previousState() {
     window.history.back();
   }
+  valueChange(array, i, $event) {
+    array[i].checked = $event.checked;
+  }
+  formatDiagnosisPatient(diagnosis, initialAssesment) {
+    this.formatInconeDiagnoses(diagnosis);
+    this.incomeDiagnosisPatientService
+      .findByAssesment({ id: initialAssesment.id })
+      .pipe(
+        filter((mayBeOk: HttpResponse<IIncomeDiagnosis[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IIncomeDiagnosis[]>) => response.body)
+      )
+      .subscribe(
+        (res: IIncomeDiagnosis[]) => this.formatArrayCheckedIncomeDiagnosis(this.incomeDiagnoses, res),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
+  }
 
+  formatComorbiditiePatient(comorbidities, initialAssesment) {
+    this.formatComorbidities(comorbidities);
+    this.comorbiditiesPatientService
+      .findByAssesment({ id: initialAssesment.id })
+      .pipe(
+        filter((mayBeOk: HttpResponse<IComorbiditie[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IComorbiditie[]>) => response.body)
+      )
+      .subscribe(
+        (res: IComorbiditie[]) => this.formatArrayCheckedComorbiditie(this.comorbidities, res),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
+  }
+
+  formatArrayCheckedIncomeDiagnosis(fullArray, filterArray) {
+    for (const fA of fullArray) {
+      for (const sA of filterArray) {
+        if (sA.incomeDiagnosisId === fA.id) {
+          if (sA.exist) {
+            fA.checked = true;
+          }
+        }
+      }
+    }
+  }
+  formatArrayCheckedComorbiditie(fullArray, filterArray) {
+    for (const fA of fullArray) {
+      for (const sA of filterArray) {
+        if (sA.comorbiditietId === fA.id) {
+          if (sA.exist) {
+            fA.checked = true;
+          }
+        }
+      }
+    }
+  }
   save() {
     this.isSaving = true;
+    this.global.loading();
     const patient = this.createFromForm();
     if (patient.id !== undefined) {
       this.subscribeToSaveResponse(this.patientService.update(patient));
@@ -94,36 +298,128 @@ export class PatientUpdateComponent implements OnInit {
   private createFromForm(): IPatient {
     return {
       ...new Patient(),
-      id: this.editForm.get(['id']).value,
-      code: this.editForm.get(['code']).value,
-      age: this.editForm.get(['age']).value,
-      sex: this.editForm.get(['sex']).value,
-      ocupation: this.editForm.get(['ocupation']).value,
+      id: this.initialInfoForm.get(['id']).value,
+      code: this.initialInfoForm.get(['code']).value,
+      age: this.initialInfoForm.get(['age']).value,
+      sex: this.initialInfoForm.get(['sex']).value,
+      ocupation: this.initialInfoForm.get(['ocupation']).value,
       lastEventOcurred:
-        this.editForm.get(['lastEventOcurred']).value != null
-          ? moment(this.editForm.get(['lastEventOcurred']).value, DATE_TIME_FORMAT)
-          : undefined,
-      deceased: this.editForm.get(['deceased']).value,
-      abandonment: this.editForm.get(['abandonment']).value,
-      abandonmentMedicCause: this.editForm.get(['abandonmentMedicCause']).value,
-      rehabStatus: this.editForm.get(['rehabStatus']).value,
-      sessionNumber: this.editForm.get(['sessionNumber']).value,
-      deleted: this.editForm.get(['deleted']).value
+        this.initialInfoForm.get(['lastEventOcurred']).value != null
+          ? moment(this.initialInfoForm.get(['lastEventOcurred']).value, DATE_TIME_FORMAT)
+          : undefined
+      // deceased: this.initialInfoForm.get(['deceased']).value,
+      // abandonment: this.initialInfoForm.get(['abandonment']).value,
+      // abandonmentMedicCause: this.initialInfoForm.get(['abandonmentMedicCause']).value,
+      // rehabStatus: this.initialInfoForm.get(['rehabStatus']).value,
+      // sessionNumber: this.initialInfoForm.get(['sessionNumber']).value,
+      // deleted: this.initialInfoForm.get(['deleted']).value
+    };
+  }
+
+  private createFromFormInitial(patient): IInitialAssessment {
+    return {
+      ...new InitialAssessment(),
+      id: this.diagnosisForm.get(['id']).value,
+      smoking: this.diagnosisForm.get(['smoking']).value,
+      weight: this.measuresForm.get(['weight']).value,
+      size: this.measuresForm.get(['size']).value,
+      iMC: this.measuresForm.get(['iMC']).value,
+      hbiac: this.measuresForm.get(['hbiac']).value,
+      baselineFunctionalCapacity: this.measuresForm.get(['baselineFunctionalCapacity']).value,
+      lDL: this.measuresForm.get(['lDL']).value,
+      hDL: this.measuresForm.get(['hDL']).value,
+      cardiovascularRisk: this.diagnosisForm.get(['cardiovascularRisk']).value,
+      patientId: patient.id
     };
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPatient>>) {
-    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+    result.subscribe(data => this.onSaveSuccess(data), () => this.onSaveError());
   }
 
-  protected onSaveSuccess() {
-    this.isSaving = false;
-    this.previousState();
+  protected subscribeToSaveResponseInitial(result: Observable<HttpResponse<IInitialAssessment>>) {
+    result.subscribe(data => this.onSaveSuccessInitialAssessmentService(data.body), () => this.onSaveError());
+  }
+
+  protected onSaveSuccess(result) {
+    const initialAssessment = this.createFromFormInitial(result.body);
+    if (initialAssessment.id !== null) {
+      this.subscribeToSaveResponseInitial(this.initialAssessmentService.update(initialAssessment));
+    } else {
+      this.subscribeToSaveResponseInitial(this.initialAssessmentService.create(initialAssessment));
+    }
+  }
+
+  protected onSaveSuccessInitialAssessmentService(initialAssesment) {
+    const newIncomeDiagnosis = this.createNewIncomeDiagnosis(initialAssesment);
+    const newComorbidities = this.createNewComorbidities(initialAssesment);
+    this.totaltoSave = newIncomeDiagnosis.length + newComorbidities.length;
+    this.saveNewIncomeDiagnosis(newIncomeDiagnosis);
+    this.saveNewComorbidities(newComorbidities);
+  }
+
+  saveNewIncomeDiagnosis(newIncomeDiagnosis) {
+    for (const newIncomeDiagnose of newIncomeDiagnosis) {
+      this.incomeDiagnosisPatientService.create(newIncomeDiagnose).subscribe(response => {
+        this.totalSaved++;
+        if (this.totaltoSave === this.totalSaved) {
+          this.modal.message(this.modalSuccessMessage);
+          this.isSaving = false;
+          this.previousState();
+          this.global.loaded();
+        }
+      });
+    }
+  }
+
+  saveNewComorbidities(newComorbidities) {
+    for (const comorbiditie of newComorbidities) {
+      this.comorbiditiesPatientService.create(comorbiditie).subscribe(response => {
+        this.totalSaved++;
+        if (this.totaltoSave === this.totalSaved) {
+          this.modal.message(this.modalSuccessMessage);
+          this.isSaving = false;
+          this.previousState();
+          this.global.loaded();
+        }
+      });
+    }
+  }
+
+  createNewComorbidities(initialAssesment) {
+    const newComorbidities = [];
+    for (const comorbiditie of this.comorbidities) {
+      newComorbidities.push({
+        ...new ComorbiditiesPatient(),
+        id: null,
+        description: comorbiditie.description,
+        comorbiditietId: comorbiditie.id,
+        exist: comorbiditie.checked,
+        initialAssessmentId: initialAssesment.id
+      });
+    }
+    return newComorbidities;
+  }
+
+  createNewIncomeDiagnosis(initialAssesment) {
+    const newIncomeDiagnosis = [];
+    for (const incomeDiagnosis of this.incomeDiagnoses) {
+      newIncomeDiagnosis.push({
+        ...new IncomeDiagnosisPatient(),
+        id: null,
+        description: incomeDiagnosis.description,
+        incomeDiagnosisId: incomeDiagnosis.id,
+        exist: incomeDiagnosis.checked,
+        initialAssessmentId: initialAssesment.id
+      });
+    }
+    return newIncomeDiagnosis;
   }
 
   protected onSaveError() {
     this.isSaving = false;
   }
+
   protected onError(errorMessage: string) {
     this.jhiAlertService.error(errorMessage, null, null);
   }

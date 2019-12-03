@@ -33,7 +33,7 @@ export const rehabilitationGroupRoute: Routes = [
     path: '',
     component: RehabilitationGroupComponent,
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_USER', 'ROLE_MANAGER'],
       pageTitle: 'cardioRehabCrApp.rehabilitationGroup.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -45,7 +45,7 @@ export const rehabilitationGroupRoute: Routes = [
       rehabilitationGroup: RehabilitationGroupResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_USER', 'ROLE_MANAGER'],
       pageTitle: 'cardioRehabCrApp.rehabilitationGroup.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -57,7 +57,7 @@ export const rehabilitationGroupRoute: Routes = [
       rehabilitationGroup: RehabilitationGroupResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_USER', 'ROLE_MANAGER'],
       pageTitle: 'cardioRehabCrApp.rehabilitationGroup.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -69,7 +69,7 @@ export const rehabilitationGroupRoute: Routes = [
       rehabilitationGroup: RehabilitationGroupResolve
     },
     data: {
-      authorities: ['ROLE_SUPERADMIN'],
+      authorities: ['ROLE_USER', 'ROLE_MANAGER'],
       pageTitle: 'cardioRehabCrApp.rehabilitationGroup.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -84,7 +84,7 @@ export const rehabilitationGroupPopupRoute: Routes = [
       rehabilitationGroup: RehabilitationGroupResolve
     },
     data: {
-      authorities: ['ROLE_SUPERADMIN'],
+      authorities: ['ROLE_USER', 'ROLE_MANAGER'],
       pageTitle: 'cardioRehabCrApp.rehabilitationGroup.home.title'
     },
     canActivate: [UserRouteAccessService],

@@ -5,6 +5,7 @@ import com.aditum.cardiorehabcr.domain.ComorbiditiesPatient;
 import com.aditum.cardiorehabcr.repository.ComorbiditiesPatientRepository;
 import com.aditum.cardiorehabcr.service.ComorbiditiesPatientService;
 import com.aditum.cardiorehabcr.service.dto.ComorbiditiesPatientDTO;
+import com.aditum.cardiorehabcr.service.impl.ComorbiditiesPatientServiceImpl;
 import com.aditum.cardiorehabcr.service.mapper.ComorbiditiesPatientMapper;
 import com.aditum.cardiorehabcr.web.rest.errors.ExceptionTranslator;
 
@@ -52,7 +53,7 @@ public class ComorbiditiesPatientResourceIT {
     private ComorbiditiesPatientMapper comorbiditiesPatientMapper;
 
     @Autowired
-    private ComorbiditiesPatientService comorbiditiesPatientService;
+    private ComorbiditiesPatientServiceImpl comorbiditiesPatientService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -212,7 +213,7 @@ public class ComorbiditiesPatientResourceIT {
             .andExpect(jsonPath("$.[*].comorbiditietId").value(hasItem(DEFAULT_COMORBIDITIET_ID.intValue())))
             .andExpect(jsonPath("$.[*].exist").value(hasItem(DEFAULT_EXIST.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getComorbiditiesPatient() throws Exception {

@@ -33,9 +33,30 @@
             Dolor agudo no específico </a>
     </mat-nav-list>
 </mat-nav-list>
+<mat-nav-list class="no-padding" *jhiHasAnyAuthority="'ROLE_MANAGER'">
+    <a mat-list-item class="isDisabled">
+        Rehabilitación </a>
+    <mat-nav-list class="mat-nav-side-menu">
+        <a mat-list-item routerLink="rehabilitation-group" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" >
+            <mat-icon class="text-icon">supervised_user_circle</mat-icon>
+            Grupos </a>
+    </mat-nav-list>
+    <mat-nav-list class="mat-nav-side-menu">
+        <a mat-list-item routerLink="patient" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" >
+            <mat-icon class="text-icon">supervised_user_circle</mat-icon>
+            Pacientes </a>
+    </mat-nav-list>
+    <mat-nav-list class="mat-nav-side-menu">
+        <a mat-list-item routerLink="comorbidities-patient" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" >
+            <mat-icon class="text-icon">supervised_user_circle</mat-icon>
+            Comor no se que </a>
+    </mat-nav-list>
+</mat-nav-list>
+<mat-divider></mat-divider>
 
-
-
+    <!--                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>-->
+    <!--                            <span jhiTranslate="global.menu.entities.patient">Patient</span>-->
+    <!--                        </a>-->
 <!--<li>&ndash;&gt;-->
 <!--                            <a class="dropdown-item" routerLink="admin/user-management" routerLinkActive="active" (click)="collapseNavbar()">-->
 <!--                                <fa-icon icon="user" fixedWidth="true"></fa-icon>-->
