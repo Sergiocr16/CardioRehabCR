@@ -146,15 +146,4 @@ export class MayorEventComponent implements OnInit, OnDestroy {
       this.mayorEvents.push(data[i]);
     }
   }
-
-  protected paginateRehabilitationCenters(data: IRehabilitationCenter[], headers: HttpHeaders) {
-    this.links = this.parseLinks.parse(headers.get('link'));
-    this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
-    for (let i = 0; i < data.length; i++) {
-      this.rehabilitationCenters.push(data[i]);
-    }
-    if (this.rehabilitationCenters.length > 0) {
-      this.rcId = this.rehabilitationCenters[0].id;
-    }
-  }
 }

@@ -70,9 +70,6 @@ export class DepressiveSymptomUpdateComponent implements OnInit {
     this.global.setFormStatus(isSaving);
   }
 
-  ngOnDestroy() {
-    this.global.leavingForm();
-  }
   updateForm(depressiveSymptom: IDepressiveSymptom) {
     this.editForm.patchValue({
       id: depressiveSymptom.id,
