@@ -46,11 +46,11 @@ public class IncomeDiagnosisPatientServiceImpl implements IncomeDiagnosisPatient
         log.debug("Request to save IncomeDiagnosisPatient : {}", incomeDiagnosisPatientDTO);
 
         IncomeDiagnosisPatient incomeDiagnosisPatient = incomeDiagnosisPatientMapper.toEntity(incomeDiagnosisPatientDTO);
-        incomeDiagnosisPatient = incomeDiagnosisPatientRepository.save(incomeDiagnosisPatient);
         Optional<IncomeDiagnosisPatient> incomeDiagnosisPatientOld = incomeDiagnosisPatientRepository.findFirstByInitialAssessmentIdAndIncomeDiagnosisId(incomeDiagnosisPatientDTO.getInitialAssessmentId(),incomeDiagnosisPatientDTO.getIncomeDiagnosisId());
         if(incomeDiagnosisPatientOld.isPresent()){
             this.delete(incomeDiagnosisPatientOld.get().getId());
         }
+        incomeDiagnosisPatient = incomeDiagnosisPatientRepository.save(incomeDiagnosisPatient);
         return incomeDiagnosisPatientMapper.toDto(incomeDiagnosisPatient);
     }
 

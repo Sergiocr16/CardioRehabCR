@@ -26,7 +26,7 @@ public interface RehabilitationGroupService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<RehabilitationGroupDTO> findAll(Pageable pageable);
+    Page<RehabilitationGroupDTO> findAll(Pageable pageable, Long rehabilitationId);
 
     /**
      * Get all the rehabilitationGroups with eager load of many-to-many relationships.
@@ -34,7 +34,7 @@ public interface RehabilitationGroupService {
      * @return the list of entities.
      */
     Page<RehabilitationGroupDTO> findAllWithEagerRelationships(Pageable pageable);
-    
+
     /**
      * Get the "id" rehabilitationGroup.
      *

@@ -10,6 +10,7 @@ export interface IPatient {
   age?: number;
   sex?: string;
   ocupation?: string;
+  scholarship?: string;
   lastEventOcurred?: Moment;
   deceased?: boolean;
   abandonment?: boolean;
@@ -30,6 +31,7 @@ export class Patient implements IPatient {
     public age?: number,
     public sex?: string,
     public ocupation?: string,
+    public scholarship?: string,
     public lastEventOcurred?: Moment,
     public deceased?: boolean,
     public abandonment?: boolean,

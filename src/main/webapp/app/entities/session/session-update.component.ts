@@ -13,6 +13,13 @@ import { ISession, Session } from 'app/shared/model/session.model';
 import { SessionService } from './session.service';
 import { IPatient } from 'app/shared/model/patient.model';
 import { PatientService } from 'app/entities/patient/patient.service';
+import { ModalService } from 'app/shared/util/modal.service';
+import { GlobalVariablesService } from 'app/shared/util/global-variables.service';
+import { IIncomeDiagnosis } from 'app/shared/model/income-diagnosis.model';
+import { NonSpecificPainService } from 'app/entities/non-specific-pain/non-specific-pain.service';
+import { MinorEventService } from 'app/entities/minor-event/minor-event.service';
+import { MayorEventService } from 'app/entities/mayor-event/mayor-event.service';
+import { DepressiveSymptomService } from 'app/entities/depressive-symptom/depressive-symptom.service';
 
 @Component({
   selector: 'jhi-session-update',
@@ -22,6 +29,14 @@ export class SessionUpdateComponent implements OnInit {
   isSaving: boolean;
 
   patients: IPatient[];
+  title;
+  modalSuccessMessage;
+  modalConfirm;
+
+  nonSpecificPains = [];
+  minorEvents = [];
+  mayorEvents = [];
+  depressiveSymptoms = [];
 
   editForm = this.fb.group({
     id: [],
@@ -39,14 +54,29 @@ export class SessionUpdateComponent implements OnInit {
     protected sessionService: SessionService,
     protected patientService: PatientService,
     protected activatedRoute: ActivatedRoute,
+    protected modal: ModalService,
+    private global: GlobalVariablesService,
+    protected nonSpecificPainService: NonSpecificPainService,
+    protected minorEventService: MinorEventService,
+    protected mayorEventService: MayorEventService,
+    protected depressiveSymptomService: DepressiveSymptomService,
     private fb: FormBuilder
   ) {}
 
   ngOnInit() {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ session }) => {
+      session.executionDate = moment(new Date());
       this.updateForm(session);
+      this.title = session.id == null ? 'Crear evaluación' : 'Editar evaluación';
+      this.modalConfirm = session.id == null ? 'new' : 'update';
+      this.modalSuccessMessage = session.id == null ? 'Evaluación creada correctamente.' : 'Evaluación editada correctamente.';
+      this.loadNonSpecificPain();
+      this.loadMinorEvents();
+      this.loadMayorEvents();
+      this.loadDepressiveSymptoms();
     });
+
     this.patientService
       .query()
       .pipe(
@@ -56,11 +86,86 @@ export class SessionUpdateComponent implements OnInit {
       .subscribe((res: IPatient[]) => (this.patients = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
+  loadMinorEvents() {
+    this.minorEventService
+      .query({
+        rehabilitationId: this.global.rehabCenter
+      })
+      .pipe(
+        filter((mayBeOk: HttpResponse<IIncomeDiagnosis[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IIncomeDiagnosis[]>) => response.body)
+      )
+      .subscribe(
+        (res: IIncomeDiagnosis[]) => this.formatCheckBoxArray(res, this.minorEvents),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
+  }
+
+  loadMayorEvents() {
+    this.mayorEventService
+      .query({
+        rehabilitationId: this.global.rehabCenter
+      })
+      .pipe(
+        filter((mayBeOk: HttpResponse<IIncomeDiagnosis[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IIncomeDiagnosis[]>) => response.body)
+      )
+      .subscribe(
+        (res: IIncomeDiagnosis[]) => this.formatCheckBoxArray(res, this.mayorEvents),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
+  }
+
+  loadDepressiveSymptoms() {
+    this.depressiveSymptomService
+      .query({
+        rehabilitationId: this.global.rehabCenter
+      })
+      .pipe(
+        filter((mayBeOk: HttpResponse<IIncomeDiagnosis[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IIncomeDiagnosis[]>) => response.body)
+      )
+      .subscribe(
+        (res: IIncomeDiagnosis[]) => this.formatCheckBoxArray(res, this.depressiveSymptoms),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
+  }
+
+  loadNonSpecificPain() {
+    this.nonSpecificPainService
+      .query({
+        rehabilitationId: this.global.rehabCenter
+      })
+      .pipe(
+        filter((mayBeOk: HttpResponse<IIncomeDiagnosis[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IIncomeDiagnosis[]>) => response.body)
+      )
+      .subscribe(
+        (res: IIncomeDiagnosis[]) => this.formatCheckBoxArray(res, this.nonSpecificPains),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
+  }
+
+  formatCheckBoxArray(res, array) {
+    for (const o of res) {
+      o.checked = false;
+      array.push(o);
+    }
+  }
+
+  valueChange(array, i, $event) {
+    array[i].checked = $event.checked;
+  }
+
+  setInvalidForm(isSaving) {
+    this.global.setFormStatus(isSaving);
+  }
+
   updateForm(session: ISession) {
     this.editForm.patchValue({
       id: session.id,
       code: session.code,
-      executionDate: session.executionDate != null ? session.executionDate.format(DATE_TIME_FORMAT) : null,
+      executionDate: session.executionDate != null ? new Date(session.executionDate.toDate()) : null,
       abscence: session.abscence,
       hospitalization: session.hospitalization,
       status: session.status,
@@ -112,6 +217,7 @@ export class SessionUpdateComponent implements OnInit {
   protected onSaveError() {
     this.isSaving = false;
   }
+
   protected onError(errorMessage: string) {
     this.jhiAlertService.error(errorMessage, null, null);
   }

@@ -60,6 +60,9 @@ public class Patient implements Serializable {
     @Column(name = "deleted")
     private Boolean deleted;
 
+    @Column(name = "scholarship")
+    private String scholarship;
+
     @OneToMany(mappedBy = "patient")
     private Set<InitialAssessment> initialAssessments = new HashSet<>();
 
@@ -225,6 +228,19 @@ public class Patient implements Serializable {
         this.deleted = deleted;
     }
 
+    public String getScholarship() {
+        return scholarship;
+    }
+
+    public Patient scholarship(String scholarship) {
+        this.scholarship = scholarship;
+        return this;
+    }
+
+    public void setScholarship(String scholarship) {
+        this.scholarship = scholarship;
+    }
+
     public Set<InitialAssessment> getInitialAssessments() {
         return initialAssessments;
     }
@@ -357,6 +373,7 @@ public class Patient implements Serializable {
             ", rehabStatus=" + getRehabStatus() +
             ", sessionNumber=" + getSessionNumber() +
             ", deleted='" + isDeleted() + "'" +
+            ", scholarship='" + getScholarship() + "'" +
             "}";
     }
 }

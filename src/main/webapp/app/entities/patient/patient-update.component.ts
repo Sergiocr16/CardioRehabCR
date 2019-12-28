@@ -41,6 +41,18 @@ export class PatientUpdateComponent implements OnInit {
   sexArray = ['Masculino', 'Femenino'];
   smokingOptions = ['Activo', 'Inactivo'];
   cardiovascularRiskOptions = ['Alto', 'Moderado', 'Bajo'];
+  scholarshipArray = [
+    'Ninguna',
+    'Primaria Incompleta',
+    'Primaria completa',
+    'Secundaria Incompleta',
+    'Secundaria completa',
+    'Universitaria Incompleta',
+    'Universitaria completa',
+    'Parauniversitaria'
+  ];
+  ocupationArray = ['Ama de casa', 'Asalariado', 'Desempleado'];
+  modalConfirm;
   totalSaved = 0;
   totaltoSave = 0;
   initialInfoForm = this.fb.group({
@@ -48,7 +60,8 @@ export class PatientUpdateComponent implements OnInit {
     code: [null, [Validators.required]],
     age: [null, [Validators.required]],
     sex: [[], [Validators.required]],
-    ocupation: [null, [Validators.required]],
+    ocupation: [[], [Validators.required]],
+    scholarship: [[], [Validators.required]],
     lastEventOcurred: [null, [Validators.required]],
     incomeDiagnoses: [[]],
     deceased: [],
@@ -96,7 +109,8 @@ export class PatientUpdateComponent implements OnInit {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ patient }) => {
       this.updateFormInitialInfo(patient);
-      this.title = patient.id == null ? 'Crear un paciente' : 'Editar un paciente';
+      this.title = patient.id == null ? 'Crear paciente' : 'Editar paciente';
+      this.modalConfirm = patient.id == null ? 'new' : 'update';
       this.modalSuccessMessage = patient.id == null ? 'Paciente creado correctamente.' : 'Paciente editado correctamente.';
       this.global.setTitle(this.title);
       if (patient.id == null) {
@@ -105,7 +119,6 @@ export class PatientUpdateComponent implements OnInit {
       }
     });
     this.global.enteringForm();
-
     // this.rehabilitationGroupService
     //   .query()
     //   .pipe(
@@ -117,7 +130,9 @@ export class PatientUpdateComponent implements OnInit {
 
   loadDiagnosis() {
     this.incomeDiagnosisService
-      .query()
+      .query({
+        rehabilitationId: this.global.rehabCenter
+      })
       .pipe(
         filter((mayBeOk: HttpResponse<IIncomeDiagnosis[]>) => mayBeOk.ok),
         map((response: HttpResponse<IIncomeDiagnosis[]>) => response.body)
@@ -126,8 +141,11 @@ export class PatientUpdateComponent implements OnInit {
   }
 
   loadComorbidities() {
+    const a = this.global.rehabCenter;
     this.comorbiditieService
-      .query()
+      .query({
+        rehabilitationId: this.global.rehabCenter
+      })
       .pipe(
         filter((mayBeOk: HttpResponse<IIncomeDiagnosis[]>) => mayBeOk.ok),
         map((response: HttpResponse<IIncomeDiagnosis[]>) => response.body)
@@ -162,6 +180,7 @@ export class PatientUpdateComponent implements OnInit {
       age: patient.age,
       sex: patient.sex,
       ocupation: patient.ocupation,
+      scholarship: patient.scholarship,
       lastEventOcurred: patient.lastEventOcurred != null ? new Date(patient.lastEventOcurred.toDate()) : null
       // deceased: patient.deceased,
       // abandonment: patient.abandonment,
@@ -231,9 +250,11 @@ export class PatientUpdateComponent implements OnInit {
   previousState() {
     window.history.back();
   }
+
   valueChange(array, i, $event) {
     array[i].checked = $event.checked;
   }
+
   formatDiagnosisPatient(diagnosis, initialAssesment) {
     this.formatInconeDiagnoses(diagnosis);
     this.incomeDiagnosisPatientService
@@ -273,6 +294,7 @@ export class PatientUpdateComponent implements OnInit {
       }
     }
   }
+
   formatArrayCheckedComorbiditie(fullArray, filterArray) {
     for (const fA of fullArray) {
       for (const sA of filterArray) {
@@ -284,15 +306,18 @@ export class PatientUpdateComponent implements OnInit {
       }
     }
   }
+
   save() {
-    this.isSaving = true;
-    this.global.loading();
-    const patient = this.createFromForm();
-    if (patient.id !== undefined) {
-      this.subscribeToSaveResponse(this.patientService.update(patient));
-    } else {
-      this.subscribeToSaveResponse(this.patientService.create(patient));
-    }
+    this.modal.confirmDialog(this.modalConfirm, () => {
+      this.isSaving = true;
+      this.global.loading();
+      const patient = this.createFromForm();
+      if (patient.id !== undefined) {
+        this.subscribeToSaveResponse(this.patientService.update(patient));
+      } else {
+        this.subscribeToSaveResponse(this.patientService.create(patient));
+      }
+    });
   }
 
   private createFromForm(): IPatient {
@@ -303,6 +328,7 @@ export class PatientUpdateComponent implements OnInit {
       age: this.initialInfoForm.get(['age']).value,
       sex: this.initialInfoForm.get(['sex']).value,
       ocupation: this.initialInfoForm.get(['ocupation']).value,
+      scholarship: this.initialInfoForm.get(['scholarship']).value,
       lastEventOcurred:
         this.initialInfoForm.get(['lastEventOcurred']).value != null
           ? moment(this.initialInfoForm.get(['lastEventOcurred']).value, DATE_TIME_FORMAT)

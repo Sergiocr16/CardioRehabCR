@@ -51,11 +51,12 @@ public class ComorbiditiesPatientServiceImpl implements ComorbiditiesPatientServ
         log.debug("Request to save ComorbiditiesPatient : {}", comorbiditiesPatientDTO);
 
         ComorbiditiesPatient comorbiditiesPatient = comorbiditiesPatientMapper.toEntity(comorbiditiesPatientDTO);
-        comorbiditiesPatient = comorbiditiesPatientRepository.save(comorbiditiesPatient);
         Optional<ComorbiditiesPatient> comorbiditiesPatientOld = comorbiditiesPatientRepository.findFirstByInitialAssessmentIdAndComorbiditietId(comorbiditiesPatientDTO.getInitialAssessmentId(),comorbiditiesPatientDTO.getComorbiditietId());
         if(comorbiditiesPatientOld.isPresent()){
             this.delete(comorbiditiesPatientOld.get().getId());
         }
+        comorbiditiesPatient = comorbiditiesPatientRepository.save(comorbiditiesPatient);
+
         return comorbiditiesPatientMapper.toDto(comorbiditiesPatient);
     }
 

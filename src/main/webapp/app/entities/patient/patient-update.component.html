@@ -3,7 +3,7 @@
          fxHide.xs="true">
         {{title}}
     </div>
-    <mat-horizontal-stepper [linear]="true" #stepper >
+    <mat-horizontal-stepper [linear]="true" #stepper>
         <mat-step [stepControl]="initialInfoForm">
             <form name="initialInfoForm" role="form" [formGroup]="initialInfoForm">
                 <span ng-hide="true">{{setInvalidForm(isSaving)}}</span>
@@ -54,12 +54,32 @@
                     <mat-form-field appearance="outline">
                         <mat-label jhiTranslate="cardioRehabCrApp.patient.ocupation" for="field_ocupation">Ocupation
                         </mat-label>
-                        <input matInput type="text" name="ocupation" id="field_ocupation"
-                               formControlName="ocupation">
+                        <mat-select name="ocupation" formControlName="ocupation">
+                            <mat-option *ngFor="let s of ocupationArray" [value]="s">
+                                {{s}}
+                            </mat-option>
+                        </mat-select>
                         <mat-hint
                             *ngIf="initialInfoForm.get('ocupation').invalid && (initialInfoForm.get('ocupation').dirty || initialInfoForm.get('ocupation').touched)"
                             class="form-text text-danger">
                     <span *ngIf="initialInfoForm.get('ocupation').errors.required"
+                          jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </span>
+                        </mat-hint>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label jhiTranslate="cardioRehabCrApp.patient.scholarship" for="field_scholarship">Escolaridad
+                        </mat-label>
+                        <mat-select name="scholarship" formControlName="scholarship">
+                            <mat-option *ngFor="let s of scholarshipArray" [value]="s">
+                                {{s}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-hint
+                            *ngIf="initialInfoForm.get('scholarship').invalid && (initialInfoForm.get('scholarship').dirty || initialInfoForm.get('ocupation').touched)"
+                            class="form-text text-danger">
+                    <span *ngIf="initialInfoForm.get('scholarship').errors.required"
                           jhiTranslate="entity.validation.required">
                         This field is required.
                     </span>
@@ -95,7 +115,7 @@
         <mat-step [stepControl]="diagnosisForm">
             <form name="diagnosisForm" role="form" [formGroup]="diagnosisForm">
                 <span ng-hide="true">{{setInvalidForm(isSaving)}}</span>
-                <ng-template matStepLabel>Diagnóstico</ng-template>
+                <ng-template matStepLabel>Características clínicas</ng-template>
                 <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between none" fxLayoutGap="20px"
                      fxLayoutGap.xs="10px" style="margin: 10px 0 10px 0">
                     <mat-card fxFlex="50">
