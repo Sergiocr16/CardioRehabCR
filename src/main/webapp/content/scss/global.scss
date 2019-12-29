@@ -380,3 +380,11 @@ button {
 .pointer {
   cursor: pointer !important;
 }
+
+.disabled {
+  pointer-events: none !important;
+}
+
+.margin-left-20 {
+  margin-left: 20px !important;
+}

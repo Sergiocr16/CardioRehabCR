@@ -5,6 +5,7 @@ import com.aditum.cardiorehabcr.domain.Session;
 import com.aditum.cardiorehabcr.repository.SessionRepository;
 import com.aditum.cardiorehabcr.service.SessionService;
 import com.aditum.cardiorehabcr.service.dto.SessionDTO;
+import com.aditum.cardiorehabcr.service.impl.SessionServiceImpl;
 import com.aditum.cardiorehabcr.service.mapper.SessionMapper;
 import com.aditum.cardiorehabcr.web.rest.errors.ExceptionTranslator;
 
@@ -56,6 +57,9 @@ public class SessionResourceIT {
     private static final Boolean DEFAULT_DELETED = false;
     private static final Boolean UPDATED_DELETED = true;
 
+    private static final Boolean DEFAULT_CURRENTLY_WORKING = false;
+    private static final Boolean UPDATED_CURRENTLY_WORKING = true;
+
     @Autowired
     private SessionRepository sessionRepository;
 
@@ -63,7 +67,7 @@ public class SessionResourceIT {
     private SessionMapper sessionMapper;
 
     @Autowired
-    private SessionService sessionService;
+    private SessionServiceImpl sessionService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -109,7 +113,8 @@ public class SessionResourceIT {
             .abscence(DEFAULT_ABSCENCE)
             .hospitalization(DEFAULT_HOSPITALIZATION)
             .status(DEFAULT_STATUS)
-            .deleted(DEFAULT_DELETED);
+            .deleted(DEFAULT_DELETED)
+            .currentlyWorking(DEFAULT_CURRENTLY_WORKING);
         return session;
     }
     /**
@@ -125,7 +130,8 @@ public class SessionResourceIT {
             .abscence(UPDATED_ABSCENCE)
             .hospitalization(UPDATED_HOSPITALIZATION)
             .status(UPDATED_STATUS)
-            .deleted(UPDATED_DELETED);
+            .deleted(UPDATED_DELETED)
+            .currentlyWorking(UPDATED_CURRENTLY_WORKING);
         return session;
     }
 
@@ -156,6 +162,7 @@ public class SessionResourceIT {
         assertThat(testSession.isHospitalization()).isEqualTo(DEFAULT_HOSPITALIZATION);
         assertThat(testSession.getStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testSession.isDeleted()).isEqualTo(DEFAULT_DELETED);
+        assertThat(testSession.isCurrentlyWorking()).isEqualTo(DEFAULT_CURRENTLY_WORKING);
     }
 
     @Test
@@ -233,9 +240,10 @@ public class SessionResourceIT {
             .andExpect(jsonPath("$.[*].abscence").value(hasItem(DEFAULT_ABSCENCE.booleanValue())))
             .andExpect(jsonPath("$.[*].hospitalization").value(hasItem(DEFAULT_HOSPITALIZATION.booleanValue())))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
-            .andExpect(jsonPath("$.[*].deleted").value(hasItem(DEFAULT_DELETED.booleanValue())));
+            .andExpect(jsonPath("$.[*].deleted").value(hasItem(DEFAULT_DELETED.booleanValue())))
+            .andExpect(jsonPath("$.[*].currentlyWorking").value(hasItem(DEFAULT_CURRENTLY_WORKING.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getSession() throws Exception {
@@ -252,7 +260,8 @@ public class SessionResourceIT {
             .andExpect(jsonPath("$.abscence").value(DEFAULT_ABSCENCE.booleanValue()))
             .andExpect(jsonPath("$.hospitalization").value(DEFAULT_HOSPITALIZATION.booleanValue()))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS))
-            .andExpect(jsonPath("$.deleted").value(DEFAULT_DELETED.booleanValue()));
+            .andExpect(jsonPath("$.deleted").value(DEFAULT_DELETED.booleanValue()))
+            .andExpect(jsonPath("$.currentlyWorking").value(DEFAULT_CURRENTLY_WORKING.booleanValue()));
     }
 
     @Test
@@ -281,7 +290,8 @@ public class SessionResourceIT {
             .abscence(UPDATED_ABSCENCE)
             .hospitalization(UPDATED_HOSPITALIZATION)
             .status(UPDATED_STATUS)
-            .deleted(UPDATED_DELETED);
+            .deleted(UPDATED_DELETED)
+            .currentlyWorking(UPDATED_CURRENTLY_WORKING);
         SessionDTO sessionDTO = sessionMapper.toDto(updatedSession);
 
         restSessionMockMvc.perform(put("/api/sessions")
@@ -299,6 +309,7 @@ public class SessionResourceIT {
         assertThat(testSession.isHospitalization()).isEqualTo(UPDATED_HOSPITALIZATION);
         assertThat(testSession.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testSession.isDeleted()).isEqualTo(UPDATED_DELETED);
+        assertThat(testSession.isCurrentlyWorking()).isEqualTo(UPDATED_CURRENTLY_WORKING);
     }
 
     @Test

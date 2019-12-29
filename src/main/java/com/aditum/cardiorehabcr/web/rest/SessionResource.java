@@ -1,6 +1,7 @@
 package com.aditum.cardiorehabcr.web.rest;
 
 import com.aditum.cardiorehabcr.service.SessionService;
+import com.aditum.cardiorehabcr.service.impl.SessionServiceImpl;
 import com.aditum.cardiorehabcr.web.rest.errors.BadRequestAlertException;
 import com.aditum.cardiorehabcr.service.dto.SessionDTO;
 
@@ -39,9 +40,9 @@ public class SessionResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final SessionService sessionService;
+    private final SessionServiceImpl sessionService;
 
-    public SessionResource(SessionService sessionService) {
+    public SessionResource(SessionServiceImpl sessionService) {
         this.sessionService = sessionService;
     }
 
@@ -97,6 +98,14 @@ public class SessionResource {
     public ResponseEntity<List<SessionDTO>> getAllSessions(Pageable pageable) {
         log.debug("REST request to get a page of Sessions");
         Page<SessionDTO> page = sessionService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/sessions/by-patient")
+    public ResponseEntity<List<SessionDTO>> getAllSessions(Pageable pageable, Long patientId) {
+        log.debug("REST request to get a page of Sessions");
+        Page<SessionDTO> page = sessionService.findAllByPatient(pageable,patientId);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

@@ -93,7 +93,6 @@ export class PatientUpdateComponent implements OnInit {
   constructor(
     protected jhiAlertService: JhiAlertService,
     protected patientService: PatientService,
-    protected rehabilitationGroupService: RehabilitationGroupService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     protected modal: ModalService,
@@ -141,7 +140,6 @@ export class PatientUpdateComponent implements OnInit {
   }
 
   loadComorbidities() {
-    const a = this.global.rehabCenter;
     this.comorbiditieService
       .query({
         rehabilitationId: this.global.rehabCenter
@@ -332,12 +330,12 @@ export class PatientUpdateComponent implements OnInit {
       lastEventOcurred:
         this.initialInfoForm.get(['lastEventOcurred']).value != null
           ? moment(this.initialInfoForm.get(['lastEventOcurred']).value, DATE_TIME_FORMAT)
-          : undefined
+          : undefined,
       // deceased: this.initialInfoForm.get(['deceased']).value,
       // abandonment: this.initialInfoForm.get(['abandonment']).value,
       // abandonmentMedicCause: this.initialInfoForm.get(['abandonmentMedicCause']).value,
       // rehabStatus: this.initialInfoForm.get(['rehabStatus']).value,
-      // sessionNumber: this.initialInfoForm.get(['sessionNumber']).value,
+      sessionNumber: 0
       // deleted: this.initialInfoForm.get(['deleted']).value
     };
   }

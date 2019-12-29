@@ -42,6 +42,9 @@ public class Session implements Serializable {
     @Column(name = "deleted")
     private Boolean deleted;
 
+    @Column(name = "currently_working")
+    private Boolean currentlyWorking;
+
     @OneToMany(mappedBy = "session")
     private Set<MinorEventsSession> minorEventsSessions = new HashSet<>();
 
@@ -143,6 +146,19 @@ public class Session implements Serializable {
 
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public Boolean isCurrentlyWorking() {
+        return currentlyWorking;
+    }
+
+    public Session currentlyWorking(Boolean currentlyWorking) {
+        this.currentlyWorking = currentlyWorking;
+        return this;
+    }
+
+    public void setCurrentlyWorking(Boolean currentlyWorking) {
+        this.currentlyWorking = currentlyWorking;
     }
 
     public Set<MinorEventsSession> getMinorEventsSessions() {
@@ -285,6 +301,7 @@ public class Session implements Serializable {
             ", hospitalization='" + isHospitalization() + "'" +
             ", status=" + getStatus() +
             ", deleted='" + isDeleted() + "'" +
+            ", currentlyWorking='" + isCurrentlyWorking() + "'" +
             "}";
     }
 }

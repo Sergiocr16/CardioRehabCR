@@ -45,7 +45,7 @@ export const sessionRoute: Routes = [
       session: SessionResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_USER', 'ROLE_MANAGER'],
       pageTitle: 'cardioRehabCrApp.session.home.title'
     },
     canActivate: [UserRouteAccessService]

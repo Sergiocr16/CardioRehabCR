@@ -7,19 +7,22 @@
         <span ng-hide="true">{{setInvalidForm(isSaving)}}</span>
         <ng-template matStepLabel>Información general</ng-template>
         <div fxLayout="column" fxLayoutAlign="center stretch">
-            <mat-form-field appearance="outline">
-                <mat-label jhiTranslate="cardioRehabCrApp.session.code" for="field_code">Code</mat-label>
-                <input matInput type="text" name="code" id="field_code"
-                       formControlName="code">
-                <mat-hint
-                    *ngIf="editForm.get('code').invalid && (editForm.get('code').dirty || editForm.get('code').touched)"
-                    class="form-text text-danger">
-                    <span *ngIf="editForm.get('code').errors.required"
-                          jhiTranslate="entity.validation.required">
-                        This field is required.
-                    </span>
-                </mat-hint>
-            </mat-form-field>
+            <mat-card-header>
+                <mat-card-title class="primary-color">Sesión número {{patient.sessionNumber}}</mat-card-title>
+            </mat-card-header>
+<!--            <mat-form-field appearance="outline">-->
+<!--                <mat-label jhiTranslate="cardioRehabCrApp.session.code" for="field_code">Code</mat-label>-->
+<!--                <input matInput type="text" name="code" id="field_code"-->
+<!--                       formControlName="code">-->
+<!--                <mat-hint-->
+<!--                    *ngIf="editForm.get('code').invalid && (editForm.get('code').dirty || editForm.get('code').touched)"-->
+<!--                    class="form-text text-danger">-->
+<!--                    <span *ngIf="editForm.get('code').errors.required"-->
+<!--                          jhiTranslate="entity.validation.required">-->
+<!--                        This field is required.-->
+<!--                    </span>-->
+<!--                </mat-hint>-->
+<!--            </mat-form-field>-->
             <mat-form-field appearance="outline">
                 <mat-label for="field_lastEventOcurred">
                     Fecha de la evaluación
@@ -40,7 +43,7 @@
             <mat-card-header>
                 <mat-card-title class="primary-color">a. Ausencia</mat-card-title>
             </mat-card-header>
-            <div fxLayout="column">
+            <div fxLayout="column" class="margin-left-20">
                 <mat-checkbox flex name="abscence" formControlName="abscence" id="field_abscence"
                               labelPosition="'after'">
                     ¿El paciente está ausente?
@@ -50,7 +53,7 @@
                 <mat-card-header>
                     <mat-card-title class="primary-color">b. Dolor agudo no específico</mat-card-title>
                 </mat-card-header>
-                <div fxLayout="column">
+                <div fxLayout="column" class="margin-left-20">
                     <mat-checkbox flex [checked]="nonSpecificPain.checked"
                                   (change)="valueChange(nonSpecificPains,i,$event)"
                                   *ngFor="let nonSpecificPain of nonSpecificPains;let i=index">{{nonSpecificPain.description}}</mat-checkbox>
@@ -59,7 +62,7 @@
                 <mat-card-header>
                     <mat-card-title class="primary-color">c. Consulta a urgencias</mat-card-title>
                 </mat-card-header>
-                <div fxLayout="column">
+                <div fxLayout="column" class="margin-left-20">
                     <mat-checkbox flex name="hospitalization" formControlName="hospitalization"
                                   id="field_hospitalization" (labelPosition)="after">
                         ¿El paciente ha sido hospitalizado?
@@ -69,7 +72,7 @@
                 <mat-card-header>
                     <mat-card-title class="primary-color">d. Eventos menores</mat-card-title>
                 </mat-card-header>
-                <div fxLayout="column">
+                <div fxLayout="column" class="margin-left-20">
                     <mat-checkbox flex [checked]="minorEvent.checked"
                                   (change)="valueChange(minorEvents,i,$event)"
                                   *ngFor="let minorEvent of minorEvents;let i=index">{{minorEvent.description}}</mat-checkbox>
@@ -78,7 +81,7 @@
                 <mat-card-header>
                     <mat-card-title class="primary-color">e. Eventos mayores</mat-card-title>
                 </mat-card-header>
-                <div fxLayout="column">
+                <div fxLayout="column" class="margin-left-20">
                     <mat-checkbox flex [checked]="mayorEvent.checked"
                                   (change)="valueChange(mayorEvents,i,$event)"
                                   *ngFor="let mayorEvent of mayorEvents;let i=index">{{mayorEvent.description}}</mat-checkbox>
@@ -87,11 +90,22 @@
                 <mat-card-header>
                     <mat-card-title class="primary-color">f. Síntomas Depresivos</mat-card-title>
                 </mat-card-header>
-                <div fxLayout="column">
+                <div fxLayout="column" class="margin-left-20">
                     <mat-checkbox flex [checked]="depressiveSymptom.checked"
                                   (change)="valueChange(depressiveSymptoms,i,$event)"
                                   *ngFor="let depressiveSymptom of depressiveSymptoms;let i=index">{{depressiveSymptom.description}}</mat-checkbox>
                 </div>
+
+                <mat-card-header>
+                    <mat-card-title class="primary-color">g. Labora activamente</mat-card-title>
+                </mat-card-header>
+                <div fxLayout="column" class="margin-left-20">
+                <mat-checkbox flex name="currentlyWorking" formControlName="currentlyWorking" id="field_currentlyWorking"
+                              labelPosition="'after'">
+                    ¿El paciente labora activamente?
+                </mat-checkbox>
+                </div>
+
             </div>
 
 
@@ -125,96 +139,97 @@
             </button>
         </div>
     </form>
+    </form>
 </mat-card>
-<div class="row justify-content-center">
-    <div class="col-8">
-        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-            <h2 id="jhi-session-heading" jhiTranslate="cardioRehabCrApp.session.home.createOrEditLabel">Create or edit a
-                Session</h2>
-            <div>
-                <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!editForm.get('id').value">
-                    <label for="id" jhiTranslate="global.field.id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
-                           readonly/>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.session.code"
-                           for="field_code">Code</label>
-                    <input type="text" class="form-control" name="code" id="field_code"
-                           formControlName="code"/>
-                    <div
-                        *ngIf="editForm.get('code').invalid && (editForm.get('code').dirty || editForm.get('code').touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('code').errors.required" jhiTranslate="entity.validation.required">
-                            This field is required.
-                        </small>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.session.executionDate"
-                           for="field_executionDate">Execution Date</label>
-                    <div class="d-flex">
-                        <input id="field_executionDate" type="datetime-local" class="form-control" name="executionDate"
-                               formControlName="executionDate" placeholder="YYYY-MM-DD HH:mm"/>
-                    </div>
-                    <div
-                        *ngIf="editForm.get('executionDate').invalid && (editForm.get('executionDate').dirty || editForm.get('executionDate').touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('executionDate').errors.required"
-                               jhiTranslate="entity.validation.required">
-                            This field is required.
-                        </small>
-                        <small class="form-text text-danger"
-                               [hidden]="!editForm.get('executionDate').errors?.ZonedDateTimelocal"
-                               jhiTranslate="entity.validation.ZonedDateTimelocal">
-                            This field should be a date and time.
-                        </small>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.session.abscence"
-                           for="field_abscence">Abscence</label>
-                    <input type="checkbox" class="form-control" name="abscence" id="field_abscence"
-                           formControlName="abscence"/>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.session.hospitalization"
-                           for="field_hospitalization">Hospitalization</label>
-                    <input type="checkbox" class="form-control" name="hospitalization" id="field_hospitalization"
-                           formControlName="hospitalization"/>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.session.status" for="field_status">Status</label>
-                    <input type="number" class="form-control" name="status" id="field_status"
-                           formControlName="status"/>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.session.deleted"
-                           for="field_deleted">Deleted</label>
-                    <input type="checkbox" class="form-control" name="deleted" id="field_deleted"
-                           formControlName="deleted"/>
-                </div>
+<!--<div class="row justify-content-center">-->
+<!--    <div class="col-8">-->
+<!--        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">-->
+<!--            <h2 id="jhi-session-heading" jhiTranslate="cardioRehabCrApp.session.home.createOrEditLabel">Create or edit a-->
+<!--                Session</h2>-->
+<!--            <div>-->
+<!--                <jhi-alert-error></jhi-alert-error>-->
+<!--                <div class="form-group" [hidden]="!editForm.get('id').value">-->
+<!--                    <label for="id" jhiTranslate="global.field.id">ID</label>-->
+<!--                    <input type="text" class="form-control" id="id" name="id" formControlName="id"-->
+<!--                           readonly/>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.session.code"-->
+<!--                           for="field_code">Code</label>-->
+<!--                    <input type="text" class="form-control" name="code" id="field_code"-->
+<!--                           formControlName="code"/>-->
+<!--                    <div-->
+<!--                        *ngIf="editForm.get('code').invalid && (editForm.get('code').dirty || editForm.get('code').touched)">-->
+<!--                        <small class="form-text text-danger"-->
+<!--                               *ngIf="editForm.get('code').errors.required" jhiTranslate="entity.validation.required">-->
+<!--                            This field is required.-->
+<!--                        </small>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.session.executionDate"-->
+<!--                           for="field_executionDate">Execution Date</label>-->
+<!--                    <div class="d-flex">-->
+<!--                        <input id="field_executionDate" type="datetime-local" class="form-control" name="executionDate"-->
+<!--                               formControlName="executionDate" placeholder="YYYY-MM-DD HH:mm"/>-->
+<!--                    </div>-->
+<!--                    <div-->
+<!--                        *ngIf="editForm.get('executionDate').invalid && (editForm.get('executionDate').dirty || editForm.get('executionDate').touched)">-->
+<!--                        <small class="form-text text-danger"-->
+<!--                               *ngIf="editForm.get('executionDate').errors.required"-->
+<!--                               jhiTranslate="entity.validation.required">-->
+<!--                            This field is required.-->
+<!--                        </small>-->
+<!--                        <small class="form-text text-danger"-->
+<!--                               [hidden]="!editForm.get('executionDate').errors?.ZonedDateTimelocal"-->
+<!--                               jhiTranslate="entity.validation.ZonedDateTimelocal">-->
+<!--                            This field should be a date and time.-->
+<!--                        </small>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.session.abscence"-->
+<!--                           for="field_abscence">Abscence</label>-->
+<!--                    <input type="checkbox" class="form-control" name="abscence" id="field_abscence"-->
+<!--                           formControlName="abscence"/>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.session.hospitalization"-->
+<!--                           for="field_hospitalization">Hospitalization</label>-->
+<!--                    <input type="checkbox" class="form-control" name="hospitalization" id="field_hospitalization"-->
+<!--                           formControlName="hospitalization"/>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.session.status" for="field_status">Status</label>-->
+<!--                    <input type="number" class="form-control" name="status" id="field_status"-->
+<!--                           formControlName="status"/>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.session.deleted"-->
+<!--                           for="field_deleted">Deleted</label>-->
+<!--                    <input type="checkbox" class="form-control" name="deleted" id="field_deleted"-->
+<!--                           formControlName="deleted"/>-->
+<!--                </div>-->
 
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.session.patient"
-                           for="field_patient">Patient</label>
-                    <select class="form-control" id="field_patient" name="patient" formControlName="patientId">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="patientOption.id"
-                                *ngFor="let patientOption of patients; trackBy: trackPatientById">{{patientOption.id}}</option>
-                    </select>
-                </div>
-            </div>
-            <div>
-                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
-                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
-                </button>
-                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving"
-                        class="btn btn-primary">
-                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
+<!--                <div class="form-group">-->
+<!--                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.session.patient"-->
+<!--                           for="field_patient">Patient</label>-->
+<!--                    <select class="form-control" id="field_patient" name="patient" formControlName="patientId">-->
+<!--                        <option [ngValue]="null"></option>-->
+<!--                        <option [ngValue]="patientOption.id"-->
+<!--                                *ngFor="let patientOption of patients; trackBy: trackPatientById">{{patientOption.id}}</option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">-->
+<!--                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>-->
+<!--                </button>-->
+<!--                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving"-->
+<!--                        class="btn btn-primary">-->
+<!--                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</div>-->

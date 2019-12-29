@@ -30,6 +30,10 @@
         {
             "fieldName": "deleted",
             "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "currentlyWorking",
+            "fieldType": "Boolean"
         }
     ],
     "relationships": [
@@ -74,5 +78,7 @@
     "fluentMethods": true,
     "readOnly": false,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "searchEngine": false,
+    "databaseType": "sql"
 }

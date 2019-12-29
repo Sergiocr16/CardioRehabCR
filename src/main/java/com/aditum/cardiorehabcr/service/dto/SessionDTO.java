@@ -2,6 +2,7 @@ package com.aditum.cardiorehabcr.service.dto;
 import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -25,8 +26,66 @@ public class SessionDTO implements Serializable {
 
     private Boolean deleted;
 
+    private Boolean currentlyWorking;
+
 
     private Long patientId;
+
+    private List<MinorEventsSessionDTO> minorEventsSessions;
+
+    private List<MayorEventsSessionDTO> mayorEventsSessions;
+
+    private List<NonSpecificPainsSessionDTO> nonSpecificPainsSessions;
+
+    private List<DepressiveSymptomsSessionDTO> depressiveSymptomsSessions;
+
+    public Boolean getAbscence() {
+        return abscence;
+    }
+
+    public Boolean getHospitalization() {
+        return hospitalization;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public Boolean getCurrentlyWorking() {
+        return currentlyWorking;
+    }
+
+    public List<MinorEventsSessionDTO> getMinorEventsSessions() {
+        return minorEventsSessions;
+    }
+
+    public void setMinorEventsSessions(List<MinorEventsSessionDTO> minorEventsSessions) {
+        this.minorEventsSessions = minorEventsSessions;
+    }
+
+    public List<MayorEventsSessionDTO> getMayorEventsSessions() {
+        return mayorEventsSessions;
+    }
+
+    public void setMayorEventsSessions(List<MayorEventsSessionDTO> mayorEventsSessions) {
+        this.mayorEventsSessions = mayorEventsSessions;
+    }
+
+    public List<NonSpecificPainsSessionDTO> getNonSpecificPainsSessions() {
+        return nonSpecificPainsSessions;
+    }
+
+    public void setNonSpecificPainsSessions(List<NonSpecificPainsSessionDTO> nonSpecificPainsSessions) {
+        this.nonSpecificPainsSessions = nonSpecificPainsSessions;
+    }
+
+    public List<DepressiveSymptomsSessionDTO> getDepressiveSymptomsSessions() {
+        return depressiveSymptomsSessions;
+    }
+
+    public void setDepressiveSymptomsSessions(List<DepressiveSymptomsSessionDTO> depressiveSymptomsSessions) {
+        this.depressiveSymptomsSessions = depressiveSymptomsSessions;
+    }
 
     public Long getId() {
         return id;
@@ -84,6 +143,14 @@ public class SessionDTO implements Serializable {
         this.deleted = deleted;
     }
 
+    public Boolean isCurrentlyWorking() {
+        return currentlyWorking;
+    }
+
+    public void setCurrentlyWorking(Boolean currentlyWorking) {
+        this.currentlyWorking = currentlyWorking;
+    }
+
     public Long getPatientId() {
         return patientId;
     }
@@ -123,6 +190,7 @@ public class SessionDTO implements Serializable {
             ", hospitalization='" + isHospitalization() + "'" +
             ", status=" + getStatus() +
             ", deleted='" + isDeleted() + "'" +
+            ", currentlyWorking='" + isCurrentlyWorking() + "'" +
             ", patient=" + getPatientId() +
             "}";
     }
