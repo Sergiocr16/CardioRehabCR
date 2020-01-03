@@ -1,67 +1,199 @@
-<div class="row justify-content-center">
-    <div class="col-8">
-        <div *ngIf="patient">
-            <h2><span jhiTranslate="cardioRehabCrApp.patient.detail.title">Patient</span> {{patient.id}}</h2>
-            <hr>
-            <jhi-alert-error></jhi-alert-error>
-            <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="cardioRehabCrApp.patient.code">Code</span></dt>
-                <dd>
-                    <span>{{patient.code}}</span>
-                </dd>
-                <dt><span jhiTranslate="cardioRehabCrApp.patient.age">Age</span></dt>
-                <dd>
-                    <span>{{patient.age}}</span>
-                </dd>
-                <dt><span jhiTranslate="cardioRehabCrApp.patient.sex">Sex</span></dt>
-                <dd>
-                    <span>{{patient.sex}}</span>
-                </dd>
-                <dt><span jhiTranslate="cardioRehabCrApp.patient.ocupation">Ocupation</span></dt>
-                <dd>
-                    <span>{{patient.ocupation}}</span>
-                </dd>
-                <dt><span jhiTranslate="cardioRehabCrApp.patient.lastEventOcurred">Last Event Ocurred</span></dt>
-                <dd>
-                    <span>{{patient.lastEventOcurred}}</span>
-                </dd>
-                <dt><span jhiTranslate="cardioRehabCrApp.patient.deceased">Deceased</span></dt>
-                <dd>
-                    <span>{{patient.deceased}}</span>
-                </dd>
-                <dt><span jhiTranslate="cardioRehabCrApp.patient.abandonment">Abandonment</span></dt>
-                <dd>
-                    <span>{{patient.abandonment}}</span>
-                </dd>
-                <dt><span jhiTranslate="cardioRehabCrApp.patient.abandonmentMedicCause">Abandonment Medic Cause</span></dt>
-                <dd>
-                    <span>{{patient.abandonmentMedicCause}}</span>
-                </dd>
-                <dt><span jhiTranslate="cardioRehabCrApp.patient.rehabStatus">Rehab Status</span></dt>
-                <dd>
-                    <span>{{patient.rehabStatus}}</span>
-                </dd>
-                <dt><span jhiTranslate="cardioRehabCrApp.patient.sessionNumber">Session Number</span></dt>
-                <dd>
-                    <span>{{patient.sessionNumber}}</span>
-                </dd>
-                <dt><span jhiTranslate="cardioRehabCrApp.patient.deleted">Deleted</span></dt>
-                <dd>
-                    <span>{{patient.deleted}}</span>
-                </dd>
-            </dl>
+<!--<div class="row justify-content-center">-->
+<!--    <div class="col-8">-->
+<!--        <div *ngIf="patient">-->
+<!--            <h2><span jhiTranslate="cardioRehabCrApp.patient.detail.title">Patient</span> {{patient.id}}</h2>-->
+<!--            <hr>-->
+<!--            <jhi-alert-error></jhi-alert-error>-->
+<!--            <dl class="row-md jh-entity-details">-->
+<!--                <dt><span jhiTranslate="cardioRehabCrApp.patient.code">Code</span></dt>-->
+<!--                <dd>-->
+<!--                    <span>{{patient.code}}</span>-->
+<!--                </dd>-->
+<!--                <dt><span jhiTranslate="cardioRehabCrApp.patient.age">Age</span></dt>-->
+<!--                <dd>-->
+<!--                    <span>{{patient.age}}</span>-->
+<!--                </dd>-->
+<!--                <dt><span jhiTranslate="cardioRehabCrApp.patient.sex">Sex</span></dt>-->
+<!--                <dd>-->
+<!--                    <span>{{patient.sex}}</span>-->
+<!--                </dd>-->
+<!--                <dt><span jhiTranslate="cardioRehabCrApp.patient.ocupation">Ocupation</span></dt>-->
+<!--                <dd>-->
+<!--                    <span>{{patient.ocupation}}</span>-->
+<!--                </dd>-->
+<!--                <dt><span jhiTranslate="cardioRehabCrApp.patient.lastEventOcurred">Last Event Ocurred</span></dt>-->
+<!--                <dd>-->
+<!--                    <span>{{patient.lastEventOcurred}}</span>-->
+<!--                </dd>-->
+<!--                <dt><span jhiTranslate="cardioRehabCrApp.patient.deceased">Deceased</span></dt>-->
+<!--                <dd>-->
+<!--                    <span>{{patient.deceased}}</span>-->
+<!--                </dd>-->
+<!--                <dt><span jhiTranslate="cardioRehabCrApp.patient.abandonment">Abandonment</span></dt>-->
+<!--                <dd>-->
+<!--                    <span>{{patient.abandonment}}</span>-->
+<!--                </dd>-->
+<!--                <dt><span jhiTranslate="cardioRehabCrApp.patient.abandonmentMedicCause">Abandonment Medic Cause</span></dt>-->
+<!--                <dd>-->
+<!--                    <span>{{patient.abandonmentMedicCause}}</span>-->
+<!--                </dd>-->
+<!--                <dt><span jhiTranslate="cardioRehabCrApp.patient.rehabStatus">Rehab Status</span></dt>-->
+<!--                <dd>-->
+<!--                    <span>{{patient.rehabStatus}}</span>-->
+<!--                </dd>-->
+<!--                <dt><span jhiTranslate="cardioRehabCrApp.patient.sessionNumber">Session Number</span></dt>-->
+<!--                <dd>-->
+<!--                    <span>{{patient.sessionNumber}}</span>-->
+<!--                </dd>-->
+<!--                <dt><span jhiTranslate="cardioRehabCrApp.patient.deleted">Deleted</span></dt>-->
+<!--                <dd>-->
+<!--                    <span>{{patient.deleted}}</span>-->
+<!--                </dd>-->
+<!--            </dl>-->
 
-            <button type="submit"
-                    (click)="previousState()"
-                    class="btn btn-info">
-                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
-            </button>
+<!--            <button type="submit"-->
+<!--                    (click)="previousState()"-->
+<!--                    class="btn btn-info">-->
+<!--                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>-->
+<!--            </button>-->
 
-            <button type="button"
-                    [routerLink]="['/patient', patient.id, 'edit']"
-                    class="btn btn-primary">
-                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
-            </button>
-        </div>
-    </div>
-</div>
+<!--            <button type="button"-->
+<!--                    [routerLink]="['/patient', patient.id, 'edit']"-->
+<!--                    class="btn btn-primary">-->
+<!--                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>-->
+<!--            </button>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            <h2 id="page-heading" class="margin-top-20">
+            <span class="primary-color table-title">
+           <mat-icon (click)="previousState()" class="text-icon pointer">arrow_back</mat-icon>
+                Paciente código: {{patient.code}}</span>
+            </h2>
+        </mat-card-title>
+        <mat-card-subtitle style="margin-left:38px"><span>Última sesión {{patient.sessionNumber}}</span>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <mat-card-subtitle><span>Edad: {{patient.sessionNumber}}</span></mat-card-subtitle>
+        <mat-card-subtitle><span>Sexo: {{patient.sex}}</span></mat-card-subtitle>
+        <mat-card-subtitle><span>Ocupation: {{patient.ocupation}}</span></mat-card-subtitle>
+        <mat-card-subtitle><span>Escolaridad: {{patient.scholarship}}</span></mat-card-subtitle>
+        <mat-card-subtitle><span>Tiempo desde el último evento coronario: {{patient.lastEventOcurred | date }}</span>
+        </mat-card-subtitle>
+        <mat-accordion class="example-headers-align">
+            <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" ng-if="initialAssesment">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Evaluación inicial
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        <!--                        Fase de selección-->
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <mat-card-header>
+                    <mat-card-title class="primary-color">Características clínicas</mat-card-title>
+                </mat-card-header>
+                <div class="margin-left-20">
+                    <mat-card-subtitle><span>Tabaquismo: {{initialAssesment.smoking}}</span></mat-card-subtitle>
+                    <mat-card-subtitle>
+                        <span>Riesgo cardiovascular asociado al ejercicio: {{initialAssesment.cardiovascularRisk}}</span>
+                    </mat-card-subtitle>
+                </div>
+                <div class="margin-left-20" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between none"
+                     fxLayoutGap="20px"
+                     fxLayoutGap.xs="10px" style="margin: 10px 0 10px 0">
+                    <div fxFlex="50">
+                        <mat-card-header>
+                            <mat-card-title class="primary-color" style="font-size: 14px!important"> Diagnóstico de
+                                Ingreso
+                            </mat-card-title>
+                        </mat-card-header>
+                        <div fxLayout="column" class="margin-left-20">
+                            <mat-checkbox flex [checked]="incomeDiagnose.exist"
+                                          *ngFor="let incomeDiagnose of incomeDiagnosis;let i=index">{{incomeDiagnose.description}}</mat-checkbox>
+                        </div>
+                    </div>
+                    <div fxFlex="50">
+                        <mat-card-header>
+                            <mat-card-title class="primary-color" style="font-size: 14px!important">Comorbilidades
+                            </mat-card-title>
+                        </mat-card-header>
+                        <div fxLayout="column" class="margin-left-20">
+                            <mat-checkbox flex [checked]="comorbiditie.exist"
+                                          *ngFor="let comorbiditie of comorbidities;let i=index">{{comorbiditie.description}}</mat-checkbox>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <mat-card-header>
+                        <mat-card-title class="primary-color">Mediciones</mat-card-title>
+                    </mat-card-header>
+                    <div class="margin-left-20">
+                        <mat-card-subtitle><span>Peso basal: {{initialAssesment.weight}} kilogramos</span>
+                        </mat-card-subtitle>
+                        <mat-card-subtitle><span>Talla: {{initialAssesment.size}} cm</span></mat-card-subtitle>
+                        <mat-card-subtitle><span>IMC: {{initialAssesment.iMC}} Kg/m2</span></mat-card-subtitle>
+                        <mat-card-subtitle><span>Valores LDL: {{initialAssesment.lDL}} mg/dL</span></mat-card-subtitle>
+                        <mat-card-subtitle><span>Valores HDL: {{initialAssesment.hDL}} mg/dL</span></mat-card-subtitle>
+                        <mat-card-subtitle><span>Valores Hb1Ac: {{initialAssesment.hbiac}} %</span></mat-card-subtitle>
+                        <mat-card-subtitle>
+                            <span>Capacidad funcional basal: {{initialAssesment.baselineFunctionalCapacity}} METS</span>
+                        </mat-card-subtitle>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Sesiones
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        <!--                        Fase de Implementación-->
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <mat-card *ngFor="let session of sessions;" style="margin-bottom: 5px" fxLayout="row" fxLayoutAlign="space-between center">
+                    <div>
+                        <mat-card-title class="primary-color" style="font-size: 16px!important">
+                            Número: {{session.code}}
+                        </mat-card-title>
+                        <mat-card-subtitle>Fecha de evaluación: {{session.executionDate | date}}
+                        </mat-card-subtitle>
+                    </div>
+                    <div >
+                        <a [routerLink]="['/session/',session.id,'view']">
+                            Detalle sesión
+                            <mat-icon class="text-icon">remove_red_eye</mat-icon>
+                        </a>
+                    </div>
+                </mat-card>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Evaluación final
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        <!--                        Fase de Mantenimiento-->
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <mat-form-field>
+                    <input matInput placeholder="Date" [matDatepicker]="picker" (focus)="picker.open()" readonly>
+                </mat-form-field>
+                <mat-datepicker #picker></mat-datepicker>
+
+                <mat-action-row>
+                    <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                    <button mat-button color="primary" (click)="nextStep()">End</button>
+                </mat-action-row>
+            </mat-expansion-panel>
+
+        </mat-accordion>
+    </mat-card-content>
+</mat-card>

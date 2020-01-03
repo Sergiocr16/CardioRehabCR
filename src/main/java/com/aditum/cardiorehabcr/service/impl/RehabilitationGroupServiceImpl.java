@@ -55,9 +55,9 @@ public class RehabilitationGroupServiceImpl implements RehabilitationGroupServic
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<RehabilitationGroupDTO> findAll(Pageable pageable) {
+    public Page<RehabilitationGroupDTO> findAll(Pageable pageable, Long rehabilitationId) {
         log.debug("Request to get all RehabilitationGroups");
-        return rehabilitationGroupRepository.findAll(pageable)
+        return rehabilitationGroupRepository.findByRehabilitationCenterIdAndAndDeleted(pageable,rehabilitationId,false)
             .map(rehabilitationGroupMapper::toDto);
     }
 
@@ -69,7 +69,7 @@ public class RehabilitationGroupServiceImpl implements RehabilitationGroupServic
     public Page<RehabilitationGroupDTO> findAllWithEagerRelationships(Pageable pageable) {
         return rehabilitationGroupRepository.findAllWithEagerRelationships(pageable).map(rehabilitationGroupMapper::toDto);
     }
-    
+
 
     /**
      * Get one rehabilitationGroup by id.

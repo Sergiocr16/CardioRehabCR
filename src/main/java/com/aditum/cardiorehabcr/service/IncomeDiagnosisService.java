@@ -1,5 +1,6 @@
 package com.aditum.cardiorehabcr.service;
 
+import com.aditum.cardiorehabcr.service.dto.ComorbiditieDTO;
 import com.aditum.cardiorehabcr.service.dto.IncomeDiagnosisDTO;
 
 import org.springframework.data.domain.Page;
@@ -26,7 +27,8 @@ public interface IncomeDiagnosisService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<IncomeDiagnosisDTO> findAll(Pageable pageable);
+    Page<IncomeDiagnosisDTO> findAll(Pageable pageable, Long rehabilitationId);
+
 
 
     /**

@@ -1,11 +1,11 @@
-id;code;execution_date;abscence;hospitalization;status;deleted
-1;optimal;2019-11-11T07:32:15;false;false;56396;false
-2;blue internet solution Concrete;2019-11-10T19:13:11;false;true;47396;true
-3;bluetooth Berkshire;2019-11-11T14:30:22;true;true;73682;true
-4;quantify architectures;2019-11-11T13:31:49;false;false;33744;false
-5;payment Illinois dot-com;2019-11-10T16:54:58;false;true;93369;false
-6;Intelligent;2019-11-11T12:55:25;false;false;48780;false
-7;blue scalable Car;2019-11-10T19:04:12;true;false;5163;true
-8;infomediaries;2019-11-10T17:00:55;true;false;89661;false
-9;Agent TCP;2019-11-10T20:58:58;true;false;49074;false
-10;Tanzanian Shilling Assurance Nebraska;2019-11-11T02:52:25;false;false;83858;true
+id;code;execution_date;abscence;hospitalization;status;deleted;currently_working
+1;mobile Fish;2019-12-27T23:17:49;true;true;15601;false;false
+2;Practical Fresh Pants;2019-12-28T03:34:58;false;true;65088;false;false
+3;transmitter Implementation Electronics;2019-12-27T18:11:48;false;true;30424;true;true
+4;web-readiness;2019-12-28T11:01:12;true;true;39986;false;false
+5;Coordinator;2019-12-28T12:25:23;false;false;78517;true;false
+6;Cambridgeshire Mississippi;2019-12-28T16:53:41;true;true;68030;false;false
+7;Automotive;2019-12-27T19:23:49;true;true;80839;false;false
+8;Intelligent;2019-12-28T01:35:17;false;false;68326;false;true
+9;backing up Salad;2019-12-28T08:37:27;false;false;66252;true;false
+10;Costa Rica Mayotte;2019-12-28T13:34:23;false;true;84228;true;false

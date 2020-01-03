@@ -1,6 +1,7 @@
 package com.aditum.cardiorehabcr.web.rest;
 
 import com.aditum.cardiorehabcr.service.MayorEventsSessionService;
+import com.aditum.cardiorehabcr.service.impl.MayorEventsSessionServiceImpl;
 import com.aditum.cardiorehabcr.web.rest.errors.BadRequestAlertException;
 import com.aditum.cardiorehabcr.service.dto.MayorEventsSessionDTO;
 
@@ -39,9 +40,9 @@ public class MayorEventsSessionResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final MayorEventsSessionService mayorEventsSessionService;
+    private final MayorEventsSessionServiceImpl mayorEventsSessionService;
 
-    public MayorEventsSessionResource(MayorEventsSessionService mayorEventsSessionService) {
+    public MayorEventsSessionResource(MayorEventsSessionServiceImpl mayorEventsSessionService) {
         this.mayorEventsSessionService = mayorEventsSessionService;
     }
 
@@ -97,6 +98,14 @@ public class MayorEventsSessionResource {
     public ResponseEntity<List<MayorEventsSessionDTO>> getAllMayorEventsSessions(Pageable pageable) {
         log.debug("REST request to get a page of MayorEventsSessions");
         Page<MayorEventsSessionDTO> page = mayorEventsSessionService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/mayor-events-sessions/by-session")
+    public ResponseEntity<List<MayorEventsSessionDTO>> getAllMayorEventsSessions(Pageable pageable,Long sessionId) {
+        log.debug("REST request to get a page of MayorEventsSessions");
+        Page<MayorEventsSessionDTO> page = mayorEventsSessionService.findAllBySession(pageable,sessionId);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

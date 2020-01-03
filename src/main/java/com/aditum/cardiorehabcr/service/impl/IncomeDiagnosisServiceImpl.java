@@ -53,11 +53,10 @@ public class IncomeDiagnosisServiceImpl implements IncomeDiagnosisService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    @Override
     @Transactional(readOnly = true)
-    public Page<IncomeDiagnosisDTO> findAll(Pageable pageable) {
+    public Page<IncomeDiagnosisDTO> findAll(Pageable pageable, Long rehabilitationId) {
         log.debug("Request to get all IncomeDiagnoses");
-        return incomeDiagnosisRepository.findAll(pageable)
+        return incomeDiagnosisRepository.findByRehabilitationCenterIdAndAndDeleted(pageable,rehabilitationId,false)
             .map(incomeDiagnosisMapper::toDto);
     }
 

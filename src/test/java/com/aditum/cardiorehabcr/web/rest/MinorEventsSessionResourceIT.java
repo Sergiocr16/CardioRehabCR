@@ -5,6 +5,7 @@ import com.aditum.cardiorehabcr.domain.MinorEventsSession;
 import com.aditum.cardiorehabcr.repository.MinorEventsSessionRepository;
 import com.aditum.cardiorehabcr.service.MinorEventsSessionService;
 import com.aditum.cardiorehabcr.service.dto.MinorEventsSessionDTO;
+import com.aditum.cardiorehabcr.service.impl.MinorEventsSessionServiceImpl;
 import com.aditum.cardiorehabcr.service.mapper.MinorEventsSessionMapper;
 import com.aditum.cardiorehabcr.web.rest.errors.ExceptionTranslator;
 
@@ -52,7 +53,7 @@ public class MinorEventsSessionResourceIT {
     private MinorEventsSessionMapper minorEventsSessionMapper;
 
     @Autowired
-    private MinorEventsSessionService minorEventsSessionService;
+    private MinorEventsSessionServiceImpl minorEventsSessionService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -212,7 +213,7 @@ public class MinorEventsSessionResourceIT {
             .andExpect(jsonPath("$.[*].minorEventId").value(hasItem(DEFAULT_MINOR_EVENT_ID.intValue())))
             .andExpect(jsonPath("$.[*].exist").value(hasItem(DEFAULT_EXIST.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getMinorEventsSession() throws Exception {

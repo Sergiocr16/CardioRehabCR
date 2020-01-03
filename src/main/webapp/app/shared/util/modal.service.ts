@@ -31,7 +31,7 @@ export class ModalService {
         text = '¿Está seguro que desea realizar el registro?';
         break;
       }
-      case 'edit': {
+      case 'update': {
         title = 'Editar';
         text = '¿Está seguro que desea editarlo?';
         break;

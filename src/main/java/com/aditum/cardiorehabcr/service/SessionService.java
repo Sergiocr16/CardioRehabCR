@@ -28,6 +28,8 @@ public interface SessionService {
      */
     Page<SessionDTO> findAll(Pageable pageable);
 
+    Page<SessionDTO> findAllByPatient(Pageable pageable, Long patientId);
+
 
     /**
      * Get the "id" session.

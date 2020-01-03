@@ -28,6 +28,9 @@ public interface NonSpecificPainsSessionService {
      */
     Page<NonSpecificPainsSessionDTO> findAll(Pageable pageable);
 
+    Page<NonSpecificPainsSessionDTO> findAllBySession(Pageable pageable, Long sessionId);
+
+
 
     /**
      * Get the "id" nonSpecificPainsSession.

@@ -30,7 +30,8 @@
       "initialAssessment": "Initial Assessment",
       "finalAssessment": "Final Assessment",
       "session": "Session",
-      "rehabilitationGroup": "Rehabilitation Group"
+      "rehabilitationGroup": "Rehabilitation Group",
+      "scholarship": "Escolaridad"
     }
   }
 }

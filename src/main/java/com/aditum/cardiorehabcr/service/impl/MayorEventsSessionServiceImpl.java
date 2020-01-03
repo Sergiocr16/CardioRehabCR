@@ -61,6 +61,14 @@ public class MayorEventsSessionServiceImpl implements MayorEventsSessionService 
             .map(mayorEventsSessionMapper::toDto);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Page<MayorEventsSessionDTO> findAllBySession(Pageable pageable, Long sessionId) {
+        log.debug("Request to get all MayorEventsSessions");
+        return mayorEventsSessionRepository.findAllBySessionId(pageable,sessionId)
+            .map(mayorEventsSessionMapper::toDto);
+    }
+
 
     /**
      * Get one mayorEventsSession by id.

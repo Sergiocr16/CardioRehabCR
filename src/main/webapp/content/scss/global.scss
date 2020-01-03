@@ -376,3 +376,19 @@ button {
 .mat-form-field-hint-wrapper {
   //margin-top: -9px;
 }
+
+.pointer {
+  cursor: pointer !important;
+}
+
+.disabled {
+  pointer-events: none !important;
+}
+
+.margin-left-20 {
+  margin-left: 20px !important;
+}
+
+.margin-top-20 {
+  margin-top: 5px !important;
+}

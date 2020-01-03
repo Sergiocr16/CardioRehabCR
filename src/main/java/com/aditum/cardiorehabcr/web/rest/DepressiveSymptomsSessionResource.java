@@ -1,6 +1,7 @@
 package com.aditum.cardiorehabcr.web.rest;
 
 import com.aditum.cardiorehabcr.service.DepressiveSymptomsSessionService;
+import com.aditum.cardiorehabcr.service.impl.DepressiveSymptomsSessionServiceImpl;
 import com.aditum.cardiorehabcr.web.rest.errors.BadRequestAlertException;
 import com.aditum.cardiorehabcr.service.dto.DepressiveSymptomsSessionDTO;
 
@@ -39,9 +40,9 @@ public class DepressiveSymptomsSessionResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final DepressiveSymptomsSessionService depressiveSymptomsSessionService;
+    private final DepressiveSymptomsSessionServiceImpl depressiveSymptomsSessionService;
 
-    public DepressiveSymptomsSessionResource(DepressiveSymptomsSessionService depressiveSymptomsSessionService) {
+    public DepressiveSymptomsSessionResource(DepressiveSymptomsSessionServiceImpl depressiveSymptomsSessionService) {
         this.depressiveSymptomsSessionService = depressiveSymptomsSessionService;
     }
 
@@ -97,6 +98,14 @@ public class DepressiveSymptomsSessionResource {
     public ResponseEntity<List<DepressiveSymptomsSessionDTO>> getAllDepressiveSymptomsSessions(Pageable pageable) {
         log.debug("REST request to get a page of DepressiveSymptomsSessions");
         Page<DepressiveSymptomsSessionDTO> page = depressiveSymptomsSessionService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/depressive-symptoms-sessions/by-session")
+    public ResponseEntity<List<DepressiveSymptomsSessionDTO>> getAllDepressiveSymptomsSessionsBySession(Pageable pageable,Long sessionId) {
+        log.debug("REST request to get a page of DepressiveSymptomsSessions");
+        Page<DepressiveSymptomsSessionDTO> page = depressiveSymptomsSessionService.findAllBySession(pageable,sessionId);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

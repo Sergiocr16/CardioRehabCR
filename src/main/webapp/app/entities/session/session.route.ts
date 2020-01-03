@@ -33,7 +33,7 @@ export const sessionRoute: Routes = [
     path: '',
     component: SessionComponent,
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_USER', 'ROLE_MANAGER'],
       pageTitle: 'cardioRehabCrApp.session.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -45,19 +45,19 @@ export const sessionRoute: Routes = [
       session: SessionResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_USER', 'ROLE_MANAGER'],
       pageTitle: 'cardioRehabCrApp.session.home.title'
     },
     canActivate: [UserRouteAccessService]
   },
   {
-    path: 'new',
+    path: ':patientId/new',
     component: SessionUpdateComponent,
     resolve: {
       session: SessionResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_USER', 'ROLE_MANAGER'],
       pageTitle: 'cardioRehabCrApp.session.home.title'
     },
     canActivate: [UserRouteAccessService]

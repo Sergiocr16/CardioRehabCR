@@ -28,6 +28,8 @@ public interface MinorEventsSessionService {
      */
     Page<MinorEventsSessionDTO> findAll(Pageable pageable);
 
+    Page<MinorEventsSessionDTO> findAllBySessionId(Pageable pageable, Long sessionId);
+
 
     /**
      * Get the "id" minorEventsSession.

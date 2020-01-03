@@ -22,6 +22,7 @@
       "hospitalization": "Hospitalization",
       "status": "Status",
       "deleted": "Deleted",
+      "currentlyWorking": "Currently Working",
       "minorEventsSession": "Minor Events Session",
       "mayorEventsSession": "Mayor Events Session",
       "depressiveSymptomsSession": "Depressive Symptoms Session",

@@ -5,6 +5,7 @@ import com.aditum.cardiorehabcr.domain.Patient;
 import com.aditum.cardiorehabcr.repository.PatientRepository;
 import com.aditum.cardiorehabcr.service.PatientService;
 import com.aditum.cardiorehabcr.service.dto.PatientDTO;
+import com.aditum.cardiorehabcr.service.impl.PatientServiceImpl;
 import com.aditum.cardiorehabcr.service.mapper.PatientMapper;
 import com.aditum.cardiorehabcr.web.rest.errors.ExceptionTranslator;
 
@@ -78,7 +79,7 @@ public class PatientResourceIT {
     private PatientMapper patientMapper;
 
     @Autowired
-    private PatientService patientService;
+    private PatientServiceImpl patientService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -327,7 +328,7 @@ public class PatientResourceIT {
             .andExpect(jsonPath("$.[*].sessionNumber").value(hasItem(DEFAULT_SESSION_NUMBER)))
             .andExpect(jsonPath("$.[*].deleted").value(hasItem(DEFAULT_DELETED.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getPatient() throws Exception {

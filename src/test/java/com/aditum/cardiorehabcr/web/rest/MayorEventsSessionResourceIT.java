@@ -5,6 +5,7 @@ import com.aditum.cardiorehabcr.domain.MayorEventsSession;
 import com.aditum.cardiorehabcr.repository.MayorEventsSessionRepository;
 import com.aditum.cardiorehabcr.service.MayorEventsSessionService;
 import com.aditum.cardiorehabcr.service.dto.MayorEventsSessionDTO;
+import com.aditum.cardiorehabcr.service.impl.MayorEventsSessionServiceImpl;
 import com.aditum.cardiorehabcr.service.mapper.MayorEventsSessionMapper;
 import com.aditum.cardiorehabcr.web.rest.errors.ExceptionTranslator;
 
@@ -52,7 +53,7 @@ public class MayorEventsSessionResourceIT {
     private MayorEventsSessionMapper mayorEventsSessionMapper;
 
     @Autowired
-    private MayorEventsSessionService mayorEventsSessionService;
+    private MayorEventsSessionServiceImpl mayorEventsSessionService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -212,7 +213,7 @@ public class MayorEventsSessionResourceIT {
             .andExpect(jsonPath("$.[*].mayorEventId").value(hasItem(DEFAULT_MAYOR_EVENT_ID.intValue())))
             .andExpect(jsonPath("$.[*].exist").value(hasItem(DEFAULT_EXIST.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getMayorEventsSession() throws Exception {

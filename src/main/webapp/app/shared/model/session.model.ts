@@ -12,10 +12,11 @@ export interface ISession {
   hospitalization?: boolean;
   status?: number;
   deleted?: boolean;
-  minorEventsSessions?: IMinorEventsSession[];
-  mayorEventsSessions?: IMayorEventsSession[];
-  depressiveSymptomsSessions?: IDepressiveSymptomsSession[];
-  nonSpecificPainsSessions?: INonSpecificPainsSession[];
+  currentlyWorking?: boolean;
+  minorEvents?: IMinorEventsSession[];
+  mayorEvents?: IMayorEventsSession[];
+  depressiveSymptoms?: IDepressiveSymptomsSession[];
+  nonSpecificPains?: INonSpecificPainsSession[];
   patientId?: number;
 }
 
@@ -28,6 +29,7 @@ export class Session implements ISession {
     public hospitalization?: boolean,
     public status?: number,
     public deleted?: boolean,
+    public currentlyWorking?: boolean,
     public minorEventsSessions?: IMinorEventsSession[],
     public mayorEventsSessions?: IMayorEventsSession[],
     public depressiveSymptomsSessions?: IDepressiveSymptomsSession[],
@@ -37,5 +39,6 @@ export class Session implements ISession {
     this.abscence = this.abscence || false;
     this.hospitalization = this.hospitalization || false;
     this.deleted = this.deleted || false;
+    this.currentlyWorking = this.currentlyWorking || false;
   }
 }

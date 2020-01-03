@@ -38,6 +38,8 @@ public class PatientDTO implements Serializable {
 
     private Boolean deleted;
 
+    private String scholarship;
+
 
     public Long getId() {
         return id;
@@ -135,6 +137,14 @@ public class PatientDTO implements Serializable {
         this.deleted = deleted;
     }
 
+    public String getScholarship() {
+        return scholarship;
+    }
+
+    public void setScholarship(String scholarship) {
+        this.scholarship = scholarship;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -171,6 +181,7 @@ public class PatientDTO implements Serializable {
             ", rehabStatus=" + getRehabStatus() +
             ", sessionNumber=" + getSessionNumber() +
             ", deleted='" + isDeleted() + "'" +
+            ", scholarship='" + getScholarship() + "'" +
             "}";
     }
 }
