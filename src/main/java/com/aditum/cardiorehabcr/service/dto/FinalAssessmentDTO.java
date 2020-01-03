@@ -39,6 +39,8 @@ public class FinalAssessmentDTO implements Serializable {
 
     private Boolean deleted;
 
+    private Boolean reevaluation;
+
 
     private Long patientId;
 
@@ -170,6 +172,14 @@ public class FinalAssessmentDTO implements Serializable {
         this.deleted = deleted;
     }
 
+    public Boolean isReevaluation() {
+        return reevaluation;
+    }
+
+    public void setReevaluation(Boolean reevaluation) {
+        this.reevaluation = reevaluation;
+    }
+
     public Long getPatientId() {
         return patientId;
     }
@@ -218,6 +228,7 @@ public class FinalAssessmentDTO implements Serializable {
             ", abandonmentMedicCause='" + isAbandonmentMedicCause() + "'" +
             ", hospitalized='" + isHospitalized() + "'" +
             ", deleted='" + isDeleted() + "'" +
+            ", reevaluation='" + isReevaluation() + "'" +
             ", patient=" + getPatientId() +
             "}";
     }

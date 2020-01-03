@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -12,7 +12,6 @@ import { JhiAlertService } from 'ng-jhipster';
 import { IPatient, Patient } from 'app/shared/model/patient.model';
 import { PatientService } from './patient.service';
 import { IRehabilitationGroup } from 'app/shared/model/rehabilitation-group.model';
-import { RehabilitationGroupService } from 'app/entities/rehabilitation-group/rehabilitation-group.service';
 import { ModalService } from 'app/shared/util/modal.service';
 import { GlobalVariablesService } from 'app/shared/util/global-variables.service';
 import { IIncomeDiagnosis } from 'app/shared/model/income-diagnosis.model';
@@ -30,7 +29,7 @@ import { IComorbiditie } from 'app/shared/model/comorbiditie.model';
   selector: 'jhi-patient-update',
   templateUrl: './patient-update.component.html'
 })
-export class PatientUpdateComponent implements OnInit {
+export class PatientUpdateComponent implements OnInit, OnDestroy {
   isSaving: boolean;
   title;
   modalSuccessMessage;
@@ -313,6 +312,7 @@ export class PatientUpdateComponent implements OnInit {
       if (patient.id !== undefined) {
         this.subscribeToSaveResponse(this.patientService.update(patient));
       } else {
+        patient.rehabStatus = 0;
         this.subscribeToSaveResponse(this.patientService.create(patient));
       }
     });
@@ -461,5 +461,9 @@ export class PatientUpdateComponent implements OnInit {
       }
     }
     return option;
+  }
+
+  ngOnDestroy() {
+    this.global.leavingForm();
   }
 }

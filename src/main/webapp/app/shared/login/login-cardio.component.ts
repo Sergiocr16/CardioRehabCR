@@ -5,6 +5,7 @@ import { JhiEventManager } from 'ng-jhipster';
 
 import { LoginService } from 'app/core/login/login.service';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
+import { ModalService } from 'app/shared/util/modal.service';
 
 @Component({
   selector: 'jhi-login',
@@ -24,6 +25,7 @@ export class LoginComponent implements AfterViewInit {
     private loginService: LoginService,
     private stateStorageService: StateStorageService,
     private elementRef: ElementRef,
+    private modal: ModalService,
     private renderer: Renderer,
     private router: Router,
     private fb: FormBuilder
@@ -64,7 +66,10 @@ export class LoginComponent implements AfterViewInit {
             this.router.navigateByUrl(redirect);
           }
         },
-        () => (this.authenticationError = true)
+        () => {
+          this.authenticationError = true;
+          this.modal.message('Credenciales inválidos');
+        }
       );
   }
 

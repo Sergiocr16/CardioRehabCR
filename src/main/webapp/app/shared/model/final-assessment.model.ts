@@ -15,6 +15,7 @@ export interface IFinalAssessment {
   abandonmentMedicCause?: boolean;
   hospitalized?: boolean;
   deleted?: boolean;
+  reevaluation?: boolean;
   patientId?: number;
 }
 
@@ -36,6 +37,7 @@ export class FinalAssessment implements IFinalAssessment {
     public abandonmentMedicCause?: boolean,
     public hospitalized?: boolean,
     public deleted?: boolean,
+    public reevaluation?: boolean,
     public patientId?: number
   ) {
     this.isWorking = this.isWorking || false;
@@ -44,5 +46,6 @@ export class FinalAssessment implements IFinalAssessment {
     this.abandonmentMedicCause = this.abandonmentMedicCause || false;
     this.hospitalized = this.hospitalized || false;
     this.deleted = this.deleted || false;
+    this.reevaluation = this.reevaluation || false;
   }
 }

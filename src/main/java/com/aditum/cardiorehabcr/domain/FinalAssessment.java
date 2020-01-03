@@ -63,6 +63,9 @@ public class FinalAssessment implements Serializable {
     @Column(name = "deleted")
     private Boolean deleted;
 
+    @Column(name = "reevaluation")
+    private Boolean reevaluation;
+
     @ManyToOne
     @JsonIgnoreProperties("finalAssessments")
     private Patient patient;
@@ -271,6 +274,19 @@ public class FinalAssessment implements Serializable {
         this.deleted = deleted;
     }
 
+    public Boolean isReevaluation() {
+        return reevaluation;
+    }
+
+    public FinalAssessment reevaluation(Boolean reevaluation) {
+        this.reevaluation = reevaluation;
+        return this;
+    }
+
+    public void setReevaluation(Boolean reevaluation) {
+        this.reevaluation = reevaluation;
+    }
+
     public Patient getPatient() {
         return patient;
     }
@@ -320,6 +336,7 @@ public class FinalAssessment implements Serializable {
             ", abandonmentMedicCause='" + isAbandonmentMedicCause() + "'" +
             ", hospitalized='" + isHospitalized() + "'" +
             ", deleted='" + isDeleted() + "'" +
+            ", reevaluation='" + isReevaluation() + "'" +
             "}";
     }
 }

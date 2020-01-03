@@ -51,13 +51,25 @@ export const finalAssessmentRoute: Routes = [
     canActivate: [UserRouteAccessService]
   },
   {
-    path: 'new',
+    path: ':patientId/new-reevaluation',
     component: FinalAssessmentUpdateComponent,
     resolve: {
       finalAssessment: FinalAssessmentResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: ['ROLE_USER', 'ROLE_MANAGER'],
+      pageTitle: 'cardioRehabCrApp.finalAssessment.home.title'
+    },
+    canActivate: [UserRouteAccessService]
+  },
+  {
+    path: ':patientId/new/',
+    component: FinalAssessmentUpdateComponent,
+    resolve: {
+      finalAssessment: FinalAssessmentResolve
+    },
+    data: {
+      authorities: ['ROLE_USER', 'ROLE_MANAGER'],
       pageTitle: 'cardioRehabCrApp.finalAssessment.home.title'
     },
     canActivate: [UserRouteAccessService]

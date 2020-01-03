@@ -71,16 +71,31 @@
             <div fxLayout="row" fxLayoutAlign="space-between center">
                 <div>
                     <mat-card-title>Código:{{patient.code}}</mat-card-title>
-                    <mat-card-subtitle><span>Última sesión: {{patient.sessionNumber}}</span></mat-card-subtitle>
+                    <mat-card-subtitle><span>Estado en el programa:
+                         <span *ngIf="patient.rehabStatus==0">Sin iniciar</span>
+                        <span *ngIf="patient.rehabStatus==1">En rehabilitación</span>
+                        <span *ngIf="patient.rehabStatus==2">Finalizado</span>
+                    </span></mat-card-subtitle>
+                    <mat-card-subtitle><span>Última sesión: <span *ngIf="patient.sessionNumber>0">{{patient.sessionNumber}}/60</span> <span *ngIf="patient.sessionNumber==0">Ninguna</span></span></mat-card-subtitle>
                     <mat-card-subtitle><span>Sexo: {{patient.sex}}</span></mat-card-subtitle>
                     <mat-card-subtitle><span>Edad: {{patient.age}}</span></mat-card-subtitle>
                 </div>
                 <div>
-                    <button color="primary" mat-raised-button    [routerLink]="['/patient', patient.id, 'view' ]">
+                    <button *ngIf="patient.rehabStatus>=1" color="primary" mat-raised-button
+                            [routerLink]="['/patient', patient.id, 'view' ]">
                         Sesiones
                     </button>
-                    <button  mat-raised-button color="accent" [routerLink]="['/session/',patient.id,'new']">
-                       Evaluar sesión
+                    <button *ngIf="patient.rehabStatus<2" mat-raised-button color="accent"
+                            [routerLink]="['/session/',patient.id,'new']">
+                        Evaluar sesión
+                    </button>
+                    <button *ngIf="patient.rehabStatus==1" mat-raised-button color="accent"
+                            [routerLink]="['/final-assessment/',patient.id,'new']">
+                        Realizar Fase de Mantenimiento
+                    </button>
+                    <button *ngIf="patient.rehabStatus==2" mat-raised-button color="accent"
+                            [routerLink]="['/final-assessment/',patient.id,'new-reevaluation']">
+                        Reevaluar Fase Mantenimiento
                     </button>
                 </div>
             </div>

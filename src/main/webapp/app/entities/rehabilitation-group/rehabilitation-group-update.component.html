@@ -1,4 +1,4 @@
-<mat-card class="mat-card-form" style="padding-top: 0">
+<mat-card class="mat-card-form margin-top-20" style="padding-top: 0">
     <div id="myUserLabel" class="form-title primary-color"
          fxHide.xs="true">
         {{title}}
@@ -15,6 +15,23 @@
                             *ngIf="editForm.get('name').invalid && (editForm.get('name').dirty || editForm.get('name').touched)"
                             class="form-text text-danger">
                     <span *ngIf="editForm.get('name').errors.required"
+                          jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </span>
+                        </mat-hint>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label >Estado en el programa de rehabilitación
+                        </mat-label>
+                        <mat-select name="programStatus" formControlName="programStatus">
+                            <mat-option *ngFor="let o of programStatusArray" [value]="o.v">
+                                {{o.d}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-hint
+                            *ngIf="editForm.get('programStatus').invalid && (editForm.get('programStatus').dirty || editForm.get('programStatus').touched)"
+                            class="form-text text-danger">
+                    <span *ngIf="editForm.get('programStatus').errors.required"
                           jhiTranslate="entity.validation.required">
                         This field is required.
                     </span>

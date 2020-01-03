@@ -1,6 +1,7 @@
 package com.aditum.cardiorehabcr.web.rest;
 
 import com.aditum.cardiorehabcr.service.NonSpecificPainsSessionService;
+import com.aditum.cardiorehabcr.service.impl.NonSpecificPainsSessionServiceImpl;
 import com.aditum.cardiorehabcr.web.rest.errors.BadRequestAlertException;
 import com.aditum.cardiorehabcr.service.dto.NonSpecificPainsSessionDTO;
 
@@ -39,9 +40,9 @@ public class NonSpecificPainsSessionResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final NonSpecificPainsSessionService nonSpecificPainsSessionService;
+    private final NonSpecificPainsSessionServiceImpl nonSpecificPainsSessionService;
 
-    public NonSpecificPainsSessionResource(NonSpecificPainsSessionService nonSpecificPainsSessionService) {
+    public NonSpecificPainsSessionResource(NonSpecificPainsSessionServiceImpl nonSpecificPainsSessionService) {
         this.nonSpecificPainsSessionService = nonSpecificPainsSessionService;
     }
 
@@ -97,6 +98,14 @@ public class NonSpecificPainsSessionResource {
     public ResponseEntity<List<NonSpecificPainsSessionDTO>> getAllNonSpecificPainsSessions(Pageable pageable) {
         log.debug("REST request to get a page of NonSpecificPainsSessions");
         Page<NonSpecificPainsSessionDTO> page = nonSpecificPainsSessionService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/non-specific-pains-sessions/by-session")
+    public ResponseEntity<List<NonSpecificPainsSessionDTO>> getAllNonSpecificPainsSessionsBySession(Pageable pageable,Long sessionId) {
+        log.debug("REST request to get a page of NonSpecificPainsSessions");
+        Page<NonSpecificPainsSessionDTO> page = nonSpecificPainsSessionService.findAllBySession(pageable,sessionId);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

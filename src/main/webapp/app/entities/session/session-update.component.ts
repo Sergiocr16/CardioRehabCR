@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import * as moment from 'moment';
@@ -25,7 +25,7 @@ import { DepressiveSymptomService } from 'app/entities/depressive-symptom/depres
   selector: 'jhi-session-update',
   templateUrl: './session-update.component.html'
 })
-export class SessionUpdateComponent implements OnInit {
+export class SessionUpdateComponent implements OnInit, OnDestroy {
   isSaving: boolean;
 
   patients: IPatient[];
@@ -74,12 +74,15 @@ export class SessionUpdateComponent implements OnInit {
       this.title = session.id == null ? 'Evaluando sesión' : 'Editar evaluación';
       this.modalConfirm = session.id == null ? 'new' : 'update';
       this.modalSuccessMessage = session.id == null ? 'Evaluación creada correctamente.' : 'Evaluación editada correctamente.';
+      this.global.setTitle(this.title);
       this.loadNonSpecificPain();
       this.loadMinorEvents();
       this.loadMayorEvents();
       this.loadDepressiveSymptoms();
     });
     this.patientId = this.route.snapshot.params['patientId'];
+    this.global.enteringForm();
+
     this.patientService
       .find(this.patientId)
       .pipe(
@@ -234,6 +237,7 @@ export class SessionUpdateComponent implements OnInit {
     }
     return newArray;
   }
+
   formatMayorEventsChecked(array) {
     const newArray = [];
     for (const o of array) {
@@ -278,18 +282,23 @@ export class SessionUpdateComponent implements OnInit {
     }
     return newArray;
   }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ISession>>) {
     result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
+
   protected subscribeToSaveResponsePatient(result: Observable<HttpResponse<ISession>>) {
     result.subscribe(() => this.onSaveSuccessPatient(), () => this.onSaveError());
   }
+
   protected onSaveSuccessPatient() {
     this.isSaving = false;
     this.modal.message('Sesión evaluada correctamente.');
     this.previousState();
   }
+
   protected onSaveSuccess() {
+    this.patient.rehabStatus = 1;
     this.subscribeToSaveResponsePatient(this.patientService.update(this.patient));
   }
 
@@ -303,5 +312,9 @@ export class SessionUpdateComponent implements OnInit {
 
   trackPatientById(index: number, item: IPatient) {
     return item.id;
+  }
+
+  ngOnDestroy() {
+    this.global.leavingForm();
   }
 }

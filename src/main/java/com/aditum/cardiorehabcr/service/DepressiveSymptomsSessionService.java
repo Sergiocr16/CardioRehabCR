@@ -28,6 +28,8 @@ public interface DepressiveSymptomsSessionService {
      */
     Page<DepressiveSymptomsSessionDTO> findAll(Pageable pageable);
 
+    Page<DepressiveSymptomsSessionDTO> findAllBySession(Pageable pageable, Long sessionId);
+
 
     /**
      * Get the "id" depressiveSymptomsSession.

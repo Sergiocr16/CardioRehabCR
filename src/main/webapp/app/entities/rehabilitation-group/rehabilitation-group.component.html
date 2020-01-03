@@ -101,7 +101,11 @@
                 <!--                <td><a [routerLink]="['/rehabilitation-group', rehabilitationGroup.id, 'view' ]">{{rehabilitationGroup.id}}</a></td>-->
                 <td>{{rehabilitationGroup.name}}</td>
                 <td>{{rehabilitationGroup.creationDate | date}}</td>
-                <td>{{rehabilitationGroup.programStatus}}</td>
+                <td>
+                    <span *ngIf="rehabilitationGroup.programStatus==0">Sin iniciar</span>
+                    <span *ngIf="rehabilitationGroup.programStatus==1">En proceso</span>
+                    <span *ngIf="rehabilitationGroup.programStatus==2">Finalizado</span>
+                </td>
                 <td>{{rehabilitationGroup.patients.length}}</td>
                 <!--                <td>{{rehabilitationGroup.deleted}}</td>-->
                 <!--                <td>-->

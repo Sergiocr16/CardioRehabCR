@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -22,7 +22,7 @@ import { GlobalVariablesService } from 'app/shared/util/global-variables.service
   selector: 'jhi-rehabilitation-group-update',
   templateUrl: './rehabilitation-group-update.component.html'
 })
-export class RehabilitationGroupUpdateComponent implements OnInit {
+export class RehabilitationGroupUpdateComponent implements OnInit, OnDestroy {
   isSaving: boolean;
 
   patients: IPatient[];
@@ -39,6 +39,8 @@ export class RehabilitationGroupUpdateComponent implements OnInit {
     patients: [],
     rehabilitationCenterId: []
   });
+
+  programStatusArray = [{ d: 'Sin iniciar', v: 0 }, { d: 'En proceso', v: 1 }, { d: 'Finalizado', v: 2 }];
 
   constructor(
     protected jhiAlertService: JhiAlertService,
@@ -58,7 +60,9 @@ export class RehabilitationGroupUpdateComponent implements OnInit {
       this.title = rehabilitationGroup.id == null ? 'Crear grupo' : 'Editar grupo';
       this.modalConfirm = rehabilitationGroup.id == null ? 'new' : 'update';
       this.modalSuccessMessage = rehabilitationGroup.id == null ? 'Grupo creado correctamente.' : 'Grupo editado correctamente.';
+      this.global.setTitle(this.title);
     });
+    this.global.enteringForm();
 
     this.patientService
       .query()
@@ -111,7 +115,7 @@ export class RehabilitationGroupUpdateComponent implements OnInit {
       name: this.editForm.get(['name']).value,
       creationDate:
         this.editForm.get(['creationDate']).value != null ? moment(this.editForm.get(['creationDate']).value, DATE_TIME_FORMAT) : undefined,
-      // programStatus: this.editForm.get(['programStatus']).value,
+      programStatus: this.editForm.get(['programStatus']).value,
       patients: this.editForm.get(['patients']).value
     };
   }
@@ -150,5 +154,9 @@ export class RehabilitationGroupUpdateComponent implements OnInit {
       }
     }
     return option;
+  }
+
+  ngOnDestroy() {
+    this.global.leavingForm();
   }
 }

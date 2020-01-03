@@ -81,6 +81,9 @@ public class FinalAssessmentResourceIT {
     private static final Boolean DEFAULT_DELETED = false;
     private static final Boolean UPDATED_DELETED = true;
 
+    private static final Boolean DEFAULT_REEVALUATION = false;
+    private static final Boolean UPDATED_REEVALUATION = true;
+
     @Autowired
     private FinalAssessmentRepository finalAssessmentRepository;
 
@@ -143,7 +146,8 @@ public class FinalAssessmentResourceIT {
             .abandonment(DEFAULT_ABANDONMENT)
             .abandonmentMedicCause(DEFAULT_ABANDONMENT_MEDIC_CAUSE)
             .hospitalized(DEFAULT_HOSPITALIZED)
-            .deleted(DEFAULT_DELETED);
+            .deleted(DEFAULT_DELETED)
+            .reevaluation(DEFAULT_REEVALUATION);
         return finalAssessment;
     }
     /**
@@ -168,7 +172,8 @@ public class FinalAssessmentResourceIT {
             .abandonment(UPDATED_ABANDONMENT)
             .abandonmentMedicCause(UPDATED_ABANDONMENT_MEDIC_CAUSE)
             .hospitalized(UPDATED_HOSPITALIZED)
-            .deleted(UPDATED_DELETED);
+            .deleted(UPDATED_DELETED)
+            .reevaluation(UPDATED_REEVALUATION);
         return finalAssessment;
     }
 
@@ -208,6 +213,7 @@ public class FinalAssessmentResourceIT {
         assertThat(testFinalAssessment.isAbandonmentMedicCause()).isEqualTo(DEFAULT_ABANDONMENT_MEDIC_CAUSE);
         assertThat(testFinalAssessment.isHospitalized()).isEqualTo(DEFAULT_HOSPITALIZED);
         assertThat(testFinalAssessment.isDeleted()).isEqualTo(DEFAULT_DELETED);
+        assertThat(testFinalAssessment.isReevaluation()).isEqualTo(DEFAULT_REEVALUATION);
     }
 
     @Test
@@ -256,7 +262,8 @@ public class FinalAssessmentResourceIT {
             .andExpect(jsonPath("$.[*].abandonment").value(hasItem(DEFAULT_ABANDONMENT.booleanValue())))
             .andExpect(jsonPath("$.[*].abandonmentMedicCause").value(hasItem(DEFAULT_ABANDONMENT_MEDIC_CAUSE.booleanValue())))
             .andExpect(jsonPath("$.[*].hospitalized").value(hasItem(DEFAULT_HOSPITALIZED.booleanValue())))
-            .andExpect(jsonPath("$.[*].deleted").value(hasItem(DEFAULT_DELETED.booleanValue())));
+            .andExpect(jsonPath("$.[*].deleted").value(hasItem(DEFAULT_DELETED.booleanValue())))
+            .andExpect(jsonPath("$.[*].reevaluation").value(hasItem(DEFAULT_REEVALUATION.booleanValue())));
     }
     
     @Test
@@ -284,7 +291,8 @@ public class FinalAssessmentResourceIT {
             .andExpect(jsonPath("$.abandonment").value(DEFAULT_ABANDONMENT.booleanValue()))
             .andExpect(jsonPath("$.abandonmentMedicCause").value(DEFAULT_ABANDONMENT_MEDIC_CAUSE.booleanValue()))
             .andExpect(jsonPath("$.hospitalized").value(DEFAULT_HOSPITALIZED.booleanValue()))
-            .andExpect(jsonPath("$.deleted").value(DEFAULT_DELETED.booleanValue()));
+            .andExpect(jsonPath("$.deleted").value(DEFAULT_DELETED.booleanValue()))
+            .andExpect(jsonPath("$.reevaluation").value(DEFAULT_REEVALUATION.booleanValue()));
     }
 
     @Test
@@ -322,7 +330,8 @@ public class FinalAssessmentResourceIT {
             .abandonment(UPDATED_ABANDONMENT)
             .abandonmentMedicCause(UPDATED_ABANDONMENT_MEDIC_CAUSE)
             .hospitalized(UPDATED_HOSPITALIZED)
-            .deleted(UPDATED_DELETED);
+            .deleted(UPDATED_DELETED)
+            .reevaluation(UPDATED_REEVALUATION);
         FinalAssessmentDTO finalAssessmentDTO = finalAssessmentMapper.toDto(updatedFinalAssessment);
 
         restFinalAssessmentMockMvc.perform(put("/api/final-assessments")
@@ -349,6 +358,7 @@ public class FinalAssessmentResourceIT {
         assertThat(testFinalAssessment.isAbandonmentMedicCause()).isEqualTo(UPDATED_ABANDONMENT_MEDIC_CAUSE);
         assertThat(testFinalAssessment.isHospitalized()).isEqualTo(UPDATED_HOSPITALIZED);
         assertThat(testFinalAssessment.isDeleted()).isEqualTo(UPDATED_DELETED);
+        assertThat(testFinalAssessment.isReevaluation()).isEqualTo(UPDATED_REEVALUATION);
     }
 
     @Test

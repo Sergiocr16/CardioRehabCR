@@ -79,7 +79,7 @@ export class PatientDetailComponent implements OnInit {
 
   loadSessions(patientId) {
     this.sessionService
-      .queryByPatient({ patientId: patientId, sort: this.sort() })
+      .queryByPatient({ patientId, sort: this.sort() })
       .pipe(
         filter((mayBeOk: HttpResponse<ISession[]>) => mayBeOk.ok),
         map((response: HttpResponse<ISession[]>) => response.body)

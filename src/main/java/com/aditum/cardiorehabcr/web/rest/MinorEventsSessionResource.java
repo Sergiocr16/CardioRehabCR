@@ -1,6 +1,7 @@
 package com.aditum.cardiorehabcr.web.rest;
 
 import com.aditum.cardiorehabcr.service.MinorEventsSessionService;
+import com.aditum.cardiorehabcr.service.impl.MinorEventsSessionServiceImpl;
 import com.aditum.cardiorehabcr.web.rest.errors.BadRequestAlertException;
 import com.aditum.cardiorehabcr.service.dto.MinorEventsSessionDTO;
 
@@ -39,9 +40,9 @@ public class MinorEventsSessionResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final MinorEventsSessionService minorEventsSessionService;
+    private final MinorEventsSessionServiceImpl minorEventsSessionService;
 
-    public MinorEventsSessionResource(MinorEventsSessionService minorEventsSessionService) {
+    public MinorEventsSessionResource(MinorEventsSessionServiceImpl minorEventsSessionService) {
         this.minorEventsSessionService = minorEventsSessionService;
     }
 
@@ -97,6 +98,14 @@ public class MinorEventsSessionResource {
     public ResponseEntity<List<MinorEventsSessionDTO>> getAllMinorEventsSessions(Pageable pageable) {
         log.debug("REST request to get a page of MinorEventsSessions");
         Page<MinorEventsSessionDTO> page = minorEventsSessionService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/minor-events-sessions/by-session")
+    public ResponseEntity<List<MinorEventsSessionDTO>> getAllMinorEventsSessionsBySession(Pageable pageable,Long sessionId) {
+        log.debug("REST request to get a page of MinorEventsSessions");
+        Page<MinorEventsSessionDTO> page = minorEventsSessionService.findAllBySessionId(pageable,sessionId);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
