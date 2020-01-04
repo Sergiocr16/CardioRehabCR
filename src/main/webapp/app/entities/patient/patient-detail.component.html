@@ -116,7 +116,7 @@
                             </mat-card-title>
                         </mat-card-header>
                         <div fxLayout="column" class="margin-left-20">
-                            <mat-checkbox flex [checked]="incomeDiagnose.exist"
+                            <mat-checkbox flex [checked]="incomeDiagnose.exist" class="disabled"
                                           *ngFor="let incomeDiagnose of incomeDiagnosis;let i=index">{{incomeDiagnose.description}}</mat-checkbox>
                         </div>
                     </div>
@@ -126,7 +126,7 @@
                             </mat-card-title>
                         </mat-card-header>
                         <div fxLayout="column" class="margin-left-20">
-                            <mat-checkbox flex [checked]="comorbiditie.exist"
+                            <mat-checkbox flex [checked]="comorbiditie.exist" class="disabled"
                                           *ngFor="let comorbiditie of comorbidities;let i=index">{{comorbiditie.description}}</mat-checkbox>
                         </div>
                     </div>
