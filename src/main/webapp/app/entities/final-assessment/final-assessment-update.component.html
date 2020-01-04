@@ -132,8 +132,7 @@
                     </mat-hint>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
-                    <mat-label for="field_size">
-                        Hb1ac
+                    <mat-label jhiTranslate="cardioRehabCrApp.initialAssessment.size" for="field_size">Size
                     </mat-label>
                     <input matInput type="text" name="size" id="field_size"
                            formControlName="size">
@@ -148,8 +147,7 @@
                     </mat-hint>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
-                    <mat-label for="field_iMC">
-                        Capacidad Funcional
+                    <mat-label jhiTranslate="cardioRehabCrApp.initialAssessment.iMC" for="field_iMC">IMC
                     </mat-label>
                     <input matInput type="text" name="iMC" id="field_iMC"
                            formControlName="iMC">
@@ -158,6 +156,37 @@
                         *ngIf="editForm.get('iMC').invalid && (editForm.get('iMC').dirty || editForm.get('iMC').touched)"
                         class="form-text text-danger">
                     <span *ngIf="editForm.get('iMC').errors.required"
+                          jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </span>
+                    </mat-hint>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label jhiTranslate="cardioRehabCrApp.initialAssessment.hbiac" for="field_hbiac">Hbiac
+                    </mat-label>
+                    <input matInput type="text" name="hbiac" id="field_hbiac"
+                           formControlName="hbiac">
+                    <span matSuffix>%</span>
+                    <mat-hint
+                        *ngIf="editForm.get('hbiac').invalid && (editForm.get('hbiac').dirty || editForm.get('hbiac').touched)"
+                        class="form-text text-danger">
+                    <span *ngIf="editForm.get('hbiac').errors.required"
+                          jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </span>
+                    </mat-hint>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label for="field_baselineFunctionalCapacity">
+                        Capacidad Funcional
+                    </mat-label>
+                    <input matInput type="text" name="baselineFunctionalCapacity" id="field_baselineFunctionalCapacity"
+                           formControlName="baselineFunctionalCapacity">
+                    <span matSuffix>METS</span>
+                    <mat-hint
+                        *ngIf="editForm.get('baselineFunctionalCapacity').invalid && (editForm.get('baselineFunctionalCapacity').dirty || editForm.get('baselineFunctionalCapacity').touched)"
+                        class="form-text text-danger">
+                    <span *ngIf="editForm.get('baselineFunctionalCapacity').errors.required"
                           jhiTranslate="entity.validation.required">
                         This field is required.
                     </span>
@@ -215,38 +244,8 @@
                     </span>
                     </mat-hint>
                 </mat-form-field>
-                <mat-form-field appearance="outline">
-                    <mat-label jhiTranslate="cardioRehabCrApp.initialAssessment.hbiac" for="field_hbiac">Hbiac
-                    </mat-label>
-                    <input matInput type="text" name="hbiac" id="field_hbiac"
-                           formControlName="hbiac">
-                    <span matSuffix>%</span>
-                    <mat-hint
-                        *ngIf="editForm.get('hbiac').invalid && (editForm.get('hbiac').dirty || editForm.get('hbiac').touched)"
-                        class="form-text text-danger">
-                    <span *ngIf="editForm.get('hbiac').errors.required"
-                          jhiTranslate="entity.validation.required">
-                        This field is required.
-                    </span>
-                    </mat-hint>
-                </mat-form-field>
-                <mat-form-field appearance="outline">
-                    <mat-label jhiTranslate="cardioRehabCrApp.initialAssessment.baselineFunctionalCapacity"
-                               for="field_baselineFunctionalCapacity">Baseline Functional Capacity
-                    </mat-label>
-                    <input matInput type="text" name="baselineFunctionalCapacity"
-                           id="field_baselineFunctionalCapacity"
-                           formControlName="baselineFunctionalCapacity">
-                    <span matSuffix>METS</span>
-                    <mat-hint
-                        *ngIf="editForm.get('baselineFunctionalCapacity').invalid && (editForm.get('baselineFunctionalCapacity').dirty || editForm.get('baselineFunctionalCapacity').touched)"
-                        class="form-text text-danger">
-                    <span *ngIf="editForm.get('baselineFunctionalCapacity').errors.required"
-                          jhiTranslate="entity.validation.required">
-                        This field is required.
-                    </span>
-                    </mat-hint>
-                </mat-form-field>
+
+
                 <div fxLayout="column" class="margin-left-20">
                     <mat-checkbox flex name="isWorking" formControlName="isWorking"
                                   id="field_isWorking"

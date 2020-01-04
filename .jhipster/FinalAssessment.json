@@ -64,6 +64,10 @@
         {
             "fieldName": "reevaluation",
             "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "executionDate",
+            "fieldType": "ZonedDateTime"
         }
     ],
     "relationships": [

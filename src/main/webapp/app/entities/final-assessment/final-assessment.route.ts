@@ -63,7 +63,7 @@ export const finalAssessmentRoute: Routes = [
     canActivate: [UserRouteAccessService]
   },
   {
-    path: ':patientId/new/',
+    path: ':patientId/new',
     component: FinalAssessmentUpdateComponent,
     resolve: {
       finalAssessment: FinalAssessmentResolve

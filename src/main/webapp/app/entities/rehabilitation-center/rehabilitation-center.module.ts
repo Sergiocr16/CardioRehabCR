@@ -10,7 +10,6 @@ import {
   RehabilitationCenterDeleteDialogComponent
 } from './rehabilitation-center-delete-dialog.component';
 import { rehabilitationCenterRoute, rehabilitationCenterPopupRoute } from './rehabilitation-center.route';
-import { NoContentComponent } from 'app/layouts/no-content/no-content.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 const ENTITY_STATES = [...rehabilitationCenterRoute, ...rehabilitationCenterPopupRoute];
@@ -22,9 +21,9 @@ const ENTITY_STATES = [...rehabilitationCenterRoute, ...rehabilitationCenterPopu
     RehabilitationCenterDetailComponent,
     RehabilitationCenterUpdateComponent,
     RehabilitationCenterDeleteDialogComponent,
-    RehabilitationCenterDeletePopupComponent,
-    NoContentComponent
+    RehabilitationCenterDeletePopupComponent
   ],
+  exports: [],
   entryComponents: [RehabilitationCenterDeleteDialogComponent]
 })
 export class CardioRehabCrRehabilitationCenterModule {}

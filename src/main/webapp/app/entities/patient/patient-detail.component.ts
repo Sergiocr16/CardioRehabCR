@@ -12,6 +12,8 @@ import { IncomeDiagnosisPatientService } from 'app/entities/income-diagnosis-pat
 import { ComorbiditiesPatientService } from 'app/entities/comorbidities-patient/comorbidities-patient.service';
 import { SessionService } from 'app/entities/session/session.service';
 import { ISession } from 'app/shared/model/session.model';
+import { FinalAssessmentService } from 'app/entities/final-assessment/final-assessment.service';
+import { IFinalAssessment } from 'app/shared/model/final-assessment.model';
 
 @Component({
   selector: 'jhi-patient-detail',
@@ -24,13 +26,15 @@ export class PatientDetailComponent implements OnInit {
   incomeDiagnosis = [];
   comorbidities = [];
   sessions = [];
+  finalAssessments = [];
 
   constructor(
     protected activatedRoute: ActivatedRoute,
     protected initialAssessmentService: InitialAssessmentService,
     protected incomeDiagnosisPatientService: IncomeDiagnosisPatientService,
     protected comorbiditiesPatientService: ComorbiditiesPatientService,
-    protected sessionService: SessionService
+    protected sessionService: SessionService,
+    protected finalAssessmentService: FinalAssessmentService
   ) {}
 
   ngOnInit() {
@@ -46,6 +50,7 @@ export class PatientDetailComponent implements OnInit {
           this.initialAssesment = initialAssesment;
           this.loadDiagnosisPatient(initialAssesment.id);
           this.loadComorbiditiesPatient(initialAssesment.id);
+          this.loadFinalAssessments(this.patient.id);
           this.loadSessions(this.patient.id);
         });
     });
@@ -85,6 +90,16 @@ export class PatientDetailComponent implements OnInit {
         map((response: HttpResponse<ISession[]>) => response.body)
       )
       .subscribe((res: ISession[]) => (this.sessions = res), (res: HttpErrorResponse) => this.onError(res.message));
+  }
+
+  loadFinalAssessments(patientId) {
+    this.finalAssessmentService
+      .queryByPatient({ patientId })
+      .pipe(
+        filter((mayBeOk: HttpResponse<IFinalAssessment[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IFinalAssessment[]>) => response.body)
+      )
+      .subscribe((res: IFinalAssessment[]) => (this.finalAssessments = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
   setStep(index: number) {

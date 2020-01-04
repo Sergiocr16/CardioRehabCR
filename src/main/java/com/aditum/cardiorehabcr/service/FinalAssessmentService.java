@@ -28,6 +28,7 @@ public interface FinalAssessmentService {
      */
     Page<FinalAssessmentDTO> findAll(Pageable pageable);
 
+    Page<FinalAssessmentDTO> findAllByPatient(Pageable pageable, Long patientId);
 
     /**
      * Get the "id" finalAssessment.
