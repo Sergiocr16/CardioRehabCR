@@ -1,3 +1,5 @@
+import { Moment } from 'moment';
+
 export interface IFinalAssessment {
   id?: number;
   smoking?: string;
@@ -12,6 +14,7 @@ export interface IFinalAssessment {
   isWorking?: boolean;
   deceased?: boolean;
   abandonment?: boolean;
+  executionDate?: Moment;
   abandonmentMedicCause?: boolean;
   hospitalized?: boolean;
   deleted?: boolean;
@@ -34,6 +37,7 @@ export class FinalAssessment implements IFinalAssessment {
     public isWorking?: boolean,
     public deceased?: boolean,
     public abandonment?: boolean,
+    public executionDate?: Moment,
     public abandonmentMedicCause?: boolean,
     public hospitalized?: boolean,
     public deleted?: boolean,

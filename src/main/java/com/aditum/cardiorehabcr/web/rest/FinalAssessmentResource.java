@@ -1,6 +1,7 @@
 package com.aditum.cardiorehabcr.web.rest;
 
 import com.aditum.cardiorehabcr.service.FinalAssessmentService;
+import com.aditum.cardiorehabcr.service.impl.FinalAssessmentServiceImpl;
 import com.aditum.cardiorehabcr.web.rest.errors.BadRequestAlertException;
 import com.aditum.cardiorehabcr.service.dto.FinalAssessmentDTO;
 
@@ -38,9 +39,9 @@ public class FinalAssessmentResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final FinalAssessmentService finalAssessmentService;
+    private final FinalAssessmentServiceImpl finalAssessmentService;
 
-    public FinalAssessmentResource(FinalAssessmentService finalAssessmentService) {
+    public FinalAssessmentResource(FinalAssessmentServiceImpl finalAssessmentService) {
         this.finalAssessmentService = finalAssessmentService;
     }
 
@@ -96,6 +97,14 @@ public class FinalAssessmentResource {
     public ResponseEntity<List<FinalAssessmentDTO>> getAllFinalAssessments(Pageable pageable) {
         log.debug("REST request to get a page of FinalAssessments");
         Page<FinalAssessmentDTO> page = finalAssessmentService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/final-assessments/by-patient")
+    public ResponseEntity<List<FinalAssessmentDTO>> getAllFinalAssessmentsByPatient(Pageable pageable,Long patientId) {
+        log.debug("REST request to get a page of FinalAssessments");
+        Page<FinalAssessmentDTO> page = finalAssessmentService.findAllByPatient(pageable,patientId);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

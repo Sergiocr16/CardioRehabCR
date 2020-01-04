@@ -5,6 +5,7 @@ import com.aditum.cardiorehabcr.domain.FinalAssessment;
 import com.aditum.cardiorehabcr.repository.FinalAssessmentRepository;
 import com.aditum.cardiorehabcr.service.FinalAssessmentService;
 import com.aditum.cardiorehabcr.service.dto.FinalAssessmentDTO;
+import com.aditum.cardiorehabcr.service.impl.FinalAssessmentServiceImpl;
 import com.aditum.cardiorehabcr.service.mapper.FinalAssessmentMapper;
 import com.aditum.cardiorehabcr.web.rest.errors.ExceptionTranslator;
 
@@ -22,8 +23,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.util.List;
 
+import static com.aditum.cardiorehabcr.web.rest.TestUtil.sameInstant;
 import static com.aditum.cardiorehabcr.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -84,6 +90,9 @@ public class FinalAssessmentResourceIT {
     private static final Boolean DEFAULT_REEVALUATION = false;
     private static final Boolean UPDATED_REEVALUATION = true;
 
+    private static final ZonedDateTime DEFAULT_EXECUTION_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_EXECUTION_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+
     @Autowired
     private FinalAssessmentRepository finalAssessmentRepository;
 
@@ -91,7 +100,7 @@ public class FinalAssessmentResourceIT {
     private FinalAssessmentMapper finalAssessmentMapper;
 
     @Autowired
-    private FinalAssessmentService finalAssessmentService;
+    private FinalAssessmentServiceImpl finalAssessmentService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -147,7 +156,8 @@ public class FinalAssessmentResourceIT {
             .abandonmentMedicCause(DEFAULT_ABANDONMENT_MEDIC_CAUSE)
             .hospitalized(DEFAULT_HOSPITALIZED)
             .deleted(DEFAULT_DELETED)
-            .reevaluation(DEFAULT_REEVALUATION);
+            .reevaluation(DEFAULT_REEVALUATION)
+            .executionDate(DEFAULT_EXECUTION_DATE);
         return finalAssessment;
     }
     /**
@@ -173,7 +183,8 @@ public class FinalAssessmentResourceIT {
             .abandonmentMedicCause(UPDATED_ABANDONMENT_MEDIC_CAUSE)
             .hospitalized(UPDATED_HOSPITALIZED)
             .deleted(UPDATED_DELETED)
-            .reevaluation(UPDATED_REEVALUATION);
+            .reevaluation(UPDATED_REEVALUATION)
+            .executionDate(UPDATED_EXECUTION_DATE);
         return finalAssessment;
     }
 
@@ -214,6 +225,7 @@ public class FinalAssessmentResourceIT {
         assertThat(testFinalAssessment.isHospitalized()).isEqualTo(DEFAULT_HOSPITALIZED);
         assertThat(testFinalAssessment.isDeleted()).isEqualTo(DEFAULT_DELETED);
         assertThat(testFinalAssessment.isReevaluation()).isEqualTo(DEFAULT_REEVALUATION);
+        assertThat(testFinalAssessment.getExecutionDate()).isEqualTo(DEFAULT_EXECUTION_DATE);
     }
 
     @Test
@@ -263,9 +275,10 @@ public class FinalAssessmentResourceIT {
             .andExpect(jsonPath("$.[*].abandonmentMedicCause").value(hasItem(DEFAULT_ABANDONMENT_MEDIC_CAUSE.booleanValue())))
             .andExpect(jsonPath("$.[*].hospitalized").value(hasItem(DEFAULT_HOSPITALIZED.booleanValue())))
             .andExpect(jsonPath("$.[*].deleted").value(hasItem(DEFAULT_DELETED.booleanValue())))
-            .andExpect(jsonPath("$.[*].reevaluation").value(hasItem(DEFAULT_REEVALUATION.booleanValue())));
+            .andExpect(jsonPath("$.[*].reevaluation").value(hasItem(DEFAULT_REEVALUATION.booleanValue())))
+            .andExpect(jsonPath("$.[*].executionDate").value(hasItem(sameInstant(DEFAULT_EXECUTION_DATE))));
     }
-    
+
     @Test
     @Transactional
     public void getFinalAssessment() throws Exception {
@@ -292,7 +305,8 @@ public class FinalAssessmentResourceIT {
             .andExpect(jsonPath("$.abandonmentMedicCause").value(DEFAULT_ABANDONMENT_MEDIC_CAUSE.booleanValue()))
             .andExpect(jsonPath("$.hospitalized").value(DEFAULT_HOSPITALIZED.booleanValue()))
             .andExpect(jsonPath("$.deleted").value(DEFAULT_DELETED.booleanValue()))
-            .andExpect(jsonPath("$.reevaluation").value(DEFAULT_REEVALUATION.booleanValue()));
+            .andExpect(jsonPath("$.reevaluation").value(DEFAULT_REEVALUATION.booleanValue()))
+            .andExpect(jsonPath("$.executionDate").value(sameInstant(DEFAULT_EXECUTION_DATE)));
     }
 
     @Test
@@ -331,7 +345,8 @@ public class FinalAssessmentResourceIT {
             .abandonmentMedicCause(UPDATED_ABANDONMENT_MEDIC_CAUSE)
             .hospitalized(UPDATED_HOSPITALIZED)
             .deleted(UPDATED_DELETED)
-            .reevaluation(UPDATED_REEVALUATION);
+            .reevaluation(UPDATED_REEVALUATION)
+            .executionDate(UPDATED_EXECUTION_DATE);
         FinalAssessmentDTO finalAssessmentDTO = finalAssessmentMapper.toDto(updatedFinalAssessment);
 
         restFinalAssessmentMockMvc.perform(put("/api/final-assessments")
@@ -359,6 +374,7 @@ public class FinalAssessmentResourceIT {
         assertThat(testFinalAssessment.isHospitalized()).isEqualTo(UPDATED_HOSPITALIZED);
         assertThat(testFinalAssessment.isDeleted()).isEqualTo(UPDATED_DELETED);
         assertThat(testFinalAssessment.isReevaluation()).isEqualTo(UPDATED_REEVALUATION);
+        assertThat(testFinalAssessment.getExecutionDate()).isEqualTo(UPDATED_EXECUTION_DATE);
     }
 
     @Test

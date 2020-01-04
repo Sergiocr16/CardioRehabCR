@@ -13,6 +13,7 @@ import { IPatient, Patient } from 'app/shared/model/patient.model';
 import { PatientService } from 'app/entities/patient/patient.service';
 import { GlobalVariablesService } from 'app/shared/util/global-variables.service';
 import { ModalService } from 'app/shared/util/modal.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'jhi-final-assessment-update',
@@ -126,6 +127,7 @@ export class FinalAssessmentUpdateComponent implements OnInit, OnDestroy {
           this.subscribeToSaveResponse(this.finalAssessmentService.update(finalAssessment));
         } else {
           finalAssessment.reevaluation = this.isReevaluation;
+          finalAssessment.executionDate = moment(new Date());
           this.subscribeToSaveResponse(this.finalAssessmentService.create(finalAssessment));
         }
       }

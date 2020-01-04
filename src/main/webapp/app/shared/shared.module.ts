@@ -7,10 +7,18 @@ import { JhiLoginModalComponent } from './login/login.component';
 import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
 import { MaterialModule } from 'app/shared/util/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { NoContentComponent } from 'app/layouts/no-content/no-content.component';
 
 @NgModule({
   imports: [CardioRehabCrSharedLibsModule, MaterialModule, FlexLayoutModule],
-  declarations: [FindLanguageFromKeyPipe, JhiAlertComponent, JhiAlertErrorComponent, JhiLoginModalComponent, HasAnyAuthorityDirective],
+  declarations: [
+    FindLanguageFromKeyPipe,
+    JhiAlertComponent,
+    JhiAlertErrorComponent,
+    JhiLoginModalComponent,
+    HasAnyAuthorityDirective,
+    NoContentComponent
+  ],
   entryComponents: [JhiLoginModalComponent],
   exports: [
     CardioRehabCrSharedLibsModule,
@@ -20,7 +28,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     JhiLoginModalComponent,
     HasAnyAuthorityDirective,
     MaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    NoContentComponent
   ]
 })
 export class CardioRehabCrSharedModule {}

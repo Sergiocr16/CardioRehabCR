@@ -4,8 +4,8 @@
         <span class="primary-color table-title">Pacientes</span>
 
     </h2>
-
-
+    <jhi-no-content *ngIf="patients?.length === 0" [text]="'No hay pacientes registrados'"
+                    [icon]="'face'"></jhi-no-content>
     <div class="table-responsive" *ngIf="patients?.length > 0">
         <table class="table table-bordered tableMaterialDesign" aria-describedby="page-heading">
             <thead class="bold" style="background-color: #fafafa;">

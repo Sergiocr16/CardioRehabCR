@@ -74,21 +74,24 @@
                 Paciente código: {{patient.code}}</span>
             </h2>
         </mat-card-title>
-        <mat-card-subtitle style="margin-left:38px"><span>Última sesión {{patient.sessionNumber}}</span>
+        <mat-card-subtitle style="margin-left:38px"><span>Progreso de sesiones {{patient.sessionNumber}}/60</span>
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <mat-card-subtitle><span>Edad: {{patient.sessionNumber}}</span></mat-card-subtitle>
-        <mat-card-subtitle><span>Sexo: {{patient.sex}}</span></mat-card-subtitle>
-        <mat-card-subtitle><span>Ocupation: {{patient.ocupation}}</span></mat-card-subtitle>
-        <mat-card-subtitle><span>Escolaridad: {{patient.scholarship}}</span></mat-card-subtitle>
-        <mat-card-subtitle><span>Tiempo desde el último evento coronario: {{patient.lastEventOcurred | date }}</span>
-        </mat-card-subtitle>
+        <div class="margin-left-20">
+            <mat-card-subtitle><span>Edad: {{patient.sessionNumber}}</span></mat-card-subtitle>
+            <mat-card-subtitle><span>Sexo: {{patient.sex}}</span></mat-card-subtitle>
+            <mat-card-subtitle><span>Ocupation: {{patient.ocupation}}</span></mat-card-subtitle>
+            <mat-card-subtitle><span>Escolaridad: {{patient.scholarship}}</span></mat-card-subtitle>
+            <mat-card-subtitle>
+                <span>Tiempo desde el último evento coronario: {{patient.lastEventOcurred | date }}</span>
+            </mat-card-subtitle>
+        </div>
         <mat-accordion class="example-headers-align">
             <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" ng-if="initialAssesment">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
-                        Evaluación inicial
+                        Fase de Selección
                     </mat-panel-title>
                     <mat-panel-description>
                         <!--                        Fase de selección-->
@@ -151,13 +154,14 @@
             <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
-                        Sesiones
+                        Fase de Implementación
                     </mat-panel-title>
                     <mat-panel-description>
                         <!--                        Fase de Implementación-->
                     </mat-panel-description>
                 </mat-expansion-panel-header>
-                <mat-card *ngFor="let session of sessions;" style="margin-bottom: 5px" fxLayout="row" fxLayoutAlign="space-between center">
+                <mat-card *ngFor="let session of sessions;" style="margin-bottom: 5px" fxLayout="row"
+                          fxLayoutAlign="space-between center">
                     <div>
                         <mat-card-title class="primary-color" style="font-size: 16px!important">
                             Número: {{session.code}}
@@ -165,7 +169,7 @@
                         <mat-card-subtitle>Fecha de evaluación: {{session.executionDate | date}}
                         </mat-card-subtitle>
                     </div>
-                    <div >
+                    <div>
                         <a [routerLink]="['/session/',session.id,'view']">
                             Detalle sesión
                             <mat-icon class="text-icon">remove_red_eye</mat-icon>
@@ -174,24 +178,56 @@
                 </mat-card>
             </mat-expansion-panel>
 
-            <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
+            <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" *ngIf="finalAssessments.length!=0">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
-                        Evaluación final
+                        Fase de mantenimiento
                     </mat-panel-title>
                     <mat-panel-description>
                         <!--                        Fase de Mantenimiento-->
                     </mat-panel-description>
                 </mat-expansion-panel-header>
-                <mat-form-field>
-                    <input matInput placeholder="Date" [matDatepicker]="picker" (focus)="picker.open()" readonly>
-                </mat-form-field>
-                <mat-datepicker #picker></mat-datepicker>
-
-                <mat-action-row>
-                    <button mat-button color="warn" (click)="prevStep()">Previous</button>
-                    <button mat-button color="primary" (click)="nextStep()">End</button>
-                </mat-action-row>
+                <div *ngFor="let finalAssessment of finalAssessments;let i=index">
+                    <mat-card-header *ngIf="!finalAssessment.reevaluation">
+                        <mat-card-title class="primary-color">Evaluación final</mat-card-title>
+                        <mat-card-subtitle>Realizada el {{finalAssessment.executionDate | date}}</mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-header *ngIf="finalAssessment.reevaluation">
+                        <mat-card-title class="primary-color">Reevaluación final</mat-card-title>
+                        <mat-card-subtitle>Realizada el {{finalAssessment.executionDate | date}}</mat-card-subtitle>
+                    </mat-card-header>
+                    <div class="margin-left-20">
+                        <mat-card-subtitle><span>Peso basal: {{finalAssessment.weight}} kilogramos</span>
+                        </mat-card-subtitle>
+                        <mat-card-subtitle><span>Talla: {{finalAssessment.size}} cm</span></mat-card-subtitle>
+                        <mat-card-subtitle><span>IMC: {{finalAssessment.iMC}} Kg/m2</span></mat-card-subtitle>
+                        <mat-card-subtitle><span>Valores LDL: {{finalAssessment.lDL}} mg/dL</span></mat-card-subtitle>
+                        <mat-card-subtitle><span>Valores HDL: {{finalAssessment.hDL}} mg/dL</span></mat-card-subtitle>
+                        <mat-card-subtitle><span>Valores Hb1Ac: {{finalAssessment.hbiac}} %</span></mat-card-subtitle>
+                        <mat-card-subtitle>
+                            <span>Capacidad funcional basal: {{finalAssessment.baselineFunctionalCapacity}} METS</span>
+                        </mat-card-subtitle>
+                        <mat-card-subtitle><span>Tabaquismo: {{finalAssessment.smoking}}</span></mat-card-subtitle>
+                        <mat-card-subtitle>
+                            <span>Abandono:
+                                <span *ngIf="!finalAssessment.abandonment">
+                                    No
+                                </span>
+                                 <span *ngIf="finalAssessment.abandonment">
+                                     <span *ngIf="finalAssessment.abandonmentMedicCause">
+                                         Causa médica
+                                     </span>
+                                     <span *ngIf="finalAssessment.hospitalized">
+                                         Causa médica - Hospitalizado
+                                     </span>
+                                     <span *ngIf="! finalAssessment.abandonmentMedicCause && !finalAssessment.hospitalized">
+                                         Causa no médica
+                                     </span>
+                                </span>
+                            </span>
+                        </mat-card-subtitle>
+                    </div>
+                </div>
             </mat-expansion-panel>
 
         </mat-accordion>

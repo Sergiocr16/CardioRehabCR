@@ -32,6 +32,11 @@ export class FinalAssessmentService {
     return this.http.get<IFinalAssessment[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
+  queryByPatient(req?: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http.get<IFinalAssessment[]>(this.resourceUrl + '/by-patient', { params: options, observe: 'response' });
+  }
+
   delete(id: number): Observable<HttpResponse<any>> {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }

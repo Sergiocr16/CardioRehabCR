@@ -74,9 +74,9 @@
                     <mat-card-subtitle><span>Estado en el programa:
                          <span *ngIf="patient.rehabStatus==0">Sin iniciar</span>
                         <span *ngIf="patient.rehabStatus==1">En rehabilitación</span>
-                        <span *ngIf="patient.rehabStatus==2">Finalizado</span>
+                        <span *ngIf="patient.rehabStatus==2 || patient.rehabStatus==3">Finalizado</span>
                     </span></mat-card-subtitle>
-                    <mat-card-subtitle><span>Última sesión: <span *ngIf="patient.sessionNumber>0">{{patient.sessionNumber}}/60</span> <span *ngIf="patient.sessionNumber==0">Ninguna</span></span></mat-card-subtitle>
+                    <mat-card-subtitle><span>Progreso de sesiones: <span *ngIf="patient.sessionNumber>0">{{patient.sessionNumber}}/60</span> <span *ngIf="patient.sessionNumber==0">Ninguna</span></span></mat-card-subtitle>
                     <mat-card-subtitle><span>Sexo: {{patient.sex}}</span></mat-card-subtitle>
                     <mat-card-subtitle><span>Edad: {{patient.age}}</span></mat-card-subtitle>
                 </div>

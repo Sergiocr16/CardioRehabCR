@@ -27,12 +27,10 @@ import { DepressiveSymptomService } from 'app/entities/depressive-symptom/depres
 })
 export class SessionUpdateComponent implements OnInit, OnDestroy {
   isSaving: boolean;
-
   patients: IPatient[];
   title;
   modalSuccessMessage;
   modalConfirm;
-
   nonSpecificPains = [];
   minorEvents = [];
   mayorEvents = [];
