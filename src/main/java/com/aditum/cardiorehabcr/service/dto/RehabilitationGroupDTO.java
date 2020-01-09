@@ -22,6 +22,15 @@ public class RehabilitationGroupDTO implements Serializable {
 
     private Boolean deleted;
 
+    private PanelDataDTO panelData;
+
+    public PanelDataDTO getPanelData() {
+        return panelData;
+    }
+
+    public void setPanelData(PanelDataDTO panelData) {
+        this.panelData = panelData;
+    }
 
     private Set<PatientDTO> patients = new HashSet<>();
 

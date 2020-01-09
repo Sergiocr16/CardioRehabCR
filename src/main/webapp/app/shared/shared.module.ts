@@ -8,9 +8,10 @@ import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
 import { MaterialModule } from 'app/shared/util/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NoContentComponent } from 'app/layouts/no-content/no-content.component';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
-  imports: [CardioRehabCrSharedLibsModule, MaterialModule, FlexLayoutModule],
+  imports: [CardioRehabCrSharedLibsModule, MaterialModule, FlexLayoutModule, ChartsModule],
   declarations: [
     FindLanguageFromKeyPipe,
     JhiAlertComponent,

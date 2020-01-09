@@ -24,7 +24,7 @@ export class DepressiveSymptomUpdateComponent implements OnInit {
   modalSuccessMessage;
   depressiveSymptom: DepressiveSymptom;
   rehabilitationcenters: IRehabilitationCenter[];
-
+  confirmMessage;
   editForm = this.fb.group({
     id: [],
     description: [null, [Validators.required]],
@@ -48,10 +48,11 @@ export class DepressiveSymptomUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ depressiveSymptom }) => {
       this.updateForm(depressiveSymptom);
 
-      this.title = !depressiveSymptom.id ? 'Crear un síntoma depresivo menor' : 'Editar  un síntoma depresivo menor';
+      this.title = !depressiveSymptom.id ? 'Crear un síntoma depresivo menor' : 'Editar un síntoma depresivo menor';
       this.modalSuccessMessage = !depressiveSymptom.id
         ? 'Síntoma depresivo creado correctamente.'
         : 'Síntoma depresivo editado correctamente.';
+      this.confirmMessage = !depressiveSymptom.id ? 'new' : 'update';
       this.global.setTitle(this.title);
     });
     this.global.enteringForm();
@@ -85,13 +86,15 @@ export class DepressiveSymptomUpdateComponent implements OnInit {
   }
 
   save() {
-    this.isSaving = true;
-    const depressiveSymptom = this.createFromForm();
-    if (depressiveSymptom.id !== undefined) {
-      this.subscribeToSaveResponse(this.depressiveSymptomService.update(depressiveSymptom));
-    } else {
-      this.subscribeToSaveResponse(this.depressiveSymptomService.create(depressiveSymptom));
-    }
+    this.modal.confirmDialog(this.confirmMessage, () => {
+      this.isSaving = true;
+      const depressiveSymptom = this.createFromForm();
+      if (depressiveSymptom.id !== undefined) {
+        this.subscribeToSaveResponse(this.depressiveSymptomService.update(depressiveSymptom));
+      } else {
+        this.subscribeToSaveResponse(this.depressiveSymptomService.create(depressiveSymptom));
+      }
+    });
   }
 
   private createFromForm(): IDepressiveSymptom {
@@ -111,6 +114,7 @@ export class DepressiveSymptomUpdateComponent implements OnInit {
 
   protected onSaveSuccess() {
     this.isSaving = false;
+    this.modal.message(this.modalSuccessMessage);
     this.previousState();
   }
 

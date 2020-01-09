@@ -83,7 +83,7 @@ export class MinorEventComponent implements OnInit, OnDestroy {
 
   loadPage(page) {
     this.page = page;
-    this.loadRC();
+    this.loadAll();
   }
 
   changeRC(index) {

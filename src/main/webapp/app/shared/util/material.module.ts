@@ -27,6 +27,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [],
@@ -59,7 +60,8 @@ import { MatStepperModule } from '@angular/material/stepper';
     MatSidenavModule,
     MatFormFieldModule,
     MatSlideToggleModule,
-    MatStepperModule
+    MatStepperModule,
+    MatPaginatorModule
   ],
   exports: [
     CommonModule,
@@ -90,7 +92,8 @@ import { MatStepperModule } from '@angular/material/stepper';
     MatSidenavModule,
     MatFormFieldModule,
     MatSlideToggleModule,
-    MatStepperModule
+    MatStepperModule,
+    MatPaginatorModule
   ]
 })
 export class MaterialModule {}

@@ -1,11 +1,13 @@
 import { Component, AfterViewInit, Renderer, ElementRef } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { LoginService } from 'app/core/login/login.service';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
 import { ModalService } from 'app/shared/util/modal.service';
+import { PasswordResetInitService } from 'app/account/password-reset/init/password-reset-init.service';
+import { EMAIL_NOT_FOUND_TYPE } from 'app/shared/constants/error.constants';
 
 @Component({
   selector: 'jhi-login',
@@ -13,13 +15,18 @@ import { ModalService } from 'app/shared/util/modal.service';
 })
 export class LoginComponent implements AfterViewInit {
   authenticationError: boolean;
-
+  reseting = false;
+  error: string;
+  errorEmailNotExists: string;
+  success: string;
   loginForm = this.fb.group({
     username: [''],
     password: [''],
     rememberMe: [false]
   });
-
+  resetRequestForm = this.fb.group({
+    email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]]
+  });
   constructor(
     private eventManager: JhiEventManager,
     private loginService: LoginService,
@@ -28,7 +35,8 @@ export class LoginComponent implements AfterViewInit {
     private modal: ModalService,
     private renderer: Renderer,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private passwordResetInitService: PasswordResetInitService
   ) {}
 
   ngAfterViewInit() {
@@ -76,8 +84,32 @@ export class LoginComponent implements AfterViewInit {
   register() {
     this.router.navigate(['/account/register']);
   }
+  requestReset() {
+    this.error = null;
+    this.errorEmailNotExists = null;
 
+    this.passwordResetInitService.save(this.resetRequestForm.get(['email']).value).subscribe(
+      () => {
+        this.success = 'OK';
+      },
+      response => {
+        this.success = null;
+        if (response.status === 400 && response.error.type === EMAIL_NOT_FOUND_TYPE) {
+          this.errorEmailNotExists = 'ERROR';
+        } else {
+          this.error = 'ERROR';
+        }
+      }
+    );
+  }
   requestResetPassword() {
-    this.router.navigate(['/account/reset', 'request']);
+    this.reseting = true;
+    this.authenticationError = false;
+    this.error = undefined;
+    this.errorEmailNotExists = undefined;
+    this.success = undefined;
+    this.resetRequestForm = this.fb.group({
+      email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]]
+    });
   }
 }

@@ -24,7 +24,7 @@ export class NonSpecificPainUpdateComponent implements OnInit {
   nonSpecificPain: NonSpecificPain;
   modalSuccessMessage;
   rehabilitationcenters: IRehabilitationCenter[];
-
+  confirmMessage;
   editForm = this.fb.group({
     id: [],
     description: [null, [Validators.required]],
@@ -47,11 +47,11 @@ export class NonSpecificPainUpdateComponent implements OnInit {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ nonSpecificPain }) => {
       this.updateForm(nonSpecificPain);
-
+      this.confirmMessage = !nonSpecificPain.id ? 'new' : 'update';
       this.title = !nonSpecificPain.id ? 'Crear un dolor no identificado ' : 'Editar un dolor no identificado';
       this.modalSuccessMessage = !nonSpecificPain.id
-        ? 'Dolor no identificado creado correctamente.'
-        : 'Dolor no identificado editado correctamente.';
+        ? 'Dolor agudo no específico creado correctamente.'
+        : 'Dolor agudo no específico editado correctamente.';
       this.global.setTitle(this.title);
     });
     this.global.enteringForm();
@@ -66,9 +66,11 @@ export class NonSpecificPainUpdateComponent implements OnInit {
         (res: HttpErrorResponse) => this.onError(res.message)
       );
   }
+
   setInvalidForm(isSaving) {
     this.global.setFormStatus(isSaving);
   }
+
   updateForm(nonSpecificPain: INonSpecificPain) {
     this.editForm.patchValue({
       id: nonSpecificPain.id,
@@ -84,13 +86,15 @@ export class NonSpecificPainUpdateComponent implements OnInit {
   }
 
   save() {
-    this.isSaving = true;
-    const nonSpecificPain = this.createFromForm();
-    if (nonSpecificPain.id !== undefined) {
-      this.subscribeToSaveResponse(this.nonSpecificPainService.update(nonSpecificPain));
-    } else {
-      this.subscribeToSaveResponse(this.nonSpecificPainService.create(nonSpecificPain));
-    }
+    this.modal.confirmDialog(this.confirmMessage, () => {
+      this.isSaving = true;
+      const nonSpecificPain = this.createFromForm();
+      if (nonSpecificPain.id !== undefined) {
+        this.subscribeToSaveResponse(this.nonSpecificPainService.update(nonSpecificPain));
+      } else {
+        this.subscribeToSaveResponse(this.nonSpecificPainService.create(nonSpecificPain));
+      }
+    });
   }
 
   private createFromForm(): INonSpecificPain {
@@ -110,12 +114,14 @@ export class NonSpecificPainUpdateComponent implements OnInit {
 
   protected onSaveSuccess() {
     this.isSaving = false;
+    this.modal.message(this.modalSuccessMessage);
     this.previousState();
   }
 
   protected onSaveError() {
     this.isSaving = false;
   }
+
   protected onError(errorMessage: string) {
     this.jhiAlertService.error(errorMessage, null, null);
   }

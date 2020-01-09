@@ -112,6 +112,23 @@ export class UserManagementUpdateComponent implements OnInit, OnDestroy {
     window.history.back();
   }
 
+  getRole(authority) {
+    switch (authority) {
+      case 'ROLE_ADMIN':
+        return 'Superadministrador';
+        break;
+      case 'ROLE_MANAGER':
+        return 'Administrador de centro';
+        break;
+      case 'ROLE_USER':
+        return 'Evaluador de consultas';
+        break;
+      case 'ROLE_CONSULTANT':
+        return 'Consultor';
+        break;
+    }
+  }
+
   save() {
     this.isSaving = true;
     this.updateUser(this.user, this.appUser);

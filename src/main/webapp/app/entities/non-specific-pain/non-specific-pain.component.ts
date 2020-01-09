@@ -4,7 +4,6 @@ import { Observable, Subscription } from 'rxjs';
 import { GlobalVariablesService } from '../../shared/util/global-variables.service';
 import { ModalService } from 'app/shared/util/modal.service';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks } from 'ng-jhipster';
 
 import { INonSpecificPain } from 'app/shared/model/non-specific-pain.model';
@@ -86,8 +85,7 @@ export class NonSpecificPainComponent implements OnInit, OnDestroy {
 
   loadPage(page) {
     this.page = page;
-
-    this.loadRC();
+    this.loadAll();
   }
 
   changeRC(index) {

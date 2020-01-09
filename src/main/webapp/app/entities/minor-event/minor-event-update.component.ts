@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -18,13 +18,13 @@ import { GlobalVariablesService } from 'app/shared/util/global-variables.service
   selector: 'jhi-minor-event-update',
   templateUrl: './minor-event-update.component.html'
 })
-export class MinorEventUpdateComponent implements OnInit {
+export class MinorEventUpdateComponent implements OnInit, OnDestroy {
   isSaving: boolean;
   title;
   modalSuccessMessage;
   minorEvent: MinorEvent;
   rehabilitationcenters: IRehabilitationCenter[];
-
+  confirmMessage;
   editForm = this.fb.group({
     id: [],
     description: [null, [Validators.required]],
@@ -47,7 +47,7 @@ export class MinorEventUpdateComponent implements OnInit {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ minorEvent }) => {
       this.updateForm(minorEvent);
-
+      this.confirmMessage = !minorEvent.id ? 'new' : 'update';
       this.title = !minorEvent.id ? 'Crear un evento menor' : 'Editar  un evento menor';
       this.modalSuccessMessage = !minorEvent.id ? 'Evento menor creado correctamente.' : 'Evento menor editado correctamente.';
       this.global.setTitle(this.title);
@@ -64,6 +64,7 @@ export class MinorEventUpdateComponent implements OnInit {
         (res: HttpErrorResponse) => this.onError(res.message)
       );
   }
+
   setInvalidForm(isSaving) {
     this.global.setFormStatus(isSaving);
   }
@@ -71,6 +72,7 @@ export class MinorEventUpdateComponent implements OnInit {
   ngOnDestroy() {
     this.global.leavingForm();
   }
+
   updateForm(minorEvent: IMinorEvent) {
     this.editForm.patchValue({
       id: minorEvent.id,
@@ -86,13 +88,15 @@ export class MinorEventUpdateComponent implements OnInit {
   }
 
   save() {
-    this.isSaving = true;
-    const minorEvent = this.createFromForm();
-    if (minorEvent.id !== undefined) {
-      this.subscribeToSaveResponse(this.minorEventService.update(minorEvent));
-    } else {
-      this.subscribeToSaveResponse(this.minorEventService.create(minorEvent));
-    }
+    this.modal.confirmDialog(this.confirmMessage, () => {
+      this.isSaving = true;
+      const minorEvent = this.createFromForm();
+      if (minorEvent.id !== undefined) {
+        this.subscribeToSaveResponse(this.minorEventService.update(minorEvent));
+      } else {
+        this.subscribeToSaveResponse(this.minorEventService.create(minorEvent));
+      }
+    });
   }
 
   private createFromForm(): IMinorEvent {
@@ -112,12 +116,14 @@ export class MinorEventUpdateComponent implements OnInit {
 
   protected onSaveSuccess() {
     this.isSaving = false;
+    this.modal.message(this.modalSuccessMessage);
     this.previousState();
   }
 
   protected onSaveError() {
     this.isSaving = false;
   }
+
   protected onError(errorMessage: string) {
     this.jhiAlertService.error(errorMessage, null, null);
   }

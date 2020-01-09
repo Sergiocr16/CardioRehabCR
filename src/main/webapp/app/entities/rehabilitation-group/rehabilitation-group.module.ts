@@ -5,6 +5,8 @@ import { CardioRehabCrSharedModule } from 'app/shared/shared.module';
 import { RehabilitationGroupComponent } from './rehabilitation-group.component';
 import { RehabilitationGroupDetailComponent } from './rehabilitation-group-detail.component';
 import { RehabilitationGroupUpdateComponent } from './rehabilitation-group-update.component';
+import { ChartsModule } from 'ng2-charts';
+
 import {
   RehabilitationGroupDeletePopupComponent,
   RehabilitationGroupDeleteDialogComponent
@@ -14,7 +16,7 @@ import { rehabilitationGroupRoute, rehabilitationGroupPopupRoute } from './rehab
 const ENTITY_STATES = [...rehabilitationGroupRoute, ...rehabilitationGroupPopupRoute];
 
 @NgModule({
-  imports: [CardioRehabCrSharedModule, RouterModule.forChild(ENTITY_STATES)],
+  imports: [CardioRehabCrSharedModule, RouterModule.forChild(ENTITY_STATES), ChartsModule],
   declarations: [
     RehabilitationGroupComponent,
     RehabilitationGroupDetailComponent,
