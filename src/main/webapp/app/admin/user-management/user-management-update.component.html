@@ -102,8 +102,8 @@
 <!--                </mat-form-field>-->
                 <mat-form-field appearance="outline">
                     <mat-label jhiTranslate="userManagement.profiles">Profiles</mat-label>
-                    <mat-select multiple name="authority" formControlName="authorities">
-                        <mat-option *ngFor="let authority of authorities" [value]="authority">{{authority}}>
+                    <mat-select name="authority" formControlName="authorities">
+                        <mat-option *ngFor="let authority of authorities" [value]="authority">
                             {{authority}}
                         </mat-option>
                     </mat-select>

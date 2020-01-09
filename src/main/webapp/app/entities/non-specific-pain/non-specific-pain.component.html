@@ -8,7 +8,8 @@
         </h2>
 
         <div>
-
+            <jhi-no-content *ngIf="nonSpecificPains?.length === 0" [text]="'No hay dolores agudos no específicos registrados'"
+                            [icon]="'sentiment_very_dissatisfied'"></jhi-no-content>
             <div class="table-responsive" *ngIf="nonSpecificPains?.length > 0">
                 <table class="table table-bordered tableMaterialDesign" aria-describedby="page-heading">
                     <thead class="bold" style="background-color: #fafafa;">

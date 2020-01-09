@@ -65,8 +65,8 @@ export class ComorbiditieComponent implements OnInit, OnDestroy {
   loadRC() {
     this.rehabilitationCenterService
       .query({
-        page: this.page,
-        size: this.itemsPerPage,
+        page: 0,
+        size: 10000,
         sort: this.sort()
       })
       .subscribe((res: HttpResponse<IRehabilitationCenter[]>) => this.getRehabilitationCenter(res.body));
@@ -88,7 +88,7 @@ export class ComorbiditieComponent implements OnInit, OnDestroy {
 
   loadPage(page) {
     this.page = page;
-    this.loadRC();
+    this.loadAll();
   }
 
   ngOnInit() {

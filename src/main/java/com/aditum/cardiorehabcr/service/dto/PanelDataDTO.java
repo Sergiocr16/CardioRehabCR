@@ -1,6 +1,7 @@
 package com.aditum.cardiorehabcr.service.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class PanelDataDTO implements Serializable {
 
@@ -27,10 +28,10 @@ public class PanelDataDTO implements Serializable {
     Double weightReductionRestPercentage;
 
 //    ?????????
-    Double distributionMinorEvents;
+    List<SesionDistributionDTO> distributionMinorEvents;
 
 //    ?????????
-    Double distributionMayorEvents;
+     List<SesionDistributionDTO> distributionMayorEvents;
 
     Double suspendedSmokingPercentage;
     Double suspendedSmokingRestPercentage;
@@ -66,6 +67,22 @@ public class PanelDataDTO implements Serializable {
 
     public Double getFullSelectionCriteriaRestPercentage() {
         return fullSelectionCriteriaRestPercentage;
+    }
+
+    public List<SesionDistributionDTO> getDistributionMinorEvents() {
+        return distributionMinorEvents;
+    }
+
+    public void setDistributionMinorEvents(List<SesionDistributionDTO> distributionMinorEvents) {
+        this.distributionMinorEvents = distributionMinorEvents;
+    }
+
+    public List<SesionDistributionDTO> getDistributionMayorEvents() {
+        return distributionMayorEvents;
+    }
+
+    public void setDistributionMayorEvents(List<SesionDistributionDTO> distributionMayorEvents) {
+        this.distributionMayorEvents = distributionMayorEvents;
     }
 
     public void setFullSelectionCriteriaRestPercentage(Double fullSelectionCriteriaRestPercentage) {
@@ -168,21 +185,6 @@ public class PanelDataDTO implements Serializable {
         this.weightReductionRestPercentage = weightReductionRestPercentage;
     }
 
-    public Double getDistributionMinorEvents() {
-        return distributionMinorEvents;
-    }
-
-    public void setDistributionMinorEvents(Double distributionMinorEvents) {
-        this.distributionMinorEvents = distributionMinorEvents;
-    }
-
-    public Double getDistributionMayorEvents() {
-        return distributionMayorEvents;
-    }
-
-    public void setDistributionMayorEvents(Double distributionMayorEvents) {
-        this.distributionMayorEvents = distributionMayorEvents;
-    }
 
     public Double getSuspendedSmokingPercentage() {
         return suspendedSmokingPercentage;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRouteSnapshot, NavigationEnd, NavigationError } from '@angular/router';
+import { Router, ActivatedRouteSnapshot, NavigationEnd, NavigationError, ActivatedRoute } from '@angular/router';
 import { AccountService } from 'app/core/auth/account.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
@@ -20,22 +20,25 @@ export class JhiMainComponent implements OnInit {
   layoutGap = '64';
   fixedInViewport = true;
   title = '';
+  isCreatingNewPassWord = false;
 
   constructor(
     private gv: GlobalVariablesService,
     private jhiLanguageHelper: JhiLanguageHelper,
     private router: Router,
+    private route: ActivatedRoute,
     private accountService: AccountService,
     private bpo: BreakpointObserver,
     private loginService: LoginService
   ) {}
 
   private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {
-    let title: string = routeSnapshot.data && routeSnapshot.data['pageTitle'] ? routeSnapshot.data['pageTitle'] : 'cardioRehabCrApp';
-    if (routeSnapshot.firstChild) {
-      title = this.getPageTitle(routeSnapshot.firstChild) || title;
-    }
-    return title;
+    // let title: string = routeSnapshot.data && routeSnapshot.data['pageTitle'] ? routeSnapshot.data['pageTitle'] : 'cardioRehabCrApp';
+    // if (routeSnapshot.firstChild) {
+    //   title = this.getPageTitle(routeSnapshot.firstChild) || title;
+    // }
+
+    return 'RehabiCor CR';
   }
 
   ngOnInit() {
@@ -43,7 +46,6 @@ export class JhiMainComponent implements OnInit {
     this.accountService.identity().subscribe((account: Account) => {
       this.loadedAccount = true;
     });
-
     const breakpoints = Object.keys(Breakpoints).map(key => Breakpoints[key]);
     this.bpo
       .observe(breakpoints)
@@ -60,6 +62,7 @@ export class JhiMainComponent implements OnInit {
       if (event instanceof NavigationError && event.error.status === 404) {
         this.router.navigate(['/404']);
       }
+      this.isCreatingNewPassWord = this.router.url.split('?')[0] === '/account/reset/finish';
     });
   }
 

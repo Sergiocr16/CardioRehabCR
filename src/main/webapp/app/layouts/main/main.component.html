@@ -16,17 +16,26 @@
 </div>
 
 <div *ngIf="isAccountChecked()">
-    <div *ngIf="!isAuthenticated()">
+    <div *ngIf="!isAuthenticated() && !isCreatingNewPassWord">
         <jhi-login></jhi-login>
     </div>
-    <div *ngIf="isAuthenticated()">
+    <div class="container-fluid background-white" *ngIf="!isAuthenticated() && isCreatingNewPassWord">
+        <div style="padding: 16px; ">
+            <router-outlet>
+
+            </router-outlet>
+            <router-outlet name="popup"></router-outlet>
+
+        </div>
+    </div>
+    <div *ngIf="isAuthenticated() && !isCreatingNewPassWord">
         <mat-toolbar class="mat-elevation-z6" color="primary" fxLayout="row" class="app-toolbar">
             <div fxFill fxLayout="row" fxLayoutAlign="space-between center">
                 <div fxHide.xs="true">
                     <button mat-icon-button (click)="opened = !opened">
                         <mat-icon aria-hidden="false" class="text-icon">menu</mat-icon>
                     </button>
-                    Cardio Rehab CR
+                    RehabiCor CR
                 </div>
                 <div *ngIf="!isInForm()" fxHide.lg="true" fxHide.xl="true">
                     <button mat-icon-button (click)="opened = !opened">
@@ -64,7 +73,7 @@
                 </div>
             </div>
         </mat-toolbar>
-        <mat-progress-bar mode="indeterminate" *ngIf="isLoading()"></mat-progress-bar>
+<!--        <mat-progress-bar mode="indeterminate" *ngIf="isLoading()"></mat-progress-bar>-->
         <mat-sidenav-container class="main-sidenav-container app-sidebar " (backdropClick)="opened = !opened">
             <mat-sidenav [mode]="mode"
                          [opened]="opened"
@@ -84,7 +93,6 @@
                         <router-outlet name="popup"></router-outlet>
 
                     </div>
-                    <jhi-footer></jhi-footer>
                 </div>
             </mat-sidenav-content>
         </mat-sidenav-container>

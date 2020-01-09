@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -18,11 +18,12 @@ import { ModalService } from 'app/shared/util/modal.service';
   selector: 'jhi-comorbiditie-update',
   templateUrl: './comorbiditie-update.component.html'
 })
-export class ComorbiditieUpdateComponent implements OnInit {
+export class ComorbiditieUpdateComponent implements OnInit, OnDestroy {
   comorbiditie: Comorbiditie;
   isSaving: boolean;
   title;
   modalSuccessMessage;
+  confirmMessage;
   rehabilitationcenters: IRehabilitationCenter[];
 
   editForm = this.fb.group({
@@ -51,6 +52,7 @@ export class ComorbiditieUpdateComponent implements OnInit {
 
       this.title = !comorbiditie.id ? 'Crear una comorbilidad' : 'Editar  una comorbilidad';
       this.modalSuccessMessage = !comorbiditie.id ? 'Comorbilidad creada correctamente.' : 'Comorbilidad editada correctamente.';
+      this.confirmMessage = !comorbiditie.id ? 'new' : 'update';
       this.global.setTitle(this.title);
     });
     this.global.enteringForm();
@@ -65,6 +67,7 @@ export class ComorbiditieUpdateComponent implements OnInit {
         (res: HttpErrorResponse) => this.onError(res.message)
       );
   }
+
   setInvalidForm(isSaving) {
     this.global.setFormStatus(isSaving);
   }
@@ -72,6 +75,7 @@ export class ComorbiditieUpdateComponent implements OnInit {
   ngOnDestroy() {
     this.global.leavingForm();
   }
+
   updateForm(comorbiditie: IComorbiditie) {
     this.editForm.patchValue({
       id: comorbiditie.id,
@@ -86,13 +90,15 @@ export class ComorbiditieUpdateComponent implements OnInit {
   }
 
   save() {
-    this.isSaving = true;
-    const comorbiditie = this.createFromForm();
-    if (comorbiditie.id !== undefined) {
-      this.subscribeToSaveResponse(this.comorbiditieService.update(comorbiditie));
-    } else {
-      this.subscribeToSaveResponse(this.comorbiditieService.create(comorbiditie));
-    }
+    this.modal.confirmDialog(this.confirmMessage, () => {
+      this.isSaving = true;
+      const comorbiditie = this.createFromForm();
+      if (comorbiditie.id !== undefined) {
+        this.subscribeToSaveResponse(this.comorbiditieService.update(comorbiditie));
+      } else {
+        this.subscribeToSaveResponse(this.comorbiditieService.create(comorbiditie));
+      }
+    });
   }
 
   private createFromForm(): IComorbiditie {
@@ -111,6 +117,7 @@ export class ComorbiditieUpdateComponent implements OnInit {
 
   protected onSaveSuccess() {
     this.isSaving = false;
+    this.modal.message(this.modalSuccessMessage);
     this.previousState();
   }
 

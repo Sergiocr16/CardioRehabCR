@@ -8,7 +8,8 @@
         </h2>
 
         <div>
-
+            <jhi-no-content *ngIf="depressiveSymptoms?.length === 0" [text]="'No hay síntomas depresivos registrados'"
+                            [icon]="'sentiment_very_dissatisfied'"></jhi-no-content>
     <div class="table-responsive" *ngIf="depressiveSymptoms?.length > 0">
         <table class="table table-bordered tableMaterialDesign" aria-describedby="page-heading">
             <thead class="bold" style="background-color: #fafafa;">

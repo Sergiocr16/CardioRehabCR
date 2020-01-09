@@ -4,8 +4,8 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$cardiorehab-primary: mat-palette($mat-deep-purple, 900, 700);
-$cardiorehabaccent: mat-palette($mat-red);
+$cardiorehab-primary: mat-palette($mat-red, 900, 700);
+$cardiorehabaccent: mat-palette($mat-indigo);
 
 // The warn palette is optional (defaults to red).
 $cardiorehab-warn: mat-palette($mat-red);
