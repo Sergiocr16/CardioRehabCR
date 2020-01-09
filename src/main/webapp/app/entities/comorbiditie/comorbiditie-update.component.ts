@@ -30,7 +30,6 @@ export class ComorbiditieUpdateComponent implements OnInit, OnDestroy {
     id: [],
     description: [null, [Validators.required]],
     deleted: [],
-
     rehabilitationCenterId: []
   });
 

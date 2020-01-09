@@ -97,12 +97,7 @@ export class RehabilitationGroupDetailComponent implements OnInit {
         position: 'top'
       },
       plugins: {
-        datalabels: {
-          formatter: (value, ctx) => {
-            const label = ctx.chart.data.labels[ctx.dataIndex];
-            return label;
-          }
-        }
+        datalabels: {}
       }
     };
     this.barChartLabelsSessionMinor = [];
