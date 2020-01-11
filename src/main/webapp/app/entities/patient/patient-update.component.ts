@@ -37,6 +37,9 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
   incomeDiagnoses = [];
   comorbidities = [];
   comorbiditiesDisplay = [];
+  itemsPerPage = 1000;
+  page = 0;
+  imc = 0;
   sexArray = ['Masculino', 'Femenino'];
   smokingOptions = ['Activo', 'Inactivo'];
   cardiovascularRiskOptions = ['Alto', 'Moderado', 'Bajo'];
@@ -80,8 +83,8 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
   });
 
   measuresForm = this.fb.group({
-    weight: [null, [Validators.required]],
-    size: [null, [Validators.required]],
+    weight: [0, [Validators.required]],
+    size: [0, [Validators.required]],
     iMC: [null, [Validators.required]],
     hbiac: [null, [Validators.required]],
     baselineFunctionalCapacity: [null, [Validators.required]],
@@ -111,10 +114,10 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
       this.modalConfirm = patient.id == null ? 'new' : 'update';
       this.modalSuccessMessage = patient.id == null ? 'Paciente creado correctamente.' : 'Paciente editado correctamente.';
       this.global.setTitle(this.title);
-      if (patient.id == null) {
-        this.loadDiagnosis();
-        this.loadComorbidities();
-      }
+      // if (patient.id == null) {
+      this.loadDiagnosis();
+      this.loadComorbidities();
+      // }
     });
     this.global.enteringForm();
     // this.rehabilitationGroupService
@@ -126,9 +129,16 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
     //   .subscribe((res: IRehabilitationGroup[]) => (this.rehabilitationgroups = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
+  calculateIMC() {
+    this.measuresForm
+      .get('iMC')
+      .setValue(parseFloat(this.measuresForm.get('weight').value / Math.pow(this.measuresForm.get('size').value, 2) + '').toFixed(3));
+  }
   loadDiagnosis() {
     this.incomeDiagnosisService
       .query({
+        page: this.page - 1,
+        size: this.itemsPerPage,
         rehabilitationId: this.global.rehabCenter
       })
       .pipe(
@@ -141,6 +151,8 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
   loadComorbidities() {
     this.comorbiditieService
       .query({
+        page: this.page - 1,
+        size: this.itemsPerPage,
         rehabilitationId: this.global.rehabCenter
       })
       .pipe(
@@ -178,13 +190,13 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
       sex: patient.sex,
       ocupation: patient.ocupation,
       scholarship: patient.scholarship,
-      lastEventOcurred: patient.lastEventOcurred != null ? new Date(patient.lastEventOcurred.toDate()) : null
-      // deceased: patient.deceased,
-      // abandonment: patient.abandonment,
-      // abandonmentMedicCause: patient.abandonmentMedicCause,
-      // rehabStatus: patient.rehabStatus,
-      // sessionNumber: patient.sessionNumber,
-      // deleted: patient.deleted
+      lastEventOcurred: patient.lastEventOcurred != null ? new Date(patient.lastEventOcurred.toDate()) : null,
+      deceased: patient.deceased,
+      abandonment: patient.abandonment,
+      abandonmentMedicCause: patient.abandonmentMedicCause,
+      rehabStatus: patient.rehabStatus,
+      sessionNumber: patient.sessionNumber,
+      deleted: patient.deleted
     });
     this.updateFormDiagnosis(patient);
   }

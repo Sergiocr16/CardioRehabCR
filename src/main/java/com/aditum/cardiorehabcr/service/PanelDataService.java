@@ -181,7 +181,14 @@ public class PanelDataService {
 
     private Integer weightReductionPercentage(PatientDTO patient, InitialAssessmentDTO initialAssessment, FinalAssessmentDTO finalAssessment) {
         if (patient.getRehabStatus() >= 2) {
-            return improve(finalAssessment.getWeight(), initialAssessment.getWeight());
+            double fivePercent = Double.parseDouble(initialAssessment.getWeight());
+            double differenceWeight = Double.parseDouble(initialAssessment.getWeight()) - Double.parseDouble(finalAssessment.getWeight());
+            if(differenceWeight<0){
+                differenceWeight = differenceWeight + differenceWeight;
+            }
+            if(differenceWeight>=fivePercent){
+                return 1;
+            }
         }
         return 0;
     }

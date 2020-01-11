@@ -296,6 +296,10 @@ MY CSS
   margin-right: 5px;
 }
 
+.text-icon-sm {
+  vertical-align: middle !important;
+}
+
 button {
   outline: none !important;
 }
@@ -455,4 +459,13 @@ mat-form-field {
   padding: 5px 10px;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
   font-size: 15px;
+}
+
+.container-fluid {
+  height: calc(100vh - 64px);
+}
+@media (max-width: 600px) {
+  .container-fluid {
+    height: calc(100vh - 56px);
+  }
 }
