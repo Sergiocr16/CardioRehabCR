@@ -1,0 +1,33 @@
+{
+  "cardioRehabCrApp": {
+    "session": {
+      "home": {
+        "title": "Sessions",
+        "createLabel": "Create a new Session",
+        "createOrEditLabel": "Create or edit a Session",
+        "notFound": "No Sessions found"
+      },
+      "created": "A new Session is created with identifier {{ param }}",
+      "updated": "A Session is updated with identifier {{ param }}",
+      "deleted": "A Session is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Session {{ id }}?"
+      },
+      "detail": {
+        "title": "Session"
+      },
+      "code": "Code",
+      "executionDate": "Execution Date",
+      "abscence": "Abscence",
+      "hospitalization": "Hospitalization",
+      "status": "Status",
+      "deleted": "Deleted",
+      "currentlyWorking": "Currently Working",
+      "minorEventsSession": "Minor Events Session",
+      "mayorEventsSession": "Mayor Events Session",
+      "depressiveSymptomsSession": "Depressive Symptoms Session",
+      "nonSpecificPainsSession": "Non Specific Pains Session",
+      "patient": "Patient"
+    }
+  }
+}
