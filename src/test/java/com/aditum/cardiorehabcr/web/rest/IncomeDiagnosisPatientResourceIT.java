@@ -305,42 +305,4 @@ public class IncomeDiagnosisPatientResourceIT {
         List<IncomeDiagnosisPatient> incomeDiagnosisPatientList = incomeDiagnosisPatientRepository.findAll();
         assertThat(incomeDiagnosisPatientList).hasSize(databaseSizeBeforeDelete - 1);
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(IncomeDiagnosisPatient.class);
-        IncomeDiagnosisPatient incomeDiagnosisPatient1 = new IncomeDiagnosisPatient();
-        incomeDiagnosisPatient1.setId(1L);
-        IncomeDiagnosisPatient incomeDiagnosisPatient2 = new IncomeDiagnosisPatient();
-        incomeDiagnosisPatient2.setId(incomeDiagnosisPatient1.getId());
-        assertThat(incomeDiagnosisPatient1).isEqualTo(incomeDiagnosisPatient2);
-        incomeDiagnosisPatient2.setId(2L);
-        assertThat(incomeDiagnosisPatient1).isNotEqualTo(incomeDiagnosisPatient2);
-        incomeDiagnosisPatient1.setId(null);
-        assertThat(incomeDiagnosisPatient1).isNotEqualTo(incomeDiagnosisPatient2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(IncomeDiagnosisPatientDTO.class);
-        IncomeDiagnosisPatientDTO incomeDiagnosisPatientDTO1 = new IncomeDiagnosisPatientDTO();
-        incomeDiagnosisPatientDTO1.setId(1L);
-        IncomeDiagnosisPatientDTO incomeDiagnosisPatientDTO2 = new IncomeDiagnosisPatientDTO();
-        assertThat(incomeDiagnosisPatientDTO1).isNotEqualTo(incomeDiagnosisPatientDTO2);
-        incomeDiagnosisPatientDTO2.setId(incomeDiagnosisPatientDTO1.getId());
-        assertThat(incomeDiagnosisPatientDTO1).isEqualTo(incomeDiagnosisPatientDTO2);
-        incomeDiagnosisPatientDTO2.setId(2L);
-        assertThat(incomeDiagnosisPatientDTO1).isNotEqualTo(incomeDiagnosisPatientDTO2);
-        incomeDiagnosisPatientDTO1.setId(null);
-        assertThat(incomeDiagnosisPatientDTO1).isNotEqualTo(incomeDiagnosisPatientDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(incomeDiagnosisPatientMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(incomeDiagnosisPatientMapper.fromId(null)).isNull();
-    }
 }

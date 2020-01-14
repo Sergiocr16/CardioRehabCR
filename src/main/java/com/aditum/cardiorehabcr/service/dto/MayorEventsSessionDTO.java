@@ -89,7 +89,7 @@ public class MayorEventsSessionDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", mayorEventId=" + getMayorEventId() +
             ", exist='" + isExist() + "'" +
-            ", session=" + getSessionId() +
+            ", sessionId=" + getSessionId() +
             "}";
     }
 }

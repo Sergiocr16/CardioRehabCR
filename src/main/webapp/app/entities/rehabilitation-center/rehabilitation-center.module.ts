@@ -5,22 +5,16 @@ import { CardioRehabCrSharedModule } from 'app/shared/shared.module';
 import { RehabilitationCenterComponent } from './rehabilitation-center.component';
 import { RehabilitationCenterDetailComponent } from './rehabilitation-center-detail.component';
 import { RehabilitationCenterUpdateComponent } from './rehabilitation-center-update.component';
-import {
-  RehabilitationCenterDeletePopupComponent,
-  RehabilitationCenterDeleteDialogComponent
-} from './rehabilitation-center-delete-dialog.component';
-import { rehabilitationCenterRoute, rehabilitationCenterPopupRoute } from './rehabilitation-center.route';
-
-const ENTITY_STATES = [...rehabilitationCenterRoute, ...rehabilitationCenterPopupRoute];
+import { RehabilitationCenterDeleteDialogComponent } from './rehabilitation-center-delete-dialog.component';
+import { rehabilitationCenterRoute } from './rehabilitation-center.route';
 
 @NgModule({
-  imports: [CardioRehabCrSharedModule, RouterModule.forChild(ENTITY_STATES)],
+  imports: [CardioRehabCrSharedModule, RouterModule.forChild(rehabilitationCenterRoute)],
   declarations: [
     RehabilitationCenterComponent,
     RehabilitationCenterDetailComponent,
     RehabilitationCenterUpdateComponent,
-    RehabilitationCenterDeleteDialogComponent,
-    RehabilitationCenterDeletePopupComponent
+    RehabilitationCenterDeleteDialogComponent
   ],
   entryComponents: [RehabilitationCenterDeleteDialogComponent]
 })

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import * as moment from 'moment';
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { DATE_FORMAT } from 'app/shared/constants/input.constants';
-import { map } from 'rxjs/operators';
-
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared/util/request-util';
 import { IFinalAssessment } from 'app/shared/model/final-assessment.model';
@@ -46,21 +46,21 @@ export class FinalAssessmentService {
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
-  delete(id: number): Observable<HttpResponse<any>> {
-    return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  delete(id: number): Observable<HttpResponse<{}>> {
+    return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
   protected convertDateFromClient(finalAssessment: IFinalAssessment): IFinalAssessment {
     const copy: IFinalAssessment = Object.assign({}, finalAssessment, {
       executionDate:
-        finalAssessment.executionDate != null && finalAssessment.executionDate.isValid() ? finalAssessment.executionDate.toJSON() : null
+        finalAssessment.executionDate && finalAssessment.executionDate.isValid() ? finalAssessment.executionDate.toJSON() : undefined
     });
     return copy;
   }
 
   protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
     if (res.body) {
-      res.body.executionDate = res.body.executionDate != null ? moment(res.body.executionDate) : null;
+      res.body.executionDate = res.body.executionDate ? moment(res.body.executionDate) : undefined;
     }
     return res;
   }
@@ -68,7 +68,7 @@ export class FinalAssessmentService {
   protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
     if (res.body) {
       res.body.forEach((finalAssessment: IFinalAssessment) => {
-        finalAssessment.executionDate = finalAssessment.executionDate != null ? moment(finalAssessment.executionDate) : null;
+        finalAssessment.executionDate = finalAssessment.executionDate ? moment(finalAssessment.executionDate) : undefined;
       });
     }
     return res;

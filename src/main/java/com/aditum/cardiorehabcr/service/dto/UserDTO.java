@@ -5,9 +5,6 @@ import com.aditum.cardiorehabcr.config.Constants;
 import com.aditum.cardiorehabcr.domain.Authority;
 import com.aditum.cardiorehabcr.domain.User;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-
 import javax.validation.constraints.*;
 import java.time.Instant;
 import java.util.Set;

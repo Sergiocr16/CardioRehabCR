@@ -305,42 +305,4 @@ public class NonSpecificPainsSessionResourceIT {
         List<NonSpecificPainsSession> nonSpecificPainsSessionList = nonSpecificPainsSessionRepository.findAll();
         assertThat(nonSpecificPainsSessionList).hasSize(databaseSizeBeforeDelete - 1);
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(NonSpecificPainsSession.class);
-        NonSpecificPainsSession nonSpecificPainsSession1 = new NonSpecificPainsSession();
-        nonSpecificPainsSession1.setId(1L);
-        NonSpecificPainsSession nonSpecificPainsSession2 = new NonSpecificPainsSession();
-        nonSpecificPainsSession2.setId(nonSpecificPainsSession1.getId());
-        assertThat(nonSpecificPainsSession1).isEqualTo(nonSpecificPainsSession2);
-        nonSpecificPainsSession2.setId(2L);
-        assertThat(nonSpecificPainsSession1).isNotEqualTo(nonSpecificPainsSession2);
-        nonSpecificPainsSession1.setId(null);
-        assertThat(nonSpecificPainsSession1).isNotEqualTo(nonSpecificPainsSession2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(NonSpecificPainsSessionDTO.class);
-        NonSpecificPainsSessionDTO nonSpecificPainsSessionDTO1 = new NonSpecificPainsSessionDTO();
-        nonSpecificPainsSessionDTO1.setId(1L);
-        NonSpecificPainsSessionDTO nonSpecificPainsSessionDTO2 = new NonSpecificPainsSessionDTO();
-        assertThat(nonSpecificPainsSessionDTO1).isNotEqualTo(nonSpecificPainsSessionDTO2);
-        nonSpecificPainsSessionDTO2.setId(nonSpecificPainsSessionDTO1.getId());
-        assertThat(nonSpecificPainsSessionDTO1).isEqualTo(nonSpecificPainsSessionDTO2);
-        nonSpecificPainsSessionDTO2.setId(2L);
-        assertThat(nonSpecificPainsSessionDTO1).isNotEqualTo(nonSpecificPainsSessionDTO2);
-        nonSpecificPainsSessionDTO1.setId(null);
-        assertThat(nonSpecificPainsSessionDTO1).isNotEqualTo(nonSpecificPainsSessionDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(nonSpecificPainsSessionMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(nonSpecificPainsSessionMapper.fromId(null)).isNull();
-    }
 }

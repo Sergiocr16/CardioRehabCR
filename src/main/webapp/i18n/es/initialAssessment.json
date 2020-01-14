@@ -5,7 +5,7 @@
         "title": "Initial Assessments",
         "createLabel": "Crear nuevo Initial Assessment",
         "createOrEditLabel": "Crear o editar Initial Assessment",
-        "notFound": "No Initial Assessments found"
+        "notFound": "Ningún Initial Assessments encontrado"
       },
       "created": "Un nuevo Initial Assessment ha sido creado con el identificador {{ param }}",
       "updated": "Un Initial Assessment ha sido actualizado con el identificador {{ param }}",

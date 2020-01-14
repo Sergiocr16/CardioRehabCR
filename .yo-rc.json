@@ -4,7 +4,7 @@
       "packageName": "com.aditum.cardiorehabcr",
       "nativeLanguage": "es"
     },
-    "jhipsterVersion": "6.4.1",
+    "jhipsterVersion": "6.6.0",
     "applicationType": "monolith",
     "baseName": "CardioRehabCR",
     "packageName": "com.aditum.cardiorehabcr",
@@ -39,6 +39,7 @@
     "languages": ["es", "en"],
     "blueprints": [],
     "herokuAppName": "rehabi-cor",
-    "herokuDeployType": "jar"
+    "herokuDeployType": "jar",
+    "creationTimestamp": 1579032663951
   }
 }

@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
-import { JhiAlertService } from 'ng-jhipster';
+
 import { ISession, Session } from 'app/shared/model/session.model';
 import { SessionService } from './session.service';
 import { IPatient } from 'app/shared/model/patient.model';
@@ -19,9 +18,9 @@ import { PatientService } from 'app/entities/patient/patient.service';
   templateUrl: './session-update.component.html'
 })
 export class SessionUpdateComponent implements OnInit {
-  isSaving: boolean;
+  isSaving = false;
 
-  patients: IPatient[];
+  patients: IPatient[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -36,28 +35,28 @@ export class SessionUpdateComponent implements OnInit {
   });
 
   constructor(
-    protected jhiAlertService: JhiAlertService,
     protected sessionService: SessionService,
     protected patientService: PatientService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
 
-  ngOnInit() {
-    this.isSaving = false;
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ session }) => {
       this.updateForm(session);
+
+      this.patientService
+        .query()
+        .pipe(
+          map((res: HttpResponse<IPatient[]>) => {
+            return res.body ? res.body : [];
+          })
+        )
+        .subscribe((resBody: IPatient[]) => (this.patients = resBody));
     });
-    this.patientService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IPatient[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IPatient[]>) => response.body)
-      )
-      .subscribe((res: IPatient[]) => (this.patients = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
-  updateForm(session: ISession) {
+  updateForm(session: ISession): void {
     this.editForm.patchValue({
       id: session.id,
       code: session.code,
@@ -71,11 +70,11 @@ export class SessionUpdateComponent implements OnInit {
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 
-  save() {
+  save(): void {
     this.isSaving = true;
     const session = this.createFromForm();
     if (session.id !== undefined) {
@@ -88,38 +87,35 @@ export class SessionUpdateComponent implements OnInit {
   private createFromForm(): ISession {
     return {
       ...new Session(),
-      id: this.editForm.get(['id']).value,
-      code: this.editForm.get(['code']).value,
+      id: this.editForm.get(['id'])!.value,
+      code: this.editForm.get(['code'])!.value,
       executionDate:
-        this.editForm.get(['executionDate']).value != null
-          ? moment(this.editForm.get(['executionDate']).value, DATE_TIME_FORMAT)
+        this.editForm.get(['executionDate'])!.value != null
+          ? moment(this.editForm.get(['executionDate'])!.value, DATE_TIME_FORMAT)
           : undefined,
-      abscence: this.editForm.get(['abscence']).value,
-      hospitalization: this.editForm.get(['hospitalization']).value,
-      status: this.editForm.get(['status']).value,
-      deleted: this.editForm.get(['deleted']).value,
-      currentlyWorking: this.editForm.get(['currentlyWorking']).value,
-      patientId: this.editForm.get(['patientId']).value
+      abscence: this.editForm.get(['abscence'])!.value,
+      hospitalization: this.editForm.get(['hospitalization'])!.value,
+      status: this.editForm.get(['status'])!.value,
+      deleted: this.editForm.get(['deleted'])!.value,
+      currentlyWorking: this.editForm.get(['currentlyWorking'])!.value,
+      patientId: this.editForm.get(['patientId'])!.value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<ISession>>) {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<ISession>>): void {
     result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
 
-  protected onSaveSuccess() {
+  protected onSaveSuccess(): void {
     this.isSaving = false;
     this.previousState();
   }
 
-  protected onSaveError() {
+  protected onSaveError(): void {
     this.isSaving = false;
   }
-  protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
-  }
 
-  trackPatientById(index: number, item: IPatient) {
+  trackById(index: number, item: IPatient): any {
     return item.id;
   }
 }

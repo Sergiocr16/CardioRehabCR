@@ -286,42 +286,4 @@ public class NonSpecificPainResourceIT {
         List<NonSpecificPain> nonSpecificPainList = nonSpecificPainRepository.findAll();
         assertThat(nonSpecificPainList).hasSize(databaseSizeBeforeDelete - 1);
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(NonSpecificPain.class);
-        NonSpecificPain nonSpecificPain1 = new NonSpecificPain();
-        nonSpecificPain1.setId(1L);
-        NonSpecificPain nonSpecificPain2 = new NonSpecificPain();
-        nonSpecificPain2.setId(nonSpecificPain1.getId());
-        assertThat(nonSpecificPain1).isEqualTo(nonSpecificPain2);
-        nonSpecificPain2.setId(2L);
-        assertThat(nonSpecificPain1).isNotEqualTo(nonSpecificPain2);
-        nonSpecificPain1.setId(null);
-        assertThat(nonSpecificPain1).isNotEqualTo(nonSpecificPain2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(NonSpecificPainDTO.class);
-        NonSpecificPainDTO nonSpecificPainDTO1 = new NonSpecificPainDTO();
-        nonSpecificPainDTO1.setId(1L);
-        NonSpecificPainDTO nonSpecificPainDTO2 = new NonSpecificPainDTO();
-        assertThat(nonSpecificPainDTO1).isNotEqualTo(nonSpecificPainDTO2);
-        nonSpecificPainDTO2.setId(nonSpecificPainDTO1.getId());
-        assertThat(nonSpecificPainDTO1).isEqualTo(nonSpecificPainDTO2);
-        nonSpecificPainDTO2.setId(2L);
-        assertThat(nonSpecificPainDTO1).isNotEqualTo(nonSpecificPainDTO2);
-        nonSpecificPainDTO1.setId(null);
-        assertThat(nonSpecificPainDTO1).isNotEqualTo(nonSpecificPainDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(nonSpecificPainMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(nonSpecificPainMapper.fromId(null)).isNull();
-    }
 }

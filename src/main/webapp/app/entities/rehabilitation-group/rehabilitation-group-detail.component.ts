@@ -8,17 +8,17 @@ import { IRehabilitationGroup } from 'app/shared/model/rehabilitation-group.mode
   templateUrl: './rehabilitation-group-detail.component.html'
 })
 export class RehabilitationGroupDetailComponent implements OnInit {
-  rehabilitationGroup: IRehabilitationGroup;
+  rehabilitationGroup: IRehabilitationGroup | null = null;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ rehabilitationGroup }) => {
       this.rehabilitationGroup = rehabilitationGroup;
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 }

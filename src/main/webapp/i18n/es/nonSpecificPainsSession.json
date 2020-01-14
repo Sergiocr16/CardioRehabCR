@@ -5,7 +5,7 @@
         "title": "Non Specific Pains Sessions",
         "createLabel": "Crear nuevo Non Specific Pains Session",
         "createOrEditLabel": "Crear o editar Non Specific Pains Session",
-        "notFound": "No Non Specific Pains Sessions found"
+        "notFound": "Ningún Non Specific Pains Sessions encontrado"
       },
       "created": "Un nuevo Non Specific Pains Session ha sido creado con el identificador {{ param }}",
       "updated": "Un Non Specific Pains Session ha sido actualizado con el identificador {{ param }}",

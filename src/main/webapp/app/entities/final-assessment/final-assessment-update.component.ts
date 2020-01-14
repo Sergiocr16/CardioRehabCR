@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
-import { JhiAlertService } from 'ng-jhipster';
+
 import { IFinalAssessment, FinalAssessment } from 'app/shared/model/final-assessment.model';
 import { FinalAssessmentService } from './final-assessment.service';
 import { IPatient } from 'app/shared/model/patient.model';
@@ -19,9 +18,9 @@ import { PatientService } from 'app/entities/patient/patient.service';
   templateUrl: './final-assessment-update.component.html'
 })
 export class FinalAssessmentUpdateComponent implements OnInit {
-  isSaving: boolean;
+  isSaving = false;
 
-  patients: IPatient[];
+  patients: IPatient[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -46,28 +45,28 @@ export class FinalAssessmentUpdateComponent implements OnInit {
   });
 
   constructor(
-    protected jhiAlertService: JhiAlertService,
     protected finalAssessmentService: FinalAssessmentService,
     protected patientService: PatientService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
 
-  ngOnInit() {
-    this.isSaving = false;
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ finalAssessment }) => {
       this.updateForm(finalAssessment);
+
+      this.patientService
+        .query()
+        .pipe(
+          map((res: HttpResponse<IPatient[]>) => {
+            return res.body ? res.body : [];
+          })
+        )
+        .subscribe((resBody: IPatient[]) => (this.patients = resBody));
     });
-    this.patientService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IPatient[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IPatient[]>) => response.body)
-      )
-      .subscribe((res: IPatient[]) => (this.patients = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
-  updateForm(finalAssessment: IFinalAssessment) {
+  updateForm(finalAssessment: IFinalAssessment): void {
     this.editForm.patchValue({
       id: finalAssessment.id,
       smoking: finalAssessment.smoking,
@@ -91,11 +90,11 @@ export class FinalAssessmentUpdateComponent implements OnInit {
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 
-  save() {
+  save(): void {
     this.isSaving = true;
     const finalAssessment = this.createFromForm();
     if (finalAssessment.id !== undefined) {
@@ -108,48 +107,45 @@ export class FinalAssessmentUpdateComponent implements OnInit {
   private createFromForm(): IFinalAssessment {
     return {
       ...new FinalAssessment(),
-      id: this.editForm.get(['id']).value,
-      smoking: this.editForm.get(['smoking']).value,
-      weight: this.editForm.get(['weight']).value,
-      size: this.editForm.get(['size']).value,
-      iMC: this.editForm.get(['iMC']).value,
-      hbiac: this.editForm.get(['hbiac']).value,
-      baselineFunctionalCapacity: this.editForm.get(['baselineFunctionalCapacity']).value,
-      lDL: this.editForm.get(['lDL']).value,
-      hDL: this.editForm.get(['hDL']).value,
-      cardiovascularRisk: this.editForm.get(['cardiovascularRisk']).value,
-      isWorking: this.editForm.get(['isWorking']).value,
-      deceased: this.editForm.get(['deceased']).value,
-      abandonment: this.editForm.get(['abandonment']).value,
-      abandonmentMedicCause: this.editForm.get(['abandonmentMedicCause']).value,
-      hospitalized: this.editForm.get(['hospitalized']).value,
-      deleted: this.editForm.get(['deleted']).value,
-      reevaluation: this.editForm.get(['reevaluation']).value,
+      id: this.editForm.get(['id'])!.value,
+      smoking: this.editForm.get(['smoking'])!.value,
+      weight: this.editForm.get(['weight'])!.value,
+      size: this.editForm.get(['size'])!.value,
+      iMC: this.editForm.get(['iMC'])!.value,
+      hbiac: this.editForm.get(['hbiac'])!.value,
+      baselineFunctionalCapacity: this.editForm.get(['baselineFunctionalCapacity'])!.value,
+      lDL: this.editForm.get(['lDL'])!.value,
+      hDL: this.editForm.get(['hDL'])!.value,
+      cardiovascularRisk: this.editForm.get(['cardiovascularRisk'])!.value,
+      isWorking: this.editForm.get(['isWorking'])!.value,
+      deceased: this.editForm.get(['deceased'])!.value,
+      abandonment: this.editForm.get(['abandonment'])!.value,
+      abandonmentMedicCause: this.editForm.get(['abandonmentMedicCause'])!.value,
+      hospitalized: this.editForm.get(['hospitalized'])!.value,
+      deleted: this.editForm.get(['deleted'])!.value,
+      reevaluation: this.editForm.get(['reevaluation'])!.value,
       executionDate:
-        this.editForm.get(['executionDate']).value != null
-          ? moment(this.editForm.get(['executionDate']).value, DATE_TIME_FORMAT)
+        this.editForm.get(['executionDate'])!.value != null
+          ? moment(this.editForm.get(['executionDate'])!.value, DATE_TIME_FORMAT)
           : undefined,
-      patientId: this.editForm.get(['patientId']).value
+      patientId: this.editForm.get(['patientId'])!.value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IFinalAssessment>>) {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IFinalAssessment>>): void {
     result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
 
-  protected onSaveSuccess() {
+  protected onSaveSuccess(): void {
     this.isSaving = false;
     this.previousState();
   }
 
-  protected onSaveError() {
+  protected onSaveError(): void {
     this.isSaving = false;
   }
-  protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
-  }
 
-  trackPatientById(index: number, item: IPatient) {
+  trackById(index: number, item: IPatient): any {
     return item.id;
   }
 }

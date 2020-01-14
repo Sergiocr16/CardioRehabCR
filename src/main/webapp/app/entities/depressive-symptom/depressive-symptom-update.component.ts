@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { JhiAlertService } from 'ng-jhipster';
+import { map } from 'rxjs/operators';
+
 import { IDepressiveSymptom, DepressiveSymptom } from 'app/shared/model/depressive-symptom.model';
 import { DepressiveSymptomService } from './depressive-symptom.service';
 import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
@@ -17,9 +16,9 @@ import { RehabilitationCenterService } from 'app/entities/rehabilitation-center/
   templateUrl: './depressive-symptom-update.component.html'
 })
 export class DepressiveSymptomUpdateComponent implements OnInit {
-  isSaving: boolean;
+  isSaving = false;
 
-  rehabilitationcenters: IRehabilitationCenter[];
+  rehabilitationcenters: IRehabilitationCenter[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -30,31 +29,28 @@ export class DepressiveSymptomUpdateComponent implements OnInit {
   });
 
   constructor(
-    protected jhiAlertService: JhiAlertService,
     protected depressiveSymptomService: DepressiveSymptomService,
     protected rehabilitationCenterService: RehabilitationCenterService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
 
-  ngOnInit() {
-    this.isSaving = false;
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ depressiveSymptom }) => {
       this.updateForm(depressiveSymptom);
+
+      this.rehabilitationCenterService
+        .query()
+        .pipe(
+          map((res: HttpResponse<IRehabilitationCenter[]>) => {
+            return res.body ? res.body : [];
+          })
+        )
+        .subscribe((resBody: IRehabilitationCenter[]) => (this.rehabilitationcenters = resBody));
     });
-    this.rehabilitationCenterService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IRehabilitationCenter[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IRehabilitationCenter[]>) => response.body)
-      )
-      .subscribe(
-        (res: IRehabilitationCenter[]) => (this.rehabilitationcenters = res),
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
   }
 
-  updateForm(depressiveSymptom: IDepressiveSymptom) {
+  updateForm(depressiveSymptom: IDepressiveSymptom): void {
     this.editForm.patchValue({
       id: depressiveSymptom.id,
       description: depressiveSymptom.description,
@@ -64,11 +60,11 @@ export class DepressiveSymptomUpdateComponent implements OnInit {
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 
-  save() {
+  save(): void {
     this.isSaving = true;
     const depressiveSymptom = this.createFromForm();
     if (depressiveSymptom.id !== undefined) {
@@ -81,31 +77,28 @@ export class DepressiveSymptomUpdateComponent implements OnInit {
   private createFromForm(): IDepressiveSymptom {
     return {
       ...new DepressiveSymptom(),
-      id: this.editForm.get(['id']).value,
-      description: this.editForm.get(['description']).value,
-      code: this.editForm.get(['code']).value,
-      deleted: this.editForm.get(['deleted']).value,
-      rehabilitationCenterId: this.editForm.get(['rehabilitationCenterId']).value
+      id: this.editForm.get(['id'])!.value,
+      description: this.editForm.get(['description'])!.value,
+      code: this.editForm.get(['code'])!.value,
+      deleted: this.editForm.get(['deleted'])!.value,
+      rehabilitationCenterId: this.editForm.get(['rehabilitationCenterId'])!.value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IDepressiveSymptom>>) {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IDepressiveSymptom>>): void {
     result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
 
-  protected onSaveSuccess() {
+  protected onSaveSuccess(): void {
     this.isSaving = false;
     this.previousState();
   }
 
-  protected onSaveError() {
+  protected onSaveError(): void {
     this.isSaving = false;
   }
-  protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
-  }
 
-  trackRehabilitationCenterById(index: number, item: IRehabilitationCenter) {
+  trackById(index: number, item: IRehabilitationCenter): any {
     return item.id;
   }
 }

@@ -5,7 +5,7 @@
         "title": "Rehabilitation Centers",
         "createLabel": "Crear nuevo Rehabilitation Center",
         "createOrEditLabel": "Crear o editar Rehabilitation Center",
-        "notFound": "No Rehabilitation Centers found"
+        "notFound": "Ningún Rehabilitation Centers encontrado"
       },
       "created": "Un nuevo Rehabilitation Center ha sido creado con el identificador {{ param }}",
       "updated": "Un Rehabilitation Center ha sido actualizado con el identificador {{ param }}",

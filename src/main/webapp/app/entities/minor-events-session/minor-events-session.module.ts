@@ -5,22 +5,16 @@ import { CardioRehabCrSharedModule } from 'app/shared/shared.module';
 import { MinorEventsSessionComponent } from './minor-events-session.component';
 import { MinorEventsSessionDetailComponent } from './minor-events-session-detail.component';
 import { MinorEventsSessionUpdateComponent } from './minor-events-session-update.component';
-import {
-  MinorEventsSessionDeletePopupComponent,
-  MinorEventsSessionDeleteDialogComponent
-} from './minor-events-session-delete-dialog.component';
-import { minorEventsSessionRoute, minorEventsSessionPopupRoute } from './minor-events-session.route';
-
-const ENTITY_STATES = [...minorEventsSessionRoute, ...minorEventsSessionPopupRoute];
+import { MinorEventsSessionDeleteDialogComponent } from './minor-events-session-delete-dialog.component';
+import { minorEventsSessionRoute } from './minor-events-session.route';
 
 @NgModule({
-  imports: [CardioRehabCrSharedModule, RouterModule.forChild(ENTITY_STATES)],
+  imports: [CardioRehabCrSharedModule, RouterModule.forChild(minorEventsSessionRoute)],
   declarations: [
     MinorEventsSessionComponent,
     MinorEventsSessionDetailComponent,
     MinorEventsSessionUpdateComponent,
-    MinorEventsSessionDeleteDialogComponent,
-    MinorEventsSessionDeletePopupComponent
+    MinorEventsSessionDeleteDialogComponent
   ],
   entryComponents: [MinorEventsSessionDeleteDialogComponent]
 })

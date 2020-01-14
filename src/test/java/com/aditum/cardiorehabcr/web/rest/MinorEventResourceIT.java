@@ -286,42 +286,4 @@ public class MinorEventResourceIT {
         List<MinorEvent> minorEventList = minorEventRepository.findAll();
         assertThat(minorEventList).hasSize(databaseSizeBeforeDelete - 1);
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(MinorEvent.class);
-        MinorEvent minorEvent1 = new MinorEvent();
-        minorEvent1.setId(1L);
-        MinorEvent minorEvent2 = new MinorEvent();
-        minorEvent2.setId(minorEvent1.getId());
-        assertThat(minorEvent1).isEqualTo(minorEvent2);
-        minorEvent2.setId(2L);
-        assertThat(minorEvent1).isNotEqualTo(minorEvent2);
-        minorEvent1.setId(null);
-        assertThat(minorEvent1).isNotEqualTo(minorEvent2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(MinorEventDTO.class);
-        MinorEventDTO minorEventDTO1 = new MinorEventDTO();
-        minorEventDTO1.setId(1L);
-        MinorEventDTO minorEventDTO2 = new MinorEventDTO();
-        assertThat(minorEventDTO1).isNotEqualTo(minorEventDTO2);
-        minorEventDTO2.setId(minorEventDTO1.getId());
-        assertThat(minorEventDTO1).isEqualTo(minorEventDTO2);
-        minorEventDTO2.setId(2L);
-        assertThat(minorEventDTO1).isNotEqualTo(minorEventDTO2);
-        minorEventDTO1.setId(null);
-        assertThat(minorEventDTO1).isNotEqualTo(minorEventDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(minorEventMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(minorEventMapper.fromId(null)).isNull();
-    }
 }

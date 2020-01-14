@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { JhiAlertService } from 'ng-jhipster';
+import { map } from 'rxjs/operators';
+
 import { IComorbiditie, Comorbiditie } from 'app/shared/model/comorbiditie.model';
 import { ComorbiditieService } from './comorbiditie.service';
 import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
@@ -17,9 +16,9 @@ import { RehabilitationCenterService } from 'app/entities/rehabilitation-center/
   templateUrl: './comorbiditie-update.component.html'
 })
 export class ComorbiditieUpdateComponent implements OnInit {
-  isSaving: boolean;
+  isSaving = false;
 
-  rehabilitationcenters: IRehabilitationCenter[];
+  rehabilitationcenters: IRehabilitationCenter[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -29,31 +28,28 @@ export class ComorbiditieUpdateComponent implements OnInit {
   });
 
   constructor(
-    protected jhiAlertService: JhiAlertService,
     protected comorbiditieService: ComorbiditieService,
     protected rehabilitationCenterService: RehabilitationCenterService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
 
-  ngOnInit() {
-    this.isSaving = false;
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ comorbiditie }) => {
       this.updateForm(comorbiditie);
+
+      this.rehabilitationCenterService
+        .query()
+        .pipe(
+          map((res: HttpResponse<IRehabilitationCenter[]>) => {
+            return res.body ? res.body : [];
+          })
+        )
+        .subscribe((resBody: IRehabilitationCenter[]) => (this.rehabilitationcenters = resBody));
     });
-    this.rehabilitationCenterService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IRehabilitationCenter[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IRehabilitationCenter[]>) => response.body)
-      )
-      .subscribe(
-        (res: IRehabilitationCenter[]) => (this.rehabilitationcenters = res),
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
   }
 
-  updateForm(comorbiditie: IComorbiditie) {
+  updateForm(comorbiditie: IComorbiditie): void {
     this.editForm.patchValue({
       id: comorbiditie.id,
       description: comorbiditie.description,
@@ -62,11 +58,11 @@ export class ComorbiditieUpdateComponent implements OnInit {
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 
-  save() {
+  save(): void {
     this.isSaving = true;
     const comorbiditie = this.createFromForm();
     if (comorbiditie.id !== undefined) {
@@ -79,30 +75,27 @@ export class ComorbiditieUpdateComponent implements OnInit {
   private createFromForm(): IComorbiditie {
     return {
       ...new Comorbiditie(),
-      id: this.editForm.get(['id']).value,
-      description: this.editForm.get(['description']).value,
-      deleted: this.editForm.get(['deleted']).value,
-      rehabilitationCenterId: this.editForm.get(['rehabilitationCenterId']).value
+      id: this.editForm.get(['id'])!.value,
+      description: this.editForm.get(['description'])!.value,
+      deleted: this.editForm.get(['deleted'])!.value,
+      rehabilitationCenterId: this.editForm.get(['rehabilitationCenterId'])!.value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IComorbiditie>>) {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IComorbiditie>>): void {
     result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
 
-  protected onSaveSuccess() {
+  protected onSaveSuccess(): void {
     this.isSaving = false;
     this.previousState();
   }
 
-  protected onSaveError() {
+  protected onSaveError(): void {
     this.isSaving = false;
   }
-  protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
-  }
 
-  trackRehabilitationCenterById(index: number, item: IRehabilitationCenter) {
+  trackById(index: number, item: IRehabilitationCenter): any {
     return item.id;
   }
 }

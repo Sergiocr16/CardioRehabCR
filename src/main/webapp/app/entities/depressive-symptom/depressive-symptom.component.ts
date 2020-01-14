@@ -1,15 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IDepressiveSymptom } from 'app/shared/model/depressive-symptom.model';
-import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { DepressiveSymptomService } from './depressive-symptom.service';
+import { DepressiveSymptomDeleteDialogComponent } from './depressive-symptom-delete-dialog.component';
 
 @Component({
   selector: 'jhi-depressive-symptom',
@@ -17,20 +16,18 @@ import { DepressiveSymptomService } from './depressive-symptom.service';
 })
 export class DepressiveSymptomComponent implements OnInit, OnDestroy {
   depressiveSymptoms: IDepressiveSymptom[];
-  currentAccount: any;
-  eventSubscriber: Subscription;
+  eventSubscriber?: Subscription;
   itemsPerPage: number;
   links: any;
-  page: any;
-  predicate: any;
-  reverse: any;
-  totalItems: number;
+  page: number;
+  predicate: string;
+  ascending: boolean;
 
   constructor(
     protected depressiveSymptomService: DepressiveSymptomService,
     protected eventManager: JhiEventManager,
-    protected parseLinks: JhiParseLinks,
-    protected accountService: AccountService
+    protected modalService: NgbModal,
+    protected parseLinks: JhiParseLinks
   ) {
     this.depressiveSymptoms = [];
     this.itemsPerPage = ITEMS_PER_PAGE;
@@ -39,10 +36,10 @@ export class DepressiveSymptomComponent implements OnInit, OnDestroy {
       last: 0
     };
     this.predicate = 'id';
-    this.reverse = true;
+    this.ascending = true;
   }
 
-  loadAll() {
+  loadAll(): void {
     this.depressiveSymptomService
       .query({
         page: this.page,
@@ -52,50 +49,57 @@ export class DepressiveSymptomComponent implements OnInit, OnDestroy {
       .subscribe((res: HttpResponse<IDepressiveSymptom[]>) => this.paginateDepressiveSymptoms(res.body, res.headers));
   }
 
-  reset() {
+  reset(): void {
     this.page = 0;
     this.depressiveSymptoms = [];
     this.loadAll();
   }
 
-  loadPage(page) {
+  loadPage(page: number): void {
     this.page = page;
     this.loadAll();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadAll();
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInDepressiveSymptoms();
   }
 
-  ngOnDestroy() {
-    this.eventManager.destroy(this.eventSubscriber);
+  ngOnDestroy(): void {
+    if (this.eventSubscriber) {
+      this.eventManager.destroy(this.eventSubscriber);
+    }
   }
 
-  trackId(index: number, item: IDepressiveSymptom) {
-    return item.id;
+  trackId(index: number, item: IDepressiveSymptom): number {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    return item.id!;
   }
 
-  registerChangeInDepressiveSymptoms() {
-    this.eventSubscriber = this.eventManager.subscribe('depressiveSymptomListModification', response => this.reset());
+  registerChangeInDepressiveSymptoms(): void {
+    this.eventSubscriber = this.eventManager.subscribe('depressiveSymptomListModification', () => this.reset());
   }
 
-  sort() {
-    const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
+  delete(depressiveSymptom: IDepressiveSymptom): void {
+    const modalRef = this.modalService.open(DepressiveSymptomDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.depressiveSymptom = depressiveSymptom;
+  }
+
+  sort(): string[] {
+    const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
     if (this.predicate !== 'id') {
       result.push('id');
     }
     return result;
   }
 
-  protected paginateDepressiveSymptoms(data: IDepressiveSymptom[], headers: HttpHeaders) {
-    this.links = this.parseLinks.parse(headers.get('link'));
-    this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
-    for (let i = 0; i < data.length; i++) {
-      this.depressiveSymptoms.push(data[i]);
+  protected paginateDepressiveSymptoms(data: IDepressiveSymptom[] | null, headers: HttpHeaders): void {
+    const headersLink = headers.get('link');
+    this.links = this.parseLinks.parse(headersLink ? headersLink : '');
+    if (data) {
+      for (let i = 0; i < data.length; i++) {
+        this.depressiveSymptoms.push(data[i]);
+      }
     }
   }
 }

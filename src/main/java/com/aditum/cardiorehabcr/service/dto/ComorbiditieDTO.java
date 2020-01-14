@@ -77,7 +77,7 @@ public class ComorbiditieDTO implements Serializable {
             "id=" + getId() +
             ", description='" + getDescription() + "'" +
             ", deleted='" + isDeleted() + "'" +
-            ", rehabilitationCenter=" + getRehabilitationCenterId() +
+            ", rehabilitationCenterId=" + getRehabilitationCenterId() +
             "}";
     }
 }

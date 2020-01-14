@@ -4,7 +4,7 @@
             <h2 id="jhi-session-heading" jhiTranslate="cardioRehabCrApp.session.home.createOrEditLabel">Create or edit a Session</h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!editForm.get('id').value">
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
                     <label for="id" jhiTranslate="global.field.id">ID</label>
                     <input type="text" class="form-control" id="id" name="id" formControlName="id"
                         readonly />
@@ -13,9 +13,9 @@
                     <label class="form-control-label" jhiTranslate="cardioRehabCrApp.session.code" for="field_code">Code</label>
                     <input type="text" class="form-control" name="code" id="field_code"
                            formControlName="code"/>
-                    <div *ngIf="editForm.get('code').invalid && (editForm.get('code').dirty || editForm.get('code').touched)">
+                    <div *ngIf="editForm.get('code')!.invalid && (editForm.get('code')!.dirty || editForm.get('code')!.touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('code').errors.required" jhiTranslate="entity.validation.required">
+                               *ngIf="editForm.get('code')?.errors?.required" jhiTranslate="entity.validation.required">
                         This field is required.
                         </small>
                     </div>
@@ -25,13 +25,13 @@
                     <div class="d-flex">
                         <input id="field_executionDate" type="datetime-local" class="form-control" name="executionDate" formControlName="executionDate" placeholder="YYYY-MM-DD HH:mm"/>
                     </div>
-                    <div *ngIf="editForm.get('executionDate').invalid && (editForm.get('executionDate').dirty || editForm.get('executionDate').touched)">
+                    <div *ngIf="editForm.get('executionDate')!.invalid && (editForm.get('executionDate')!.dirty || editForm.get('executionDate')!.touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('executionDate').errors.required" jhiTranslate="entity.validation.required">
+                               *ngIf="editForm.get('executionDate')?.errors?.required" jhiTranslate="entity.validation.required">
                         This field is required.
                         </small>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.get('executionDate').errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
+                            [hidden]="!editForm.get('executionDate')?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
                             This field should be a date and time.
                         </small>
                     </div>
@@ -66,7 +66,7 @@
                     <label class="form-control-label" jhiTranslate="cardioRehabCrApp.session.patient" for="field_patient">Patient</label>
                     <select class="form-control" id="field_patient" name="patient" formControlName="patientId">
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="patientOption.id" *ngFor="let patientOption of patients; trackBy: trackPatientById">{{patientOption.id}}</option>
+                        <option [ngValue]="patientOption.id" *ngFor="let patientOption of patients; trackBy: trackById">{{patientOption.id}}</option>
                     </select>
                 </div>
             </div>

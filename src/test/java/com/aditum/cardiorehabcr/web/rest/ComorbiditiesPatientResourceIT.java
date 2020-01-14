@@ -305,42 +305,4 @@ public class ComorbiditiesPatientResourceIT {
         List<ComorbiditiesPatient> comorbiditiesPatientList = comorbiditiesPatientRepository.findAll();
         assertThat(comorbiditiesPatientList).hasSize(databaseSizeBeforeDelete - 1);
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ComorbiditiesPatient.class);
-        ComorbiditiesPatient comorbiditiesPatient1 = new ComorbiditiesPatient();
-        comorbiditiesPatient1.setId(1L);
-        ComorbiditiesPatient comorbiditiesPatient2 = new ComorbiditiesPatient();
-        comorbiditiesPatient2.setId(comorbiditiesPatient1.getId());
-        assertThat(comorbiditiesPatient1).isEqualTo(comorbiditiesPatient2);
-        comorbiditiesPatient2.setId(2L);
-        assertThat(comorbiditiesPatient1).isNotEqualTo(comorbiditiesPatient2);
-        comorbiditiesPatient1.setId(null);
-        assertThat(comorbiditiesPatient1).isNotEqualTo(comorbiditiesPatient2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ComorbiditiesPatientDTO.class);
-        ComorbiditiesPatientDTO comorbiditiesPatientDTO1 = new ComorbiditiesPatientDTO();
-        comorbiditiesPatientDTO1.setId(1L);
-        ComorbiditiesPatientDTO comorbiditiesPatientDTO2 = new ComorbiditiesPatientDTO();
-        assertThat(comorbiditiesPatientDTO1).isNotEqualTo(comorbiditiesPatientDTO2);
-        comorbiditiesPatientDTO2.setId(comorbiditiesPatientDTO1.getId());
-        assertThat(comorbiditiesPatientDTO1).isEqualTo(comorbiditiesPatientDTO2);
-        comorbiditiesPatientDTO2.setId(2L);
-        assertThat(comorbiditiesPatientDTO1).isNotEqualTo(comorbiditiesPatientDTO2);
-        comorbiditiesPatientDTO1.setId(null);
-        assertThat(comorbiditiesPatientDTO1).isNotEqualTo(comorbiditiesPatientDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(comorbiditiesPatientMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(comorbiditiesPatientMapper.fromId(null)).isNull();
-    }
 }

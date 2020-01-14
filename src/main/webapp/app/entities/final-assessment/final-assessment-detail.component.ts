@@ -8,17 +8,17 @@ import { IFinalAssessment } from 'app/shared/model/final-assessment.model';
   templateUrl: './final-assessment-detail.component.html'
 })
 export class FinalAssessmentDetailComponent implements OnInit {
-  finalAssessment: IFinalAssessment;
+  finalAssessment: IFinalAssessment | null = null;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ finalAssessment }) => {
       this.finalAssessment = finalAssessment;
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 }

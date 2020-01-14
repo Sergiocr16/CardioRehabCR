@@ -1,27 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
+import { Observable, of, EMPTY } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { InitialAssessment } from 'app/shared/model/initial-assessment.model';
+import { IInitialAssessment, InitialAssessment } from 'app/shared/model/initial-assessment.model';
 import { InitialAssessmentService } from './initial-assessment.service';
 import { InitialAssessmentComponent } from './initial-assessment.component';
 import { InitialAssessmentDetailComponent } from './initial-assessment-detail.component';
 import { InitialAssessmentUpdateComponent } from './initial-assessment-update.component';
-import { InitialAssessmentDeletePopupComponent } from './initial-assessment-delete-dialog.component';
-import { IInitialAssessment } from 'app/shared/model/initial-assessment.model';
 
 @Injectable({ providedIn: 'root' })
 export class InitialAssessmentResolve implements Resolve<IInitialAssessment> {
-  constructor(private service: InitialAssessmentService) {}
+  constructor(private service: InitialAssessmentService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IInitialAssessment> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IInitialAssessment> | Observable<never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        filter((response: HttpResponse<InitialAssessment>) => response.ok),
-        map((initialAssessment: HttpResponse<InitialAssessment>) => initialAssessment.body)
+        flatMap((initialAssessment: HttpResponse<InitialAssessment>) => {
+          if (initialAssessment.body) {
+            return of(initialAssessment.body);
+          } else {
+            this.router.navigate(['404']);
+            return EMPTY;
+          }
+        })
       );
     }
     return of(new InitialAssessment());
@@ -73,21 +78,5 @@ export const initialAssessmentRoute: Routes = [
       pageTitle: 'cardioRehabCrApp.initialAssessment.home.title'
     },
     canActivate: [UserRouteAccessService]
-  }
-];
-
-export const initialAssessmentPopupRoute: Routes = [
-  {
-    path: ':id/delete',
-    component: InitialAssessmentDeletePopupComponent,
-    resolve: {
-      initialAssessment: InitialAssessmentResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'cardioRehabCrApp.initialAssessment.home.title'
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
   }
 ];

@@ -5,19 +5,16 @@ import { CardioRehabCrSharedModule } from 'app/shared/shared.module';
 import { IncomeDiagnosisComponent } from './income-diagnosis.component';
 import { IncomeDiagnosisDetailComponent } from './income-diagnosis-detail.component';
 import { IncomeDiagnosisUpdateComponent } from './income-diagnosis-update.component';
-import { IncomeDiagnosisDeletePopupComponent, IncomeDiagnosisDeleteDialogComponent } from './income-diagnosis-delete-dialog.component';
-import { incomeDiagnosisRoute, incomeDiagnosisPopupRoute } from './income-diagnosis.route';
-
-const ENTITY_STATES = [...incomeDiagnosisRoute, ...incomeDiagnosisPopupRoute];
+import { IncomeDiagnosisDeleteDialogComponent } from './income-diagnosis-delete-dialog.component';
+import { incomeDiagnosisRoute } from './income-diagnosis.route';
 
 @NgModule({
-  imports: [CardioRehabCrSharedModule, RouterModule.forChild(ENTITY_STATES)],
+  imports: [CardioRehabCrSharedModule, RouterModule.forChild(incomeDiagnosisRoute)],
   declarations: [
     IncomeDiagnosisComponent,
     IncomeDiagnosisDetailComponent,
     IncomeDiagnosisUpdateComponent,
-    IncomeDiagnosisDeleteDialogComponent,
-    IncomeDiagnosisDeletePopupComponent
+    IncomeDiagnosisDeleteDialogComponent
   ],
   entryComponents: [IncomeDiagnosisDeleteDialogComponent]
 })

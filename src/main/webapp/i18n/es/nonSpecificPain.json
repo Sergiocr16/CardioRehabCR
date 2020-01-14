@@ -5,7 +5,7 @@
         "title": "Non Specific Pains",
         "createLabel": "Crear nuevo Non Specific Pain",
         "createOrEditLabel": "Crear o editar Non Specific Pain",
-        "notFound": "No Non Specific Pains found"
+        "notFound": "Ningún Non Specific Pains encontrado"
       },
       "created": "Un nuevo Non Specific Pain ha sido creado con el identificador {{ param }}",
       "updated": "Un Non Specific Pain ha sido actualizado con el identificador {{ param }}",

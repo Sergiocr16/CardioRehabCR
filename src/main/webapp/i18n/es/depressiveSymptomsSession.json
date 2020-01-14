@@ -5,7 +5,7 @@
         "title": "Depressive Symptoms Sessions",
         "createLabel": "Crear nuevo Depressive Symptoms Session",
         "createOrEditLabel": "Crear o editar Depressive Symptoms Session",
-        "notFound": "No Depressive Symptoms Sessions found"
+        "notFound": "Ningún Depressive Symptoms Sessions encontrado"
       },
       "created": "Un nuevo Depressive Symptoms Session ha sido creado con el identificador {{ param }}",
       "updated": "Un Depressive Symptoms Session ha sido actualizado con el identificador {{ param }}",

@@ -5,19 +5,16 @@ import { CardioRehabCrSharedModule } from 'app/shared/shared.module';
 import { FinalAssessmentComponent } from './final-assessment.component';
 import { FinalAssessmentDetailComponent } from './final-assessment-detail.component';
 import { FinalAssessmentUpdateComponent } from './final-assessment-update.component';
-import { FinalAssessmentDeletePopupComponent, FinalAssessmentDeleteDialogComponent } from './final-assessment-delete-dialog.component';
-import { finalAssessmentRoute, finalAssessmentPopupRoute } from './final-assessment.route';
-
-const ENTITY_STATES = [...finalAssessmentRoute, ...finalAssessmentPopupRoute];
+import { FinalAssessmentDeleteDialogComponent } from './final-assessment-delete-dialog.component';
+import { finalAssessmentRoute } from './final-assessment.route';
 
 @NgModule({
-  imports: [CardioRehabCrSharedModule, RouterModule.forChild(ENTITY_STATES)],
+  imports: [CardioRehabCrSharedModule, RouterModule.forChild(finalAssessmentRoute)],
   declarations: [
     FinalAssessmentComponent,
     FinalAssessmentDetailComponent,
     FinalAssessmentUpdateComponent,
-    FinalAssessmentDeleteDialogComponent,
-    FinalAssessmentDeletePopupComponent
+    FinalAssessmentDeleteDialogComponent
   ],
   entryComponents: [FinalAssessmentDeleteDialogComponent]
 })

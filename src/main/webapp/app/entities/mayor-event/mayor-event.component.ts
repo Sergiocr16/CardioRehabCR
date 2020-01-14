@@ -1,15 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IMayorEvent } from 'app/shared/model/mayor-event.model';
-import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { MayorEventService } from './mayor-event.service';
+import { MayorEventDeleteDialogComponent } from './mayor-event-delete-dialog.component';
 
 @Component({
   selector: 'jhi-mayor-event',
@@ -17,20 +16,18 @@ import { MayorEventService } from './mayor-event.service';
 })
 export class MayorEventComponent implements OnInit, OnDestroy {
   mayorEvents: IMayorEvent[];
-  currentAccount: any;
-  eventSubscriber: Subscription;
+  eventSubscriber?: Subscription;
   itemsPerPage: number;
   links: any;
-  page: any;
-  predicate: any;
-  reverse: any;
-  totalItems: number;
+  page: number;
+  predicate: string;
+  ascending: boolean;
 
   constructor(
     protected mayorEventService: MayorEventService,
     protected eventManager: JhiEventManager,
-    protected parseLinks: JhiParseLinks,
-    protected accountService: AccountService
+    protected modalService: NgbModal,
+    protected parseLinks: JhiParseLinks
   ) {
     this.mayorEvents = [];
     this.itemsPerPage = ITEMS_PER_PAGE;
@@ -39,10 +36,10 @@ export class MayorEventComponent implements OnInit, OnDestroy {
       last: 0
     };
     this.predicate = 'id';
-    this.reverse = true;
+    this.ascending = true;
   }
 
-  loadAll() {
+  loadAll(): void {
     this.mayorEventService
       .query({
         page: this.page,
@@ -52,50 +49,57 @@ export class MayorEventComponent implements OnInit, OnDestroy {
       .subscribe((res: HttpResponse<IMayorEvent[]>) => this.paginateMayorEvents(res.body, res.headers));
   }
 
-  reset() {
+  reset(): void {
     this.page = 0;
     this.mayorEvents = [];
     this.loadAll();
   }
 
-  loadPage(page) {
+  loadPage(page: number): void {
     this.page = page;
     this.loadAll();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadAll();
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInMayorEvents();
   }
 
-  ngOnDestroy() {
-    this.eventManager.destroy(this.eventSubscriber);
+  ngOnDestroy(): void {
+    if (this.eventSubscriber) {
+      this.eventManager.destroy(this.eventSubscriber);
+    }
   }
 
-  trackId(index: number, item: IMayorEvent) {
-    return item.id;
+  trackId(index: number, item: IMayorEvent): number {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    return item.id!;
   }
 
-  registerChangeInMayorEvents() {
-    this.eventSubscriber = this.eventManager.subscribe('mayorEventListModification', response => this.reset());
+  registerChangeInMayorEvents(): void {
+    this.eventSubscriber = this.eventManager.subscribe('mayorEventListModification', () => this.reset());
   }
 
-  sort() {
-    const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
+  delete(mayorEvent: IMayorEvent): void {
+    const modalRef = this.modalService.open(MayorEventDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.mayorEvent = mayorEvent;
+  }
+
+  sort(): string[] {
+    const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
     if (this.predicate !== 'id') {
       result.push('id');
     }
     return result;
   }
 
-  protected paginateMayorEvents(data: IMayorEvent[], headers: HttpHeaders) {
-    this.links = this.parseLinks.parse(headers.get('link'));
-    this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
-    for (let i = 0; i < data.length; i++) {
-      this.mayorEvents.push(data[i]);
+  protected paginateMayorEvents(data: IMayorEvent[] | null, headers: HttpHeaders): void {
+    const headersLink = headers.get('link');
+    this.links = this.parseLinks.parse(headersLink ? headersLink : '');
+    if (data) {
+      for (let i = 0; i < data.length; i++) {
+        this.mayorEvents.push(data[i]);
+      }
     }
   }
 }

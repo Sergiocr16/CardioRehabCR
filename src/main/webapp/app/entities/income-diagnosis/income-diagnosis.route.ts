@@ -1,27 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
+import { Observable, of, EMPTY } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { IncomeDiagnosis } from 'app/shared/model/income-diagnosis.model';
+import { IIncomeDiagnosis, IncomeDiagnosis } from 'app/shared/model/income-diagnosis.model';
 import { IncomeDiagnosisService } from './income-diagnosis.service';
 import { IncomeDiagnosisComponent } from './income-diagnosis.component';
 import { IncomeDiagnosisDetailComponent } from './income-diagnosis-detail.component';
 import { IncomeDiagnosisUpdateComponent } from './income-diagnosis-update.component';
-import { IncomeDiagnosisDeletePopupComponent } from './income-diagnosis-delete-dialog.component';
-import { IIncomeDiagnosis } from 'app/shared/model/income-diagnosis.model';
 
 @Injectable({ providedIn: 'root' })
 export class IncomeDiagnosisResolve implements Resolve<IIncomeDiagnosis> {
-  constructor(private service: IncomeDiagnosisService) {}
+  constructor(private service: IncomeDiagnosisService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IIncomeDiagnosis> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IIncomeDiagnosis> | Observable<never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        filter((response: HttpResponse<IncomeDiagnosis>) => response.ok),
-        map((incomeDiagnosis: HttpResponse<IncomeDiagnosis>) => incomeDiagnosis.body)
+        flatMap((incomeDiagnosis: HttpResponse<IncomeDiagnosis>) => {
+          if (incomeDiagnosis.body) {
+            return of(incomeDiagnosis.body);
+          } else {
+            this.router.navigate(['404']);
+            return EMPTY;
+          }
+        })
       );
     }
     return of(new IncomeDiagnosis());
@@ -73,21 +78,5 @@ export const incomeDiagnosisRoute: Routes = [
       pageTitle: 'cardioRehabCrApp.incomeDiagnosis.home.title'
     },
     canActivate: [UserRouteAccessService]
-  }
-];
-
-export const incomeDiagnosisPopupRoute: Routes = [
-  {
-    path: ':id/delete',
-    component: IncomeDiagnosisDeletePopupComponent,
-    resolve: {
-      incomeDiagnosis: IncomeDiagnosisResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'cardioRehabCrApp.incomeDiagnosis.home.title'
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
   }
 ];

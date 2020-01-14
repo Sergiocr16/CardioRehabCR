@@ -1,27 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
+import { Observable, of, EMPTY } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { NonSpecificPain } from 'app/shared/model/non-specific-pain.model';
+import { INonSpecificPain, NonSpecificPain } from 'app/shared/model/non-specific-pain.model';
 import { NonSpecificPainService } from './non-specific-pain.service';
 import { NonSpecificPainComponent } from './non-specific-pain.component';
 import { NonSpecificPainDetailComponent } from './non-specific-pain-detail.component';
 import { NonSpecificPainUpdateComponent } from './non-specific-pain-update.component';
-import { NonSpecificPainDeletePopupComponent } from './non-specific-pain-delete-dialog.component';
-import { INonSpecificPain } from 'app/shared/model/non-specific-pain.model';
 
 @Injectable({ providedIn: 'root' })
 export class NonSpecificPainResolve implements Resolve<INonSpecificPain> {
-  constructor(private service: NonSpecificPainService) {}
+  constructor(private service: NonSpecificPainService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<INonSpecificPain> {
+  resolve(route: ActivatedRouteSnapshot): Observable<INonSpecificPain> | Observable<never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        filter((response: HttpResponse<NonSpecificPain>) => response.ok),
-        map((nonSpecificPain: HttpResponse<NonSpecificPain>) => nonSpecificPain.body)
+        flatMap((nonSpecificPain: HttpResponse<NonSpecificPain>) => {
+          if (nonSpecificPain.body) {
+            return of(nonSpecificPain.body);
+          } else {
+            this.router.navigate(['404']);
+            return EMPTY;
+          }
+        })
       );
     }
     return of(new NonSpecificPain());
@@ -73,21 +78,5 @@ export const nonSpecificPainRoute: Routes = [
       pageTitle: 'cardioRehabCrApp.nonSpecificPain.home.title'
     },
     canActivate: [UserRouteAccessService]
-  }
-];
-
-export const nonSpecificPainPopupRoute: Routes = [
-  {
-    path: ':id/delete',
-    component: NonSpecificPainDeletePopupComponent,
-    resolve: {
-      nonSpecificPain: NonSpecificPainResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'cardioRehabCrApp.nonSpecificPain.home.title'
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
   }
 ];

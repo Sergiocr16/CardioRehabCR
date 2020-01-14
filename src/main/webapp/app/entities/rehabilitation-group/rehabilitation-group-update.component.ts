@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
-import { JhiAlertService } from 'ng-jhipster';
+
 import { IRehabilitationGroup, RehabilitationGroup } from 'app/shared/model/rehabilitation-group.model';
 import { RehabilitationGroupService } from './rehabilitation-group.service';
 import { IPatient } from 'app/shared/model/patient.model';
@@ -16,16 +15,18 @@ import { PatientService } from 'app/entities/patient/patient.service';
 import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
 import { RehabilitationCenterService } from 'app/entities/rehabilitation-center/rehabilitation-center.service';
 
+type SelectableEntity = IPatient | IRehabilitationCenter;
+
 @Component({
   selector: 'jhi-rehabilitation-group-update',
   templateUrl: './rehabilitation-group-update.component.html'
 })
 export class RehabilitationGroupUpdateComponent implements OnInit {
-  isSaving: boolean;
+  isSaving = false;
 
-  patients: IPatient[];
+  patients: IPatient[] = [];
 
-  rehabilitationcenters: IRehabilitationCenter[];
+  rehabilitationcenters: IRehabilitationCenter[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -38,7 +39,6 @@ export class RehabilitationGroupUpdateComponent implements OnInit {
   });
 
   constructor(
-    protected jhiAlertService: JhiAlertService,
     protected rehabilitationGroupService: RehabilitationGroupService,
     protected patientService: PatientService,
     protected rehabilitationCenterService: RehabilitationCenterService,
@@ -46,31 +46,31 @@ export class RehabilitationGroupUpdateComponent implements OnInit {
     private fb: FormBuilder
   ) {}
 
-  ngOnInit() {
-    this.isSaving = false;
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ rehabilitationGroup }) => {
       this.updateForm(rehabilitationGroup);
+
+      this.patientService
+        .query()
+        .pipe(
+          map((res: HttpResponse<IPatient[]>) => {
+            return res.body ? res.body : [];
+          })
+        )
+        .subscribe((resBody: IPatient[]) => (this.patients = resBody));
+
+      this.rehabilitationCenterService
+        .query()
+        .pipe(
+          map((res: HttpResponse<IRehabilitationCenter[]>) => {
+            return res.body ? res.body : [];
+          })
+        )
+        .subscribe((resBody: IRehabilitationCenter[]) => (this.rehabilitationcenters = resBody));
     });
-    this.patientService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IPatient[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IPatient[]>) => response.body)
-      )
-      .subscribe((res: IPatient[]) => (this.patients = res), (res: HttpErrorResponse) => this.onError(res.message));
-    this.rehabilitationCenterService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IRehabilitationCenter[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IRehabilitationCenter[]>) => response.body)
-      )
-      .subscribe(
-        (res: IRehabilitationCenter[]) => (this.rehabilitationcenters = res),
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
   }
 
-  updateForm(rehabilitationGroup: IRehabilitationGroup) {
+  updateForm(rehabilitationGroup: IRehabilitationGroup): void {
     this.editForm.patchValue({
       id: rehabilitationGroup.id,
       name: rehabilitationGroup.name,
@@ -82,11 +82,11 @@ export class RehabilitationGroupUpdateComponent implements OnInit {
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 
-  save() {
+  save(): void {
     this.isSaving = true;
     const rehabilitationGroup = this.createFromForm();
     if (rehabilitationGroup.id !== undefined) {
@@ -99,42 +99,37 @@ export class RehabilitationGroupUpdateComponent implements OnInit {
   private createFromForm(): IRehabilitationGroup {
     return {
       ...new RehabilitationGroup(),
-      id: this.editForm.get(['id']).value,
-      name: this.editForm.get(['name']).value,
+      id: this.editForm.get(['id'])!.value,
+      name: this.editForm.get(['name'])!.value,
       creationDate:
-        this.editForm.get(['creationDate']).value != null ? moment(this.editForm.get(['creationDate']).value, DATE_TIME_FORMAT) : undefined,
-      programStatus: this.editForm.get(['programStatus']).value,
-      deleted: this.editForm.get(['deleted']).value,
-      patients: this.editForm.get(['patients']).value,
-      rehabilitationCenterId: this.editForm.get(['rehabilitationCenterId']).value
+        this.editForm.get(['creationDate'])!.value != null
+          ? moment(this.editForm.get(['creationDate'])!.value, DATE_TIME_FORMAT)
+          : undefined,
+      programStatus: this.editForm.get(['programStatus'])!.value,
+      deleted: this.editForm.get(['deleted'])!.value,
+      patients: this.editForm.get(['patients'])!.value,
+      rehabilitationCenterId: this.editForm.get(['rehabilitationCenterId'])!.value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IRehabilitationGroup>>) {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IRehabilitationGroup>>): void {
     result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
 
-  protected onSaveSuccess() {
+  protected onSaveSuccess(): void {
     this.isSaving = false;
     this.previousState();
   }
 
-  protected onSaveError() {
+  protected onSaveError(): void {
     this.isSaving = false;
   }
-  protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
-  }
 
-  trackPatientById(index: number, item: IPatient) {
+  trackById(index: number, item: SelectableEntity): any {
     return item.id;
   }
 
-  trackRehabilitationCenterById(index: number, item: IRehabilitationCenter) {
-    return item.id;
-  }
-
-  getSelected(selectedVals: any[], option: any) {
+  getSelected(selectedVals: IPatient[], option: IPatient): IPatient {
     if (selectedVals) {
       for (let i = 0; i < selectedVals.length; i++) {
         if (option.id === selectedVals[i].id) {

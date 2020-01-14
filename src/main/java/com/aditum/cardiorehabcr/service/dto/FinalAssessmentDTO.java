@@ -241,7 +241,7 @@ public class FinalAssessmentDTO implements Serializable {
             ", deleted='" + isDeleted() + "'" +
             ", reevaluation='" + isReevaluation() + "'" +
             ", executionDate='" + getExecutionDate() + "'" +
-            ", patient=" + getPatientId() +
+            ", patientId=" + getPatientId() +
             "}";
     }
 }

@@ -276,42 +276,4 @@ public class ComorbiditieResourceIT {
         List<Comorbiditie> comorbiditieList = comorbiditieRepository.findAll();
         assertThat(comorbiditieList).hasSize(databaseSizeBeforeDelete - 1);
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(Comorbiditie.class);
-        Comorbiditie comorbiditie1 = new Comorbiditie();
-        comorbiditie1.setId(1L);
-        Comorbiditie comorbiditie2 = new Comorbiditie();
-        comorbiditie2.setId(comorbiditie1.getId());
-        assertThat(comorbiditie1).isEqualTo(comorbiditie2);
-        comorbiditie2.setId(2L);
-        assertThat(comorbiditie1).isNotEqualTo(comorbiditie2);
-        comorbiditie1.setId(null);
-        assertThat(comorbiditie1).isNotEqualTo(comorbiditie2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ComorbiditieDTO.class);
-        ComorbiditieDTO comorbiditieDTO1 = new ComorbiditieDTO();
-        comorbiditieDTO1.setId(1L);
-        ComorbiditieDTO comorbiditieDTO2 = new ComorbiditieDTO();
-        assertThat(comorbiditieDTO1).isNotEqualTo(comorbiditieDTO2);
-        comorbiditieDTO2.setId(comorbiditieDTO1.getId());
-        assertThat(comorbiditieDTO1).isEqualTo(comorbiditieDTO2);
-        comorbiditieDTO2.setId(2L);
-        assertThat(comorbiditieDTO1).isNotEqualTo(comorbiditieDTO2);
-        comorbiditieDTO1.setId(null);
-        assertThat(comorbiditieDTO1).isNotEqualTo(comorbiditieDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(comorbiditieMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(comorbiditieMapper.fromId(null)).isNull();
-    }
 }

@@ -119,9 +119,9 @@ public class AppUserDTO implements Serializable {
             ", lastName='" + getLastName() + "'" +
             ", authorityType=" + getAuthorityType() +
             ", status=" + getStatus() +
-            ", user=" + getUserId() +
-            ", user='" + getUserLogin() + "'" +
-            ", rehabilitationCenter=" + getRehabilitationCenterId() +
+            ", userId=" + getUserId() +
+            ", userLogin='" + getUserLogin() + "'" +
+            ", rehabilitationCenterId=" + getRehabilitationCenterId() +
             "}";
     }
 }

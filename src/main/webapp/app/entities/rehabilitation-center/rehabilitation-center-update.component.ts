@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+
 import { IRehabilitationCenter, RehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
 import { RehabilitationCenterService } from './rehabilitation-center.service';
 
@@ -13,7 +13,7 @@ import { RehabilitationCenterService } from './rehabilitation-center.service';
   templateUrl: './rehabilitation-center-update.component.html'
 })
 export class RehabilitationCenterUpdateComponent implements OnInit {
-  isSaving: boolean;
+  isSaving = false;
 
   editForm = this.fb.group({
     id: [],
@@ -29,14 +29,13 @@ export class RehabilitationCenterUpdateComponent implements OnInit {
     private fb: FormBuilder
   ) {}
 
-  ngOnInit() {
-    this.isSaving = false;
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ rehabilitationCenter }) => {
       this.updateForm(rehabilitationCenter);
     });
   }
 
-  updateForm(rehabilitationCenter: IRehabilitationCenter) {
+  updateForm(rehabilitationCenter: IRehabilitationCenter): void {
     this.editForm.patchValue({
       id: rehabilitationCenter.id,
       name: rehabilitationCenter.name,
@@ -46,11 +45,11 @@ export class RehabilitationCenterUpdateComponent implements OnInit {
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 
-  save() {
+  save(): void {
     this.isSaving = true;
     const rehabilitationCenter = this.createFromForm();
     if (rehabilitationCenter.id !== undefined) {
@@ -63,24 +62,24 @@ export class RehabilitationCenterUpdateComponent implements OnInit {
   private createFromForm(): IRehabilitationCenter {
     return {
       ...new RehabilitationCenter(),
-      id: this.editForm.get(['id']).value,
-      name: this.editForm.get(['name']).value,
-      telephone: this.editForm.get(['telephone']).value,
-      deleted: this.editForm.get(['deleted']).value,
-      status: this.editForm.get(['status']).value
+      id: this.editForm.get(['id'])!.value,
+      name: this.editForm.get(['name'])!.value,
+      telephone: this.editForm.get(['telephone'])!.value,
+      deleted: this.editForm.get(['deleted'])!.value,
+      status: this.editForm.get(['status'])!.value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IRehabilitationCenter>>) {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IRehabilitationCenter>>): void {
     result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
 
-  protected onSaveSuccess() {
+  protected onSaveSuccess(): void {
     this.isSaving = false;
     this.previousState();
   }
 
-  protected onSaveError() {
+  protected onSaveError(): void {
     this.isSaving = false;
   }
 }

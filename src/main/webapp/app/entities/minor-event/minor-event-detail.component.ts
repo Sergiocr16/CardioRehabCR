@@ -8,17 +8,17 @@ import { IMinorEvent } from 'app/shared/model/minor-event.model';
   templateUrl: './minor-event-detail.component.html'
 })
 export class MinorEventDetailComponent implements OnInit {
-  minorEvent: IMinorEvent;
+  minorEvent: IMinorEvent | null = null;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ minorEvent }) => {
       this.minorEvent = minorEvent;
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 }

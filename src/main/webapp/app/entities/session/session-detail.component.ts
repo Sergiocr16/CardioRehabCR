@@ -8,17 +8,17 @@ import { ISession } from 'app/shared/model/session.model';
   templateUrl: './session-detail.component.html'
 })
 export class SessionDetailComponent implements OnInit {
-  session: ISession;
+  session: ISession | null = null;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ session }) => {
       this.session = session;
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 }

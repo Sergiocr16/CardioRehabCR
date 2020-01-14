@@ -1,27 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
+import { Observable, of, EMPTY } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { DepressiveSymptomsSession } from 'app/shared/model/depressive-symptoms-session.model';
+import { IDepressiveSymptomsSession, DepressiveSymptomsSession } from 'app/shared/model/depressive-symptoms-session.model';
 import { DepressiveSymptomsSessionService } from './depressive-symptoms-session.service';
 import { DepressiveSymptomsSessionComponent } from './depressive-symptoms-session.component';
 import { DepressiveSymptomsSessionDetailComponent } from './depressive-symptoms-session-detail.component';
 import { DepressiveSymptomsSessionUpdateComponent } from './depressive-symptoms-session-update.component';
-import { DepressiveSymptomsSessionDeletePopupComponent } from './depressive-symptoms-session-delete-dialog.component';
-import { IDepressiveSymptomsSession } from 'app/shared/model/depressive-symptoms-session.model';
 
 @Injectable({ providedIn: 'root' })
 export class DepressiveSymptomsSessionResolve implements Resolve<IDepressiveSymptomsSession> {
-  constructor(private service: DepressiveSymptomsSessionService) {}
+  constructor(private service: DepressiveSymptomsSessionService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IDepressiveSymptomsSession> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IDepressiveSymptomsSession> | Observable<never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        filter((response: HttpResponse<DepressiveSymptomsSession>) => response.ok),
-        map((depressiveSymptomsSession: HttpResponse<DepressiveSymptomsSession>) => depressiveSymptomsSession.body)
+        flatMap((depressiveSymptomsSession: HttpResponse<DepressiveSymptomsSession>) => {
+          if (depressiveSymptomsSession.body) {
+            return of(depressiveSymptomsSession.body);
+          } else {
+            this.router.navigate(['404']);
+            return EMPTY;
+          }
+        })
       );
     }
     return of(new DepressiveSymptomsSession());
@@ -73,21 +78,5 @@ export const depressiveSymptomsSessionRoute: Routes = [
       pageTitle: 'cardioRehabCrApp.depressiveSymptomsSession.home.title'
     },
     canActivate: [UserRouteAccessService]
-  }
-];
-
-export const depressiveSymptomsSessionPopupRoute: Routes = [
-  {
-    path: ':id/delete',
-    component: DepressiveSymptomsSessionDeletePopupComponent,
-    resolve: {
-      depressiveSymptomsSession: DepressiveSymptomsSessionResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'cardioRehabCrApp.depressiveSymptomsSession.home.title'
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
   }
 ];

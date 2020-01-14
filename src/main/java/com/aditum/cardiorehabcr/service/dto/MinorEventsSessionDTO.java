@@ -89,7 +89,7 @@ public class MinorEventsSessionDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", minorEventId=" + getMinorEventId() +
             ", exist='" + isExist() + "'" +
-            ", session=" + getSessionId() +
+            ", sessionId=" + getSessionId() +
             "}";
     }
 }

@@ -13,7 +13,7 @@
     "indicator": {
       "discoveryComposite": "Descubrimiento compuesto",
       "refreshScope": "Alcance de actualización de microservicios",
-      "configServer": "Servidor de configuración de microservicio",
+      "clientConfigServer": "Servidor de configuración de microservicio",
       "hystrix": "Hystrix",
       "diskSpace": "Espacio en disco",
       "mail": "Email",

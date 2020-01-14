@@ -4,7 +4,7 @@
             <h2 id="jhi-rehabilitation-group-heading" jhiTranslate="cardioRehabCrApp.rehabilitationGroup.home.createOrEditLabel">Create or edit a Rehabilitation Group</h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!editForm.get('id').value">
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
                     <label for="id" jhiTranslate="global.field.id">ID</label>
                     <input type="text" class="form-control" id="id" name="id" formControlName="id"
                         readonly />
@@ -13,9 +13,9 @@
                     <label class="form-control-label" jhiTranslate="cardioRehabCrApp.rehabilitationGroup.name" for="field_name">Name</label>
                     <input type="text" class="form-control" name="name" id="field_name"
                            formControlName="name"/>
-                    <div *ngIf="editForm.get('name').invalid && (editForm.get('name').dirty || editForm.get('name').touched)">
+                    <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('name').errors.required" jhiTranslate="entity.validation.required">
+                               *ngIf="editForm.get('name')?.errors?.required" jhiTranslate="entity.validation.required">
                         This field is required.
                         </small>
                     </div>
@@ -40,14 +40,14 @@
                 <div class="form-group">
                     <label jhiTranslate="cardioRehabCrApp.rehabilitationGroup.patient" for="field_patients">Patient</label>
                     <select class="form-control" id="field_patients" multiple name="patients" formControlName="patients">
-                        <option [ngValue]="getSelected(editForm.get('patients').value, patientOption)" *ngFor="let patientOption of patients; trackBy: trackPatientById">{{patientOption.id}}</option>
+                        <option [ngValue]="getSelected(editForm.get('patients')!.value, patientOption)" *ngFor="let patientOption of patients; trackBy: trackById">{{patientOption.id}}</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="cardioRehabCrApp.rehabilitationGroup.rehabilitationCenter" for="field_rehabilitationCenter">Rehabilitation Center</label>
                     <select class="form-control" id="field_rehabilitationCenter" name="rehabilitationCenter" formControlName="rehabilitationCenterId">
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="rehabilitationCenterOption.id" *ngFor="let rehabilitationCenterOption of rehabilitationcenters; trackBy: trackRehabilitationCenterById">{{rehabilitationCenterOption.id}}</option>
+                        <option [ngValue]="rehabilitationCenterOption.id" *ngFor="let rehabilitationCenterOption of rehabilitationcenters; trackBy: trackById">{{rehabilitationCenterOption.id}}</option>
                     </select>
                 </div>
             </div>

@@ -1,4 +1,5 @@
 package com.aditum.cardiorehabcr.repository;
+
 import com.aditum.cardiorehabcr.domain.NonSpecificPainsSession;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;

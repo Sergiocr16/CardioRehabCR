@@ -5,7 +5,7 @@
         "title": "Rehabilitation Groups",
         "createLabel": "Crear nuevo Rehabilitation Group",
         "createOrEditLabel": "Crear o editar Rehabilitation Group",
-        "notFound": "No Rehabilitation Groups found"
+        "notFound": "Ningún Rehabilitation Groups encontrado"
       },
       "created": "Un nuevo Rehabilitation Group ha sido creado con el identificador {{ param }}",
       "updated": "Un Rehabilitation Group ha sido actualizado con el identificador {{ param }}",

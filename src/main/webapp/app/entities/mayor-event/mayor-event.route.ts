@@ -1,27 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
+import { Observable, of, EMPTY } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { MayorEvent } from 'app/shared/model/mayor-event.model';
+import { IMayorEvent, MayorEvent } from 'app/shared/model/mayor-event.model';
 import { MayorEventService } from './mayor-event.service';
 import { MayorEventComponent } from './mayor-event.component';
 import { MayorEventDetailComponent } from './mayor-event-detail.component';
 import { MayorEventUpdateComponent } from './mayor-event-update.component';
-import { MayorEventDeletePopupComponent } from './mayor-event-delete-dialog.component';
-import { IMayorEvent } from 'app/shared/model/mayor-event.model';
 
 @Injectable({ providedIn: 'root' })
 export class MayorEventResolve implements Resolve<IMayorEvent> {
-  constructor(private service: MayorEventService) {}
+  constructor(private service: MayorEventService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IMayorEvent> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IMayorEvent> | Observable<never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        filter((response: HttpResponse<MayorEvent>) => response.ok),
-        map((mayorEvent: HttpResponse<MayorEvent>) => mayorEvent.body)
+        flatMap((mayorEvent: HttpResponse<MayorEvent>) => {
+          if (mayorEvent.body) {
+            return of(mayorEvent.body);
+          } else {
+            this.router.navigate(['404']);
+            return EMPTY;
+          }
+        })
       );
     }
     return of(new MayorEvent());
@@ -73,21 +78,5 @@ export const mayorEventRoute: Routes = [
       pageTitle: 'cardioRehabCrApp.mayorEvent.home.title'
     },
     canActivate: [UserRouteAccessService]
-  }
-];
-
-export const mayorEventPopupRoute: Routes = [
-  {
-    path: ':id/delete',
-    component: MayorEventDeletePopupComponent,
-    resolve: {
-      mayorEvent: MayorEventResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'cardioRehabCrApp.mayorEvent.home.title'
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
   }
 ];

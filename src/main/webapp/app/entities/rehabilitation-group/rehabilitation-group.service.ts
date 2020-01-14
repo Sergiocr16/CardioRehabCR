@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import * as moment from 'moment';
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { DATE_FORMAT } from 'app/shared/constants/input.constants';
-import { map } from 'rxjs/operators';
-
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared/util/request-util';
 import { IRehabilitationGroup } from 'app/shared/model/rehabilitation-group.model';
@@ -46,23 +46,23 @@ export class RehabilitationGroupService {
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
-  delete(id: number): Observable<HttpResponse<any>> {
-    return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  delete(id: number): Observable<HttpResponse<{}>> {
+    return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
   protected convertDateFromClient(rehabilitationGroup: IRehabilitationGroup): IRehabilitationGroup {
     const copy: IRehabilitationGroup = Object.assign({}, rehabilitationGroup, {
       creationDate:
-        rehabilitationGroup.creationDate != null && rehabilitationGroup.creationDate.isValid()
+        rehabilitationGroup.creationDate && rehabilitationGroup.creationDate.isValid()
           ? rehabilitationGroup.creationDate.toJSON()
-          : null
+          : undefined
     });
     return copy;
   }
 
   protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
     if (res.body) {
-      res.body.creationDate = res.body.creationDate != null ? moment(res.body.creationDate) : null;
+      res.body.creationDate = res.body.creationDate ? moment(res.body.creationDate) : undefined;
     }
     return res;
   }
@@ -70,7 +70,7 @@ export class RehabilitationGroupService {
   protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
     if (res.body) {
       res.body.forEach((rehabilitationGroup: IRehabilitationGroup) => {
-        rehabilitationGroup.creationDate = rehabilitationGroup.creationDate != null ? moment(rehabilitationGroup.creationDate) : null;
+        rehabilitationGroup.creationDate = rehabilitationGroup.creationDate ? moment(rehabilitationGroup.creationDate) : undefined;
       });
     }
     return res;

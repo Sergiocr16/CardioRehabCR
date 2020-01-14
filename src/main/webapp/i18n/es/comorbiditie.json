@@ -5,7 +5,7 @@
         "title": "Comorbidities",
         "createLabel": "Crear nuevo Comorbiditie",
         "createOrEditLabel": "Crear o editar Comorbiditie",
-        "notFound": "No Comorbidities found"
+        "notFound": "Ningún Comorbidities encontrado"
       },
       "created": "Un nuevo Comorbiditie ha sido creado con el identificador {{ param }}",
       "updated": "Un Comorbiditie ha sido actualizado con el identificador {{ param }}",

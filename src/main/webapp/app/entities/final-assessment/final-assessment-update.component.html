@@ -4,7 +4,7 @@
             <h2 id="jhi-final-assessment-heading" jhiTranslate="cardioRehabCrApp.finalAssessment.home.createOrEditLabel">Create or edit a Final Assessment</h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!editForm.get('id').value">
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
                     <label for="id" jhiTranslate="global.field.id">ID</label>
                     <input type="text" class="form-control" id="id" name="id" formControlName="id"
                         readonly />
@@ -100,7 +100,7 @@
                     <label class="form-control-label" jhiTranslate="cardioRehabCrApp.finalAssessment.patient" for="field_patient">Patient</label>
                     <select class="form-control" id="field_patient" name="patient" formControlName="patientId">
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="patientOption.id" *ngFor="let patientOption of patients; trackBy: trackPatientById">{{patientOption.id}}</option>
+                        <option [ngValue]="patientOption.id" *ngFor="let patientOption of patients; trackBy: trackById">{{patientOption.id}}</option>
                     </select>
                 </div>
             </div>

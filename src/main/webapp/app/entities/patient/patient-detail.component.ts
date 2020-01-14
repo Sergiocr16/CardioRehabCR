@@ -8,17 +8,17 @@ import { IPatient } from 'app/shared/model/patient.model';
   templateUrl: './patient-detail.component.html'
 })
 export class PatientDetailComponent implements OnInit {
-  patient: IPatient;
+  patient: IPatient | null = null;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ patient }) => {
       this.patient = patient;
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 }

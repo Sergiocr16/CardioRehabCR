@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { JhiAlertService } from 'ng-jhipster';
+import { map } from 'rxjs/operators';
+
 import { IIncomeDiagnosisPatient, IncomeDiagnosisPatient } from 'app/shared/model/income-diagnosis-patient.model';
 import { IncomeDiagnosisPatientService } from './income-diagnosis-patient.service';
 import { IInitialAssessment } from 'app/shared/model/initial-assessment.model';
@@ -17,9 +16,9 @@ import { InitialAssessmentService } from 'app/entities/initial-assessment/initia
   templateUrl: './income-diagnosis-patient-update.component.html'
 })
 export class IncomeDiagnosisPatientUpdateComponent implements OnInit {
-  isSaving: boolean;
+  isSaving = false;
 
-  initialassessments: IInitialAssessment[];
+  initialassessments: IInitialAssessment[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -30,28 +29,28 @@ export class IncomeDiagnosisPatientUpdateComponent implements OnInit {
   });
 
   constructor(
-    protected jhiAlertService: JhiAlertService,
     protected incomeDiagnosisPatientService: IncomeDiagnosisPatientService,
     protected initialAssessmentService: InitialAssessmentService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
 
-  ngOnInit() {
-    this.isSaving = false;
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ incomeDiagnosisPatient }) => {
       this.updateForm(incomeDiagnosisPatient);
+
+      this.initialAssessmentService
+        .query()
+        .pipe(
+          map((res: HttpResponse<IInitialAssessment[]>) => {
+            return res.body ? res.body : [];
+          })
+        )
+        .subscribe((resBody: IInitialAssessment[]) => (this.initialassessments = resBody));
     });
-    this.initialAssessmentService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IInitialAssessment[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IInitialAssessment[]>) => response.body)
-      )
-      .subscribe((res: IInitialAssessment[]) => (this.initialassessments = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
-  updateForm(incomeDiagnosisPatient: IIncomeDiagnosisPatient) {
+  updateForm(incomeDiagnosisPatient: IIncomeDiagnosisPatient): void {
     this.editForm.patchValue({
       id: incomeDiagnosisPatient.id,
       description: incomeDiagnosisPatient.description,
@@ -61,11 +60,11 @@ export class IncomeDiagnosisPatientUpdateComponent implements OnInit {
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 
-  save() {
+  save(): void {
     this.isSaving = true;
     const incomeDiagnosisPatient = this.createFromForm();
     if (incomeDiagnosisPatient.id !== undefined) {
@@ -78,31 +77,28 @@ export class IncomeDiagnosisPatientUpdateComponent implements OnInit {
   private createFromForm(): IIncomeDiagnosisPatient {
     return {
       ...new IncomeDiagnosisPatient(),
-      id: this.editForm.get(['id']).value,
-      description: this.editForm.get(['description']).value,
-      incomeDiagnosisId: this.editForm.get(['incomeDiagnosisId']).value,
-      exist: this.editForm.get(['exist']).value,
-      initialAssessmentId: this.editForm.get(['initialAssessmentId']).value
+      id: this.editForm.get(['id'])!.value,
+      description: this.editForm.get(['description'])!.value,
+      incomeDiagnosisId: this.editForm.get(['incomeDiagnosisId'])!.value,
+      exist: this.editForm.get(['exist'])!.value,
+      initialAssessmentId: this.editForm.get(['initialAssessmentId'])!.value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IIncomeDiagnosisPatient>>) {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IIncomeDiagnosisPatient>>): void {
     result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
 
-  protected onSaveSuccess() {
+  protected onSaveSuccess(): void {
     this.isSaving = false;
     this.previousState();
   }
 
-  protected onSaveError() {
+  protected onSaveError(): void {
     this.isSaving = false;
   }
-  protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
-  }
 
-  trackInitialAssessmentById(index: number, item: IInitialAssessment) {
+  trackById(index: number, item: IInitialAssessment): any {
     return item.id;
   }
 }
