@@ -3,7 +3,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { AppUserService } from 'app/entities/app-user/app-user.service';
 import { Account } from 'app/core/user/account.model';
 import { filter, map } from 'rxjs/operators';
-// import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { AppUser } from 'app/shared/model/app-user.model';
 import { Subject } from 'rxjs';
 import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';

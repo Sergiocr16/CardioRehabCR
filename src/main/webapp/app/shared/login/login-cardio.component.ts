@@ -72,7 +72,7 @@ export class LoginComponent implements AfterViewInit {
             case 'ROLE_MANAGER':
               this.router.navigateByUrl('/panel-data');
               break;
-            case 'ROLE_CONSULTOR':
+            case 'ROLE_CONSULTANT':
               this.router.navigateByUrl('/panel-data');
               break;
             case 'ROLE_USER':
