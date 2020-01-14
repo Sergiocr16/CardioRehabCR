@@ -12,7 +12,7 @@ import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { RehabilitationCenterService } from './rehabilitation-center.service';
-import { IComorbiditie } from 'app/shared/model/comorbiditie.model';
+// import { IComorbiditie } from 'app/shared/model/comorbiditie.model';
 
 @Component({
   selector: 'jhi-rehabilitation-center',
