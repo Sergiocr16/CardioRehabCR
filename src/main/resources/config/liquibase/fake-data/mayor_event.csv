@@ -1,5 +1,5 @@
-id;description;code;deleted
-1;Angor inestable;1;false
-2;Arritmia cardiaca sintomática;2;false
-3;Insuficiencia cardiaca descompensada;3;false
-4;Claudicación Intermitente;4;false
+id;description;code;deleted;rehabilitation_center_id
+1;Angor inestable;1;false;1
+2;Arritmia cardiaca sintomática;2;false;1
+3;Insuficiencia cardiaca descompensada;3;false;1
+4;Claudicación Intermitente;4;false;1

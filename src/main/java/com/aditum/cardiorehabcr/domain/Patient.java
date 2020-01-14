@@ -40,7 +40,7 @@ public class Patient implements Serializable {
 
     @NotNull
     @Column(name = "last_event_ocurred", nullable = false)
-    private Instant lastEventOcurred;
+    private Integer lastEventOcurred;
 
     @Column(name = "deceased")
     private Boolean deceased;
@@ -137,16 +137,16 @@ public class Patient implements Serializable {
         this.ocupation = ocupation;
     }
 
-    public Instant getLastEventOcurred() {
+    public Integer getLastEventOcurred() {
         return lastEventOcurred;
     }
 
-    public Patient lastEventOcurred(Instant lastEventOcurred) {
+    public Patient lastEventOcurred(Integer lastEventOcurred) {
         this.lastEventOcurred = lastEventOcurred;
         return this;
     }
 
-    public void setLastEventOcurred(Instant lastEventOcurred) {
+    public void setLastEventOcurred(Integer lastEventOcurred) {
         this.lastEventOcurred = lastEventOcurred;
     }
 

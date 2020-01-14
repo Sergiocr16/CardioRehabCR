@@ -90,10 +90,8 @@
                                    for="field_lastEventOcurred">
                             Last Event Ocurred
                         </mat-label>
-                        <input matInput [matDatepicker]="picker" id="field_lastEventOcurred" (focus)="picker.open()"
-                               name="lastEventOcurred" formControlName="lastEventOcurred" placeholder="dd/mm/yyyy">
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker touchUi #picker></mat-datepicker>
+                        <input matInput type="number" id="field_lastEventOcurred"
+                               name="lastEventOcurred" formControlName="lastEventOcurred" placeholder="En meses">
                         <mat-hint
                             *ngIf="initialInfoForm.get('lastEventOcurred').invalid && (initialInfoForm.get('lastEventOcurred').dirty || initialInfoForm.get('lastEventOcurred').touched)"
                             class="form-text text-danger">

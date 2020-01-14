@@ -1,4 +1,4 @@
-id;description;code;deleted
-1;Intervención Farmacológica;1;false
-2;Intervención con psicoterapia;2;false
+id;description;code;deleted;rehabilitation_center_id
+1;Intervención Farmacológica;1;false;1
+2;Intervención con psicoterapia;2;false;1
 

@@ -51,8 +51,8 @@ public class PatientResourceIT {
     private static final String DEFAULT_OCUPATION = "AAAAAAAAAA";
     private static final String UPDATED_OCUPATION = "BBBBBBBBBB";
 
-    private static final Instant DEFAULT_LAST_EVENT_OCURRED = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_LAST_EVENT_OCURRED = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final Integer DEFAULT_LAST_EVENT_OCURRED = 1;
+    private static final Integer UPDATED_LAST_EVENT_OCURRED = 2;
 
     private static final Boolean DEFAULT_DECEASED = false;
     private static final Boolean UPDATED_DECEASED = true;

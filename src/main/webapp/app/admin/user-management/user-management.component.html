@@ -10,16 +10,16 @@
                     <mat-card-title><mat-icon class="text-icon">face</mat-icon>
                          {{user.firstName}} {{user.lastName}}</mat-card-title>
                 <div fxLayoutAlign="center center">
-                    <button mat-icon-button [matMenuTriggerFor]="beforeMenu" fxLayoutAlign="center center">
+                    <button mat-icon-button [matMenuTriggerFor]="beforeMenu" fxLayoutAlign="center center" *ngIf="user.login!='superadmin'">
                         <mat-icon aria-hidden="false" class="text-icon big-icon">more_vert</mat-icon>
                     </button>
 
-                    <mat-menu #beforeMenu="matMenu" xPosition="before">
+                    <mat-menu #beforeMenu="matMenu" xPosition="before" >
                         <button mat-menu-item [routerLink]="['./', user.login, 'view']">
                             <mat-icon>remove_red_eye</mat-icon>
                             <span jhiTranslate="entity.action.view">Ver</span>
                         </button>
-                        <button mat-menu-item [routerLink]="['./', user.login, 'edit']">
+                        <button  mat-menu-item [routerLink]="['./', user.login, 'edit']">
                             <mat-icon>create</mat-icon>
                             <span jhiTranslate="entity.action.edit">Editar</span>
                         </button>

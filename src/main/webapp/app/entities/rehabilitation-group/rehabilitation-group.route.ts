@@ -34,7 +34,7 @@ export const rehabilitationGroupRoute: Routes = [
     path: '',
     component: RehabilitationGroupComponent,
     data: {
-      authorities: ['ROLE_USER', 'ROLE_MANAGER'],
+      authorities: ['ROLE_USER', 'ROLE_MANAGER', 'ROLE_CONSULTANT'],
       pageTitle: 'cardioRehabCrApp.rehabilitationGroup.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -46,7 +46,7 @@ export const rehabilitationGroupRoute: Routes = [
       rehabilitationGroup: RehabilitationGroupResolve
     },
     data: {
-      authorities: ['ROLE_USER', 'ROLE_MANAGER'],
+      authorities: ['ROLE_USER', 'ROLE_MANAGER', 'ROLE_CONSULTANT'],
       pageTitle: 'cardioRehabCrApp.rehabilitationGroup.home.title'
     },
     canActivate: [UserRouteAccessService]

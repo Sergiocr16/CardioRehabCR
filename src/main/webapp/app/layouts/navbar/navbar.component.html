@@ -7,7 +7,7 @@
             CONFIGURACIÓN </a>
         <mat-nav-list class="mat-nav-side-menu">
             <a mat-list-item routerLink="admin/user-management" routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: true }">
+               [routerLinkActiveOptions]="{ exact: true }" (click)="closeNavBar()">
                 <mat-icon class="text-icon">supervised_user_circle</mat-icon>
                 Gestión de usuarios </a>
         </mat-nav-list>
@@ -15,31 +15,31 @@
             ADMINISTRACIÓN </a>
         <mat-nav-list class="mat-nav-side-menu">
             <a mat-list-item routerLink="rehabilitation-center" routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: true }">
+               [routerLinkActiveOptions]="{ exact: true }" (click)="closeNavBar()">
                 <mat-icon class="text-icon">location_city</mat-icon>
                 Centro de Rehabilitación </a>
             <a mat-list-item routerLink="income-diagnosis" routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: true }">
+               [routerLinkActiveOptions]="{ exact: true }" (click)="closeNavBar()">
                 <mat-icon class="text-icon">emoji_people</mat-icon>
                 Diagnósticos de ingreso</a>
             <a mat-list-item routerLink="comorbiditie" routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: true }">
+               [routerLinkActiveOptions]="{ exact: true }" (click)="closeNavBar()">
                 <mat-icon class="text-icon">local_hospital</mat-icon>
                 Comorbilidades </a>
             <a mat-list-item routerLink="mayor-event" routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: true }">
+               [routerLinkActiveOptions]="{ exact: true }" (click)="closeNavBar()">
                 <mat-icon class="text-icon">arrow_upward</mat-icon>
                 Eventos mayores </a>
             <a mat-list-item routerLink="minor-event" routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: true }">
+               [routerLinkActiveOptions]="{ exact: true }" (click)="closeNavBar()">
                 <mat-icon class="text-icon">arrow_downward</mat-icon>
                 Eventos menores </a>
             <a mat-list-item routerLink="depressive-symptom" routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: true }">
+               [routerLinkActiveOptions]="{ exact: true }" (click)="closeNavBar()">
                 <mat-icon class="text-icon">sentiment_very_dissatisfied</mat-icon>
                 Síntomas depresivos </a>
             <a mat-list-item routerLink="non-specific-pain" routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: true }">
+               [routerLinkActiveOptions]="{ exact: true }" (click)="closeNavBar()">
                 <mat-icon class="text-icon">airline_seat_flat_angled</mat-icon>
                 Dolores agudos no específicos</a>
         </mat-nav-list>
@@ -51,23 +51,23 @@
             PANEL DE DATOS </a>
         <mat-nav-list class="mat-nav-side-menu">
             <a mat-list-item routerLink="panel-data" routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: false }">
+               [routerLinkActiveOptions]="{ exact: false }" (click)="closeNavBar()">
                 <mat-icon class="text-icon">assessment</mat-icon>
                 Consultar instrumento de datos </a>
         </mat-nav-list>
     </mat-nav-list>
     <mat-divider></mat-divider>
-    <mat-nav-list class="no-padding" *jhiHasAnyAuthority="'ROLE_MANAGER'">
+    <mat-nav-list class="no-padding" *jhiHasAnyAuthority="['ROLE_MANAGER','ROLE_CONSULTANT']">
         <a mat-list-item class="isDisabled">
             ADMINISTRACIÓN </a>
         <mat-nav-list class="mat-nav-side-menu">
             <a mat-list-item routerLink="rehabilitation-group" routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: true }">
+               [routerLinkActiveOptions]="{ exact: true }" (click)="closeNavBar()">
                 <mat-icon class="text-icon">supervised_user_circle</mat-icon>
                 Grupos </a>
         </mat-nav-list>
         <mat-nav-list class="mat-nav-side-menu">
-            <a mat-list-item routerLink="patient" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            <a (click)="closeNavBar()" mat-list-item routerLink="patient" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <mat-icon class="text-icon">face</mat-icon>
                 Pacientes </a>
         </mat-nav-list>
@@ -78,7 +78,7 @@
             REHABILITACIÓN </a>
         <mat-nav-list class="mat-nav-side-menu">
             <a mat-list-item routerLink="evaluation" routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: false }">
+               [routerLinkActiveOptions]="{ exact: false }" (click)="closeNavBar()">
                 <mat-icon class="text-icon">fitness_center</mat-icon>
                 Realizar evaluación </a>
         </mat-nav-list>

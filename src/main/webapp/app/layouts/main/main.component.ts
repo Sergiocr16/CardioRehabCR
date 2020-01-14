@@ -117,6 +117,10 @@ export class JhiMainComponent implements OnInit {
     return this.gv.isLoading;
   }
 
+  public collapseNavBar() {
+    this.opened = !this.opened;
+  }
+
   public isInForm() {
     return this.gv.isInForm;
   }

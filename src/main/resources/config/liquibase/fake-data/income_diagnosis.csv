@@ -1,7 +1,7 @@
-id;description;deleted
-1;IAM revascularizado con Stent;false
-2;EAC no revascularizada;false
-3;Cardiopatía Isquémica Dilatada;false
-4;IAM revascularizado con Bypass Co;false
-5;Ángor;false
-6;Sobreviviente PCR;false
+id;description;deleted;rehabilitation_center_id
+1;IAM revascularizado con Stent;false;1
+2;EAC no revascularizada;false;1
+3;Cardiopatía Isquémica Dilatada;false;1
+4;IAM revascularizado con Bypass Co;false;1
+5;Ángor;false;1
+6;Sobreviviente PCR;false;1
