@@ -14,13 +14,13 @@
     <property name="uuidType" value="varchar(36)" dbms="h2, mysql, mariadb"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163532_added_entity_RehabilitationCenter.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191111163526_added_entity_Patient.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191111163527_added_entity_InitialAssessment.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191111163528_added_entity_IncomeDiagnosisPatient.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20191111163529_added_entity_IncomeDiagnosis.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191111163530_added_entity_Comorbiditie.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191111163531_added_entity_ComorbiditiesPatient.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20191111163532_added_entity_RehabilitationCenter.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191111163529_added_entity_IncomeDiagnosis.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191111163533_added_entity_RehabilitationGroup.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191111163534_added_entity_Session.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191111163535_added_entity_MinorEvent.xml" relativeToChangelogFile="false"/>
