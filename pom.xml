@@ -341,11 +341,11 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-localconfig-connector</artifactId>
+            <artifactId>spring-cloud-heroku-connector</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-heroku-connector</artifactId>
+            <artifactId>spring-cloud-localconfig-connector</artifactId>
         </dependency>
         <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>

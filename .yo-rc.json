@@ -38,7 +38,7 @@
     "nativeLanguage": "es",
     "languages": ["es", "en"],
     "blueprints": [],
-    "herokuAppName": "rehabi-cor",
-    "herokuDeployType": "jar"
+    "herokuAppName": "rehabicorcr",
+    "herokuDeployType": "git"
   }
 }
