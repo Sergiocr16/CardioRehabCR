@@ -67,7 +67,7 @@ export class LoginComponent implements AfterViewInit {
           });
           switch (user.authorities[0]) {
             case 'ROLE_ADMIN':
-              this.router.navigateByUrl('/user-management');
+              this.router.navigateByUrl('/admin/user-management');
               break;
             case 'ROLE_MANAGER':
               this.router.navigateByUrl('/panel-data');
