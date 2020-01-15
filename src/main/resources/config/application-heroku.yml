@@ -12,7 +12,7 @@
 
 eureka:
   instance:
-    hostname: rehabicocr.herokuapp.com
+    hostname: rehabicorcr.herokuapp.com
     non-secure-port: 80
     prefer-ip-address: false
   client:
