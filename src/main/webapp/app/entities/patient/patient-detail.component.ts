@@ -122,7 +122,9 @@ export class PatientDetailComponent implements OnInit {
     this.step++;
   }
 
-  protected onError(errorMessage: string) {}
+  protected onError(errorMessage: string) {
+    const a = errorMessage;
+  }
 
   prevStep() {
     this.step--;

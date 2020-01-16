@@ -174,7 +174,7 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
     this.global.setFormStatus(isSaving);
   }
 
-  updateForm(patient: IPatient) {}
+  updateForm() {}
 
   formatInconeDiagnoses(incomeDiagnoses) {
     for (const incomeDiagnose of incomeDiagnoses) {
@@ -414,7 +414,7 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
 
   saveNewIncomeDiagnosis(newIncomeDiagnosis) {
     for (const newIncomeDiagnose of newIncomeDiagnosis) {
-      this.incomeDiagnosisPatientService.create(newIncomeDiagnose).subscribe(response => {
+      this.incomeDiagnosisPatientService.create(newIncomeDiagnose).subscribe(() => {
         this.totalSaved++;
         if (this.totaltoSave === this.totalSaved) {
           this.modal.message(this.modalSuccessMessage);
@@ -428,7 +428,7 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
 
   saveNewComorbidities(newComorbidities) {
     for (const comorbiditie of newComorbidities) {
-      this.comorbiditiesPatientService.create(comorbiditie).subscribe(response => {
+      this.comorbiditiesPatientService.create(comorbiditie).subscribe(() => {
         this.totalSaved++;
         if (this.totaltoSave === this.totalSaved) {
           this.modal.message(this.modalSuccessMessage);

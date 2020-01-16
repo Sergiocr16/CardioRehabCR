@@ -108,7 +108,7 @@ export class ComorbiditieComponent implements OnInit, OnDestroy {
   }
 
   registerChangeInComorbidities() {
-    this.eventSubscriber = this.eventManager.subscribe('comorbiditieListModification', response => this.reset());
+    this.eventSubscriber = this.eventManager.subscribe('comorbiditieListModification', () => this.reset());
   }
 
   sort() {

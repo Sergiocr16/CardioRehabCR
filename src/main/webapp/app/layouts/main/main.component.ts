@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRouteSnapshot, NavigationEnd, NavigationError, ActivatedRoute } from '@angular/router';
+import { Router, NavigationError, ActivatedRoute } from '@angular/router';
 import { AccountService } from 'app/core/auth/account.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
 import { LoginService } from 'app/core/login/login.service';
 
 import { LanguageHelper } from 'app/core/language/language.helper';
-import { Account } from 'app/core/user/account.model';
 import { GlobalVariablesService } from '../../shared/util/global-variables.service';
 
 @Component({
@@ -32,32 +31,29 @@ export class JhiMainComponent implements OnInit {
     private loginService: LoginService
   ) {}
 
-  private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {
+  private getPageTitle() {
     // let title: string = routeSnapshot.data && routeSnapshot.data['pageTitle'] ? routeSnapshot.data['pageTitle'] : 'cardioRehabCrApp';
     // if (routeSnapshot.firstChild) {
     //   title = this.getPageTitle(routeSnapshot.firstChild) || title;
     // }
-
     return 'RehabiCor CR';
   }
 
   ngOnInit() {
     this.loadedAccount = this.accountService.isAuthenticated();
-    this.accountService.identity().subscribe((account: Account) => {
+    this.accountService.identity().subscribe(() => {
       this.loadedAccount = true;
     });
     const breakpoints = Object.keys(Breakpoints).map(key => Breakpoints[key]);
     this.bpo
       .observe(breakpoints)
       .pipe(map(bst => bst.matches))
-      .subscribe(matched => {
+      .subscribe(() => {
         this.determineSidenavMode();
         this.determineLayoutGap();
       });
 
     this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-      }
       if (event instanceof NavigationError && event.error.status === 404) {
         this.router.navigate(['/404']);
       }

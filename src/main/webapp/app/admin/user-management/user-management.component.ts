@@ -8,9 +8,8 @@ import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { AccountService } from 'app/core/auth/account.service';
 import { UserService } from 'app/core/user/user.service';
-import { User } from 'app/core/user/user.model';
+import { IUser, User } from 'app/core/user/user.model';
 import { ModalService } from 'app/shared/util/modal.service';
-import { IComorbiditie } from 'app/shared/model/comorbiditie.model';
 
 @Component({
   selector: 'jhi-user-mgmt',
@@ -66,14 +65,14 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   }
 
   registerChangeInUsers() {
-    this.userListSubscription = this.eventManager.subscribe('userListModification', response => this.loadAll());
+    this.userListSubscription = this.eventManager.subscribe('userListModification', () => this.loadAll());
   }
 
   setActive(user, isActivated) {
     user.activated = isActivated;
 
     this.userService.update(user).subscribe(
-      response => {
+      () => {
         this.error = null;
         this.success = 'OK';
         this.loadAll();
@@ -130,11 +129,10 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 
   deleteUser(user) {
     this.modal.confirmDialog('delete', () => {
-      // @ts-ignore
       this.subscribeToSaveResponse(this.userService.delete(user.login));
     });
   }
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IComorbiditie>>) {
+  protected subscribeToSaveResponse(result: Observable<IUser>) {
     result.subscribe(
       () => this.onSaveSuccess(),
       () => this.onSaveError()

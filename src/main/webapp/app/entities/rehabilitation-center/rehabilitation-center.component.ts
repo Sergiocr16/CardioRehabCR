@@ -89,7 +89,7 @@ export class RehabilitationCenterComponent implements OnInit, OnDestroy {
   }
 
   registerChangeInRehabilitationCenters() {
-    this.eventSubscriber = this.eventManager.subscribe('rehabilitationCenterListModification', response => this.reset());
+    this.eventSubscriber = this.eventManager.subscribe('rehabilitationCenterListModification', () => this.reset());
   }
 
   sort() {

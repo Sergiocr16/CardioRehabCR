@@ -105,7 +105,7 @@ export class IncomeDiagnosisComponent implements OnInit, OnDestroy {
   }
 
   registerChangeInIncomeDiagnoses() {
-    this.eventSubscriber = this.eventManager.subscribe('incomeDiagnosisListModification', response => this.reset());
+    this.eventSubscriber = this.eventManager.subscribe('incomeDiagnosisListModification', () => this.reset());
   }
 
   sort() {

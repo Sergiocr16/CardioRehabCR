@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { LANGUAGES } from 'app/core/language/language.constants';
 import { User } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
 import { GlobalVariablesService } from 'app/shared/util/global-variables.service';
@@ -83,7 +82,7 @@ export class UserManagementUpdateComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         (res: IRehabilitationCenter[]) => (this.rehabilitationcenters = res),
-        (res: HttpErrorResponse) => this.onError(res.message)
+        (res: HttpErrorResponse) => this.onError()
       );
     this.languages = this.languageHelper.getAll();
   }
@@ -182,7 +181,7 @@ export class UserManagementUpdateComponent implements OnInit, OnDestroy {
   private onSaveSuccess(result) {
     if (this.appUser.id !== null) {
       this.appUserService.update(this.appUser).subscribe(
-        response => {
+        () => {
           this.isSaving = false;
           this.modal.message(this.modalSuccessMessage);
           this.previousState();
@@ -192,7 +191,7 @@ export class UserManagementUpdateComponent implements OnInit, OnDestroy {
     } else {
       this.appUser.userId = result.id;
       this.appUserService.create(this.appUser).subscribe(
-        response => {
+        () => {
           this.isSaving = false;
           this.modal.message(this.modalSuccessMessage);
           this.previousState();
@@ -202,9 +201,7 @@ export class UserManagementUpdateComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected onError(errorMessage: string) {
-    // this.jhiAlertService.error(errorMessage, null, null);
-  }
+  protected onError() {}
 
   private onSaveError(): void {
     this.isSaving = false;

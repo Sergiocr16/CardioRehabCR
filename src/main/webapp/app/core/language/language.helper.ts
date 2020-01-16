@@ -29,7 +29,7 @@ export class LanguageHelper {
    * 2. $state.$current.data.pageTitle (current state page title)
    * 3. 'global.title'
    */
-  updateTitle(titleKey?: string) {
+  updateTitle() {
     // if (!titleKey) {
     //   titleKey = this.getPageTitle(this.router.routerState.snapshot.root);
     // }
