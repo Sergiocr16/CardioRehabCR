@@ -1,6 +1,7 @@
 import { Injectable, RendererFactory2, Renderer2 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRouteSnapshot } from '@angular/router';
+import { LANGUAGES } from 'app/core/language/language.constants';
 // import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({ providedIn: 'root' })
