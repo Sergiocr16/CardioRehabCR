@@ -6,6 +6,7 @@ import com.aditum.cardiorehabcr.domain.PersistentAuditEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.stereotype.Repository;
@@ -27,9 +28,10 @@ public class CustomAuditEventRepository implements AuditEventRepository {
      * Should be the same as in Liquibase migration.
      */
     protected static final int EVENT_DATA_COLUMN_MAX_LENGTH = 255;
-
+    @Autowired
     private final PersistenceAuditEventRepository persistenceAuditEventRepository;
 
+    @Autowired
     private final AuditEventConverter auditEventConverter;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
