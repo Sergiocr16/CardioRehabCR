@@ -26,6 +26,8 @@
             <th scope="col"  jhiSortBy="status"><span jhiTranslate="cardioRehabCrApp.session.status">Status</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th scope="col"  jhiSortBy="deleted"><span jhiTranslate="cardioRehabCrApp.session.deleted">Deleted</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th scope="col"  jhiSortBy="currentlyWorking"><span jhiTranslate="cardioRehabCrApp.session.currentlyWorking">Currently Working</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="emergencies"><span jhiTranslate="cardioRehabCrApp.session.emergencies">Emergencies</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="emergencyHospitalization"><span jhiTranslate="cardioRehabCrApp.session.emergencyHospitalization">Emergency Hospitalization</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th scope="col"  jhiSortBy="patientId"><span jhiTranslate="cardioRehabCrApp.session.patient">Patient</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th scope="col"></th>
             </tr>
@@ -40,6 +42,8 @@
                 <td>{{session.status}}</td>
                 <td>{{session.deleted}}</td>
                 <td>{{session.currentlyWorking}}</td>
+                <td>{{session.emergencies}}</td>
+                <td>{{session.emergencyHospitalization}}</td>
                 <td>
                     <div *ngIf="session.patientId">
                         <a [routerLink]="['/patient', session.patientId , 'view' ]" >{{session.patientId}}</a>

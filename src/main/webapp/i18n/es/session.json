@@ -23,6 +23,8 @@
       "status": "Status",
       "deleted": "Deleted",
       "currentlyWorking": "Currently Working",
+      "emergencies": "Emergencies",
+      "emergencyHospitalization": "Emergency Hospitalization",
       "depressiveSymptomsSession": "Depressive Symptoms Session",
       "mayorEventsSession": "Mayor Events Session",
       "minorEventsSession": "Minor Events Session",

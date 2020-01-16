@@ -27,6 +27,10 @@ public class SessionDTO implements Serializable {
 
     private Boolean currentlyWorking;
 
+    private Boolean emergencies;
+
+    private Boolean emergencyHospitalization;
+
 
     private Long patientId;
 
@@ -94,6 +98,22 @@ public class SessionDTO implements Serializable {
         this.currentlyWorking = currentlyWorking;
     }
 
+    public Boolean isEmergencies() {
+        return emergencies;
+    }
+
+    public void setEmergencies(Boolean emergencies) {
+        this.emergencies = emergencies;
+    }
+
+    public Boolean isEmergencyHospitalization() {
+        return emergencyHospitalization;
+    }
+
+    public void setEmergencyHospitalization(Boolean emergencyHospitalization) {
+        this.emergencyHospitalization = emergencyHospitalization;
+    }
+
     public Long getPatientId() {
         return patientId;
     }
@@ -134,6 +154,8 @@ public class SessionDTO implements Serializable {
             ", status=" + getStatus() +
             ", deleted='" + isDeleted() + "'" +
             ", currentlyWorking='" + isCurrentlyWorking() + "'" +
+            ", emergencies='" + isEmergencies() + "'" +
+            ", emergencyHospitalization='" + isEmergencyHospitalization() + "'" +
             ", patientId=" + getPatientId() +
             "}";
     }

@@ -31,6 +31,8 @@ export class SessionUpdateComponent implements OnInit {
     status: [],
     deleted: [],
     currentlyWorking: [],
+    emergencies: [],
+    emergencyHospitalization: [],
     patientId: []
   });
 
@@ -66,6 +68,8 @@ export class SessionUpdateComponent implements OnInit {
       status: session.status,
       deleted: session.deleted,
       currentlyWorking: session.currentlyWorking,
+      emergencies: session.emergencies,
+      emergencyHospitalization: session.emergencyHospitalization,
       patientId: session.patientId
     });
   }
@@ -98,6 +102,8 @@ export class SessionUpdateComponent implements OnInit {
       status: this.editForm.get(['status'])!.value,
       deleted: this.editForm.get(['deleted'])!.value,
       currentlyWorking: this.editForm.get(['currentlyWorking'])!.value,
+      emergencies: this.editForm.get(['emergencies'])!.value,
+      emergencyHospitalization: this.editForm.get(['emergencyHospitalization'])!.value,
       patientId: this.editForm.get(['patientId'])!.value
     };
   }

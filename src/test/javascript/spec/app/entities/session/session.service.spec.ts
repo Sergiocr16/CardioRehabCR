@@ -24,7 +24,7 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new Session(0, 'AAAAAAA', currentDate, false, false, 0, false, false);
+      elemDefault = new Session(0, 'AAAAAAA', currentDate, false, false, 0, false, false, false, false);
     });
 
     describe('Service methods', () => {
@@ -77,7 +77,9 @@ describe('Service Tests', () => {
             hospitalization: true,
             status: 1,
             deleted: true,
-            currentlyWorking: true
+            currentlyWorking: true,
+            emergencies: true,
+            emergencyHospitalization: true
           },
           elemDefault
         );
@@ -106,7 +108,9 @@ describe('Service Tests', () => {
             hospitalization: true,
             status: 1,
             deleted: true,
-            currentlyWorking: true
+            currentlyWorking: true,
+            emergencies: true,
+            emergencyHospitalization: true
           },
           elemDefault
         );

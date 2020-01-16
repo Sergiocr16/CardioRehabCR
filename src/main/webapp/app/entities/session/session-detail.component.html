@@ -33,6 +33,14 @@
                 <dd>
                     <span>{{session.currentlyWorking}}</span>
                 </dd>
+                <dt><span jhiTranslate="cardioRehabCrApp.session.emergencies">Emergencies</span></dt>
+                <dd>
+                    <span>{{session.emergencies}}</span>
+                </dd>
+                <dt><span jhiTranslate="cardioRehabCrApp.session.emergencyHospitalization">Emergency Hospitalization</span></dt>
+                <dd>
+                    <span>{{session.emergencyHospitalization}}</span>
+                </dd>
                 <dt><span jhiTranslate="cardioRehabCrApp.session.patient">Patient</span></dt>
                 <dd>
                     <div *ngIf="session.patientId">

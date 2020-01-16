@@ -1,2 +1,11 @@
-id;code;execution_date;abscence;hospitalization;status;deleted;currently_working
-1;Administrator Home Rest;2020-01-16T13:59:51;true;true;41924;false;false
+id;code;execution_date;abscence;hospitalization;status;deleted;currently_working;emergencies;emergency_hospitalization
+1;Administrator Home Rest;2020-01-16T13:59:51;true;true;41924;false;false;true;false
+2;Massachusetts Nevada;2020-01-16T17:48:13;false;true;27370;false;false;true;true
+3;Kids Rubber;2020-01-16T21:19:51;false;false;33282;true;false;true;true
+4;Drive Associate;2020-01-16T04:13:07;false;false;37229;true;true;false;false
+5;Handmade;2020-01-16T01:43:17;true;true;64196;true;false;true;true
+6;navigating Right-sized;2020-01-16T05:36:57;false;false;9826;true;true;false;true
+7;card Intuitive Incredible;2020-01-16T19:52:37;true;false;44612;false;true;false;false
+8;Stand-alone FTP white;2020-01-16T12:44:54;true;true;68376;true;false;true;false
+9;black;2020-01-16T03:52:30;false;true;24648;true;false;true;false
+10;open-source Unbranded National;2020-01-16T00:15:36;false;false;18358;true;true;true;true

@@ -59,6 +59,12 @@ public class SessionResourceIT {
     private static final Boolean DEFAULT_CURRENTLY_WORKING = false;
     private static final Boolean UPDATED_CURRENTLY_WORKING = true;
 
+    private static final Boolean DEFAULT_EMERGENCIES = false;
+    private static final Boolean UPDATED_EMERGENCIES = true;
+
+    private static final Boolean DEFAULT_EMERGENCY_HOSPITALIZATION = false;
+    private static final Boolean UPDATED_EMERGENCY_HOSPITALIZATION = true;
+
     @Autowired
     private SessionRepository sessionRepository;
 
@@ -113,7 +119,9 @@ public class SessionResourceIT {
             .hospitalization(DEFAULT_HOSPITALIZATION)
             .status(DEFAULT_STATUS)
             .deleted(DEFAULT_DELETED)
-            .currentlyWorking(DEFAULT_CURRENTLY_WORKING);
+            .currentlyWorking(DEFAULT_CURRENTLY_WORKING)
+            .emergencies(DEFAULT_EMERGENCIES)
+            .emergencyHospitalization(DEFAULT_EMERGENCY_HOSPITALIZATION);
         return session;
     }
     /**
@@ -130,7 +138,9 @@ public class SessionResourceIT {
             .hospitalization(UPDATED_HOSPITALIZATION)
             .status(UPDATED_STATUS)
             .deleted(UPDATED_DELETED)
-            .currentlyWorking(UPDATED_CURRENTLY_WORKING);
+            .currentlyWorking(UPDATED_CURRENTLY_WORKING)
+            .emergencies(UPDATED_EMERGENCIES)
+            .emergencyHospitalization(UPDATED_EMERGENCY_HOSPITALIZATION);
         return session;
     }
 
@@ -162,6 +172,8 @@ public class SessionResourceIT {
         assertThat(testSession.getStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testSession.isDeleted()).isEqualTo(DEFAULT_DELETED);
         assertThat(testSession.isCurrentlyWorking()).isEqualTo(DEFAULT_CURRENTLY_WORKING);
+        assertThat(testSession.isEmergencies()).isEqualTo(DEFAULT_EMERGENCIES);
+        assertThat(testSession.isEmergencyHospitalization()).isEqualTo(DEFAULT_EMERGENCY_HOSPITALIZATION);
     }
 
     @Test
@@ -240,7 +252,9 @@ public class SessionResourceIT {
             .andExpect(jsonPath("$.[*].hospitalization").value(hasItem(DEFAULT_HOSPITALIZATION.booleanValue())))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
             .andExpect(jsonPath("$.[*].deleted").value(hasItem(DEFAULT_DELETED.booleanValue())))
-            .andExpect(jsonPath("$.[*].currentlyWorking").value(hasItem(DEFAULT_CURRENTLY_WORKING.booleanValue())));
+            .andExpect(jsonPath("$.[*].currentlyWorking").value(hasItem(DEFAULT_CURRENTLY_WORKING.booleanValue())))
+            .andExpect(jsonPath("$.[*].emergencies").value(hasItem(DEFAULT_EMERGENCIES.booleanValue())))
+            .andExpect(jsonPath("$.[*].emergencyHospitalization").value(hasItem(DEFAULT_EMERGENCY_HOSPITALIZATION.booleanValue())));
     }
     
     @Test
@@ -260,7 +274,9 @@ public class SessionResourceIT {
             .andExpect(jsonPath("$.hospitalization").value(DEFAULT_HOSPITALIZATION.booleanValue()))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS))
             .andExpect(jsonPath("$.deleted").value(DEFAULT_DELETED.booleanValue()))
-            .andExpect(jsonPath("$.currentlyWorking").value(DEFAULT_CURRENTLY_WORKING.booleanValue()));
+            .andExpect(jsonPath("$.currentlyWorking").value(DEFAULT_CURRENTLY_WORKING.booleanValue()))
+            .andExpect(jsonPath("$.emergencies").value(DEFAULT_EMERGENCIES.booleanValue()))
+            .andExpect(jsonPath("$.emergencyHospitalization").value(DEFAULT_EMERGENCY_HOSPITALIZATION.booleanValue()));
     }
 
     @Test
@@ -290,7 +306,9 @@ public class SessionResourceIT {
             .hospitalization(UPDATED_HOSPITALIZATION)
             .status(UPDATED_STATUS)
             .deleted(UPDATED_DELETED)
-            .currentlyWorking(UPDATED_CURRENTLY_WORKING);
+            .currentlyWorking(UPDATED_CURRENTLY_WORKING)
+            .emergencies(UPDATED_EMERGENCIES)
+            .emergencyHospitalization(UPDATED_EMERGENCY_HOSPITALIZATION);
         SessionDTO sessionDTO = sessionMapper.toDto(updatedSession);
 
         restSessionMockMvc.perform(put("/api/sessions")
@@ -309,6 +327,8 @@ public class SessionResourceIT {
         assertThat(testSession.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testSession.isDeleted()).isEqualTo(UPDATED_DELETED);
         assertThat(testSession.isCurrentlyWorking()).isEqualTo(UPDATED_CURRENTLY_WORKING);
+        assertThat(testSession.isEmergencies()).isEqualTo(UPDATED_EMERGENCIES);
+        assertThat(testSession.isEmergencyHospitalization()).isEqualTo(UPDATED_EMERGENCY_HOSPITALIZATION);
     }
 
     @Test

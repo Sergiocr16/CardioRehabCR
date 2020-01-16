@@ -37,6 +37,12 @@
             <column name="currently_working" type="boolean">
                 <constraints nullable="true" />
             </column>
+            <column name="emergencies" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="emergency_hospitalization" type="boolean">
+                <constraints nullable="true" />
+            </column>
             <column name="patient_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -71,6 +77,8 @@
             <column name="status" type="numeric"/>
             <column name="deleted" type="boolean"/>
             <column name="currently_working" type="boolean"/>
+            <column name="emergencies" type="boolean"/>
+            <column name="emergency_hospitalization" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

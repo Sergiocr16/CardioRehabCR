@@ -45,6 +45,12 @@ public class Session implements Serializable {
     @Column(name = "currently_working")
     private Boolean currentlyWorking;
 
+    @Column(name = "emergencies")
+    private Boolean emergencies;
+
+    @Column(name = "emergency_hospitalization")
+    private Boolean emergencyHospitalization;
+
     @OneToMany(mappedBy = "session")
     private Set<DepressiveSymptomsSession> depressiveSymptomsSessions = new HashSet<>();
 
@@ -159,6 +165,32 @@ public class Session implements Serializable {
 
     public void setCurrentlyWorking(Boolean currentlyWorking) {
         this.currentlyWorking = currentlyWorking;
+    }
+
+    public Boolean isEmergencies() {
+        return emergencies;
+    }
+
+    public Session emergencies(Boolean emergencies) {
+        this.emergencies = emergencies;
+        return this;
+    }
+
+    public void setEmergencies(Boolean emergencies) {
+        this.emergencies = emergencies;
+    }
+
+    public Boolean isEmergencyHospitalization() {
+        return emergencyHospitalization;
+    }
+
+    public Session emergencyHospitalization(Boolean emergencyHospitalization) {
+        this.emergencyHospitalization = emergencyHospitalization;
+        return this;
+    }
+
+    public void setEmergencyHospitalization(Boolean emergencyHospitalization) {
+        this.emergencyHospitalization = emergencyHospitalization;
     }
 
     public Set<DepressiveSymptomsSession> getDepressiveSymptomsSessions() {
@@ -302,6 +334,8 @@ public class Session implements Serializable {
             ", status=" + getStatus() +
             ", deleted='" + isDeleted() + "'" +
             ", currentlyWorking='" + isCurrentlyWorking() + "'" +
+            ", emergencies='" + isEmergencies() + "'" +
+            ", emergencyHospitalization='" + isEmergencyHospitalization() + "'" +
             "}";
     }
 }
