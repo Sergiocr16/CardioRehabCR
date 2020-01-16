@@ -16,11 +16,11 @@
       "detail": {
         "title": "Patient"
       },
-      "code": "Code",
-      "age": "Age",
-      "sex": "Sex",
-      "ocupation": "Ocupation",
-      "lastEventOcurred": "Last Event Ocurred",
+      "code": "Código",
+      "age": "Edad",
+      "sex": "Sexo",
+      "ocupation": "Ocupación",
+      "lastEventOcurred": "Tiempo del último evento coronario previo",
       "deceased": "Deceased",
       "abandonment": "Abandonment",
       "abandonmentMedicCause": "Abandonment Medic Cause",
@@ -30,7 +30,8 @@
       "initialAssessment": "Initial Assessment",
       "finalAssessment": "Final Assessment",
       "session": "Session",
-      "rehabilitationGroup": "Rehabilitation Group"
+      "rehabilitationGroup": "Rehabilitation Group",
+      "scholarship": "Escolaridad"
     }
   }
 }

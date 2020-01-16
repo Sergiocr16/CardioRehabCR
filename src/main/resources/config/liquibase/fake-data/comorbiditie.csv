@@ -1,11 +1,10 @@
-id;description;deleted
-1;Designer;false
-2;circuit Guam;true
-3;Liaison;true
-4;generating SDD bypassing;false
-5;Centralized revolutionize International;false
-6;Avon;false
-7;Maine PCI SAS;false
-8;Principal Pennsylvania dynamic;true
-9;Buckinghamshire;false
-10;system Triple-buffered;false
+id;description;deleted;rehabilitation_center_id
+1;HTA;false;1
+2;EPOC/ASMA ;false;1
+3;Insuficiencia Arterial Periférica ;false;1
+4;DM;false;1
+5;Obesidad;false;1
+6;Dislipidemia;false;1
+7;Alteraciones articulares;false;1
+8;Cardiopatía valvular;false;1
+9;Anticoagulación;false;1

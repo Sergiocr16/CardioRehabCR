@@ -1,7 +1,7 @@
 import { Injectable, RendererFactory2, Renderer2 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRouteSnapshot } from '@angular/router';
-import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+// import { TranslateService } from '@ngx-translate/core';
 
 import { LANGUAGES } from 'app/core/language/language.constants';
 
@@ -10,7 +10,7 @@ export class JhiLanguageHelper {
   private renderer: Renderer2 = null;
 
   constructor(
-    private translateService: TranslateService,
+    // private translateService: TranslateService,
     private titleService: Title,
     private router: Router,
     rootRenderer: RendererFactory2
@@ -31,20 +31,20 @@ export class JhiLanguageHelper {
    * 3. 'global.title'
    */
   updateTitle(titleKey?: string) {
-    if (!titleKey) {
-      titleKey = this.getPageTitle(this.router.routerState.snapshot.root);
-    }
+    // if (!titleKey) {
+    //   titleKey = this.getPageTitle(this.router.routerState.snapshot.root);
+    // }
 
-    this.translateService.get(titleKey).subscribe(title => {
-      this.titleService.setTitle(title);
-    });
+    // this.translateService.get(titleKey).subscribe(title => {
+    this.titleService.setTitle('RehabiCor CR');
+    // });
   }
 
   private init() {
-    this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
-      this.renderer.setAttribute(document.querySelector('html'), 'lang', this.translateService.currentLang);
-      this.updateTitle();
-    });
+    // this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+    //   this.renderer.setAttribute(document.querySelector('html'), 'lang', this.translateService.currentLang);
+    this.updateTitle();
+    // });
   }
 
   private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {

@@ -1,4 +1,5 @@
 package com.aditum.cardiorehabcr.service.dto;
+import java.time.ZonedDateTime;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -38,6 +39,10 @@ public class FinalAssessmentDTO implements Serializable {
     private Boolean hospitalized;
 
     private Boolean deleted;
+
+    private Boolean reevaluation;
+
+    private ZonedDateTime executionDate;
 
 
     private Long patientId;
@@ -170,6 +175,22 @@ public class FinalAssessmentDTO implements Serializable {
         this.deleted = deleted;
     }
 
+    public Boolean isReevaluation() {
+        return reevaluation;
+    }
+
+    public void setReevaluation(Boolean reevaluation) {
+        this.reevaluation = reevaluation;
+    }
+
+    public ZonedDateTime getExecutionDate() {
+        return executionDate;
+    }
+
+    public void setExecutionDate(ZonedDateTime executionDate) {
+        this.executionDate = executionDate;
+    }
+
     public Long getPatientId() {
         return patientId;
     }
@@ -218,6 +239,8 @@ public class FinalAssessmentDTO implements Serializable {
             ", abandonmentMedicCause='" + isAbandonmentMedicCause() + "'" +
             ", hospitalized='" + isHospitalized() + "'" +
             ", deleted='" + isDeleted() + "'" +
+            ", reevaluation='" + isReevaluation() + "'" +
+            ", executionDate='" + getExecutionDate() + "'" +
             ", patient=" + getPatientId() +
             "}";
     }

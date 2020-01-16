@@ -55,9 +55,9 @@ public class DepressiveSymptomServiceImpl implements DepressiveSymptomService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<DepressiveSymptomDTO> findAll(Pageable pageable) {
+    public Page<DepressiveSymptomDTO> findAll(Pageable pageable, Long rehabilitationId) {
         log.debug("Request to get all DepressiveSymptoms");
-        return depressiveSymptomRepository.findAll(pageable)
+        return depressiveSymptomRepository.findByRehabilitationCenterIdAndAndDeleted(pageable,rehabilitationId, false)
             .map(depressiveSymptomMapper::toDto);
     }
 

@@ -3,6 +3,7 @@ package com.aditum.cardiorehabcr.service.impl;
 import com.aditum.cardiorehabcr.service.SessionService;
 import com.aditum.cardiorehabcr.domain.Session;
 import com.aditum.cardiorehabcr.repository.SessionRepository;
+import com.aditum.cardiorehabcr.service.dto.NonSpecificPainsSessionDTO;
 import com.aditum.cardiorehabcr.service.dto.SessionDTO;
 import com.aditum.cardiorehabcr.service.mapper.SessionMapper;
 import org.slf4j.Logger;
@@ -28,9 +29,22 @@ public class SessionServiceImpl implements SessionService {
 
     private final SessionMapper sessionMapper;
 
-    public SessionServiceImpl(SessionRepository sessionRepository, SessionMapper sessionMapper) {
+    private final DepressiveSymptomsSessionServiceImpl depressiveSymptomService;
+
+    private final MinorEventsSessionServiceImpl minorEventService;
+
+    private final MayorEventsSessionServiceImpl mayorEventService;
+
+    private final NonSpecificPainsSessionServiceImpl nonSpecificPainService;
+
+    public SessionServiceImpl(NonSpecificPainsSessionServiceImpl nonSpecificPainService, MayorEventsSessionServiceImpl mayorEventService, MinorEventsSessionServiceImpl minorEventService, DepressiveSymptomsSessionServiceImpl depressiveSymptomService, SessionRepository sessionRepository, SessionMapper sessionMapper) {
         this.sessionRepository = sessionRepository;
         this.sessionMapper = sessionMapper;
+        this.depressiveSymptomService = depressiveSymptomService;
+        this.mayorEventService = mayorEventService;
+        this.minorEventService = minorEventService;
+        this.nonSpecificPainService = nonSpecificPainService;
+
     }
 
     /**
@@ -44,6 +58,23 @@ public class SessionServiceImpl implements SessionService {
         log.debug("Request to save Session : {}", sessionDTO);
         Session session = sessionMapper.toEntity(sessionDTO);
         session = sessionRepository.save(session);
+        Session finalSession = session;
+        sessionDTO.getDepressiveSymptomsSessions().forEach(depressiveSymptomsSessionDTO -> {
+             depressiveSymptomsSessionDTO.setSessionId(finalSession.getId());
+             this.depressiveSymptomService.save(depressiveSymptomsSessionDTO);
+         });
+        sessionDTO.getMayorEventsSessions().forEach(mayorEventsSessionDTO -> {
+            mayorEventsSessionDTO.setSessionId(finalSession.getId());
+            this.mayorEventService.save(mayorEventsSessionDTO);
+        });
+        sessionDTO.getMinorEventsSessions().forEach(minorEventsSessionDTO -> {
+            minorEventsSessionDTO.setSessionId(finalSession.getId());
+            this.minorEventService.save(minorEventsSessionDTO);
+        });
+        sessionDTO.getNonSpecificPainsSessions().forEach(nonSpecificPainsSessionDTO -> {
+            nonSpecificPainsSessionDTO.setSessionId(finalSession.getId());
+            this.nonSpecificPainService.save(nonSpecificPainsSessionDTO);
+        });
         return sessionMapper.toDto(session);
     }
 
@@ -58,6 +89,13 @@ public class SessionServiceImpl implements SessionService {
     public Page<SessionDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Sessions");
         return sessionRepository.findAll(pageable)
+            .map(sessionMapper::toDto);
+    }
+    @Override
+    @Transactional(readOnly = true)
+    public Page<SessionDTO> findAllByPatient(Pageable pageable,Long patientId) {
+        log.debug("Request to get all Sessions");
+        return sessionRepository.findAllByPatientId(pageable, patientId)
             .map(sessionMapper::toDto);
     }
 

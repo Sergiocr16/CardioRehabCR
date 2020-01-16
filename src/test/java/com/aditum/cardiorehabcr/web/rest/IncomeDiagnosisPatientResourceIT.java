@@ -5,6 +5,7 @@ import com.aditum.cardiorehabcr.domain.IncomeDiagnosisPatient;
 import com.aditum.cardiorehabcr.repository.IncomeDiagnosisPatientRepository;
 import com.aditum.cardiorehabcr.service.IncomeDiagnosisPatientService;
 import com.aditum.cardiorehabcr.service.dto.IncomeDiagnosisPatientDTO;
+import com.aditum.cardiorehabcr.service.impl.IncomeDiagnosisPatientServiceImpl;
 import com.aditum.cardiorehabcr.service.mapper.IncomeDiagnosisPatientMapper;
 import com.aditum.cardiorehabcr.web.rest.errors.ExceptionTranslator;
 
@@ -52,7 +53,7 @@ public class IncomeDiagnosisPatientResourceIT {
     private IncomeDiagnosisPatientMapper incomeDiagnosisPatientMapper;
 
     @Autowired
-    private IncomeDiagnosisPatientService incomeDiagnosisPatientService;
+    private IncomeDiagnosisPatientServiceImpl incomeDiagnosisPatientService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -212,7 +213,7 @@ public class IncomeDiagnosisPatientResourceIT {
             .andExpect(jsonPath("$.[*].incomeDiagnosisId").value(hasItem(DEFAULT_INCOME_DIAGNOSIS_ID.intValue())))
             .andExpect(jsonPath("$.[*].exist").value(hasItem(DEFAULT_EXIST.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getIncomeDiagnosisPatient() throws Exception {

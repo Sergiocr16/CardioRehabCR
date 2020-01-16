@@ -5,6 +5,7 @@ import com.aditum.cardiorehabcr.domain.DepressiveSymptomsSession;
 import com.aditum.cardiorehabcr.repository.DepressiveSymptomsSessionRepository;
 import com.aditum.cardiorehabcr.service.DepressiveSymptomsSessionService;
 import com.aditum.cardiorehabcr.service.dto.DepressiveSymptomsSessionDTO;
+import com.aditum.cardiorehabcr.service.impl.DepressiveSymptomsSessionServiceImpl;
 import com.aditum.cardiorehabcr.service.mapper.DepressiveSymptomsSessionMapper;
 import com.aditum.cardiorehabcr.web.rest.errors.ExceptionTranslator;
 
@@ -52,7 +53,7 @@ public class DepressiveSymptomsSessionResourceIT {
     private DepressiveSymptomsSessionMapper depressiveSymptomsSessionMapper;
 
     @Autowired
-    private DepressiveSymptomsSessionService depressiveSymptomsSessionService;
+    private DepressiveSymptomsSessionServiceImpl depressiveSymptomsSessionService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -212,7 +213,7 @@ public class DepressiveSymptomsSessionResourceIT {
             .andExpect(jsonPath("$.[*].depressiveSymptomId").value(hasItem(DEFAULT_DEPRESSIVE_SYMPTOM_ID.intValue())))
             .andExpect(jsonPath("$.[*].exist").value(hasItem(DEFAULT_EXIST.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getDepressiveSymptomsSession() throws Exception {

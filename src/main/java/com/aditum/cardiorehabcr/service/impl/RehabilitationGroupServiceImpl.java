@@ -1,5 +1,6 @@
 package com.aditum.cardiorehabcr.service.impl;
 
+import com.aditum.cardiorehabcr.service.PanelDataService;
 import com.aditum.cardiorehabcr.service.RehabilitationGroupService;
 import com.aditum.cardiorehabcr.domain.RehabilitationGroup;
 import com.aditum.cardiorehabcr.repository.RehabilitationGroupRepository;
@@ -8,6 +9,7 @@ import com.aditum.cardiorehabcr.service.mapper.RehabilitationGroupMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,9 +30,12 @@ public class RehabilitationGroupServiceImpl implements RehabilitationGroupServic
 
     private final RehabilitationGroupMapper rehabilitationGroupMapper;
 
-    public RehabilitationGroupServiceImpl(RehabilitationGroupRepository rehabilitationGroupRepository, RehabilitationGroupMapper rehabilitationGroupMapper) {
+    private final PanelDataService panelDataService;
+
+    public RehabilitationGroupServiceImpl(@Lazy PanelDataService panelDataService, RehabilitationGroupRepository rehabilitationGroupRepository, RehabilitationGroupMapper rehabilitationGroupMapper) {
         this.rehabilitationGroupRepository = rehabilitationGroupRepository;
         this.rehabilitationGroupMapper = rehabilitationGroupMapper;
+        this.panelDataService = panelDataService;
     }
 
     /**
@@ -55,9 +60,9 @@ public class RehabilitationGroupServiceImpl implements RehabilitationGroupServic
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<RehabilitationGroupDTO> findAll(Pageable pageable) {
+    public Page<RehabilitationGroupDTO> findAll(Pageable pageable, Long rehabilitationId) {
         log.debug("Request to get all RehabilitationGroups");
-        return rehabilitationGroupRepository.findAll(pageable)
+        return rehabilitationGroupRepository.findByRehabilitationCenterIdAndAndDeleted(pageable,rehabilitationId,false)
             .map(rehabilitationGroupMapper::toDto);
     }
 
@@ -69,7 +74,7 @@ public class RehabilitationGroupServiceImpl implements RehabilitationGroupServic
     public Page<RehabilitationGroupDTO> findAllWithEagerRelationships(Pageable pageable) {
         return rehabilitationGroupRepository.findAllWithEagerRelationships(pageable).map(rehabilitationGroupMapper::toDto);
     }
-    
+
 
     /**
      * Get one rehabilitationGroup by id.
@@ -82,7 +87,11 @@ public class RehabilitationGroupServiceImpl implements RehabilitationGroupServic
     public Optional<RehabilitationGroupDTO> findOne(Long id) {
         log.debug("Request to get RehabilitationGroup : {}", id);
         return rehabilitationGroupRepository.findOneWithEagerRelationships(id)
-            .map(rehabilitationGroupMapper::toDto);
+            .map(rehabilitationGroup -> {
+                RehabilitationGroupDTO rehabilitationGroupDTO =rehabilitationGroupMapper.toDto(rehabilitationGroup);
+                rehabilitationGroupDTO.setPanelData(this.panelDataService.calculatePanelDataPerGroup(rehabilitationGroupDTO));
+                return  rehabilitationGroupDTO;
+            });
     }
 
     /**

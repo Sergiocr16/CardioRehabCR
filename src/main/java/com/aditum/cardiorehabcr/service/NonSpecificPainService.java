@@ -26,7 +26,7 @@ public interface NonSpecificPainService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<NonSpecificPainDTO> findAll(Pageable pageable);
+    Page<NonSpecificPainDTO> findAll(Pageable pageable, Long rehabilitationId);
 
 
     /**

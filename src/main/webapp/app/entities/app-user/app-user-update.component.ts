@@ -13,6 +13,7 @@ import { IUser } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
 import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
 import { RehabilitationCenterService } from 'app/entities/rehabilitation-center/rehabilitation-center.service';
+import { ModalService } from 'app/shared/util/modal.service';
 
 @Component({
   selector: 'jhi-app-user-update',
@@ -41,7 +42,8 @@ export class AppUserUpdateComponent implements OnInit {
     protected userService: UserService,
     protected rehabilitationCenterService: RehabilitationCenterService,
     protected activatedRoute: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private modal: ModalService
   ) {}
 
   ngOnInit() {

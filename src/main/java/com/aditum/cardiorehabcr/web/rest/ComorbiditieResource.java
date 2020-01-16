@@ -1,6 +1,7 @@
 package com.aditum.cardiorehabcr.web.rest;
 
 import com.aditum.cardiorehabcr.service.ComorbiditieService;
+import com.aditum.cardiorehabcr.service.impl.ComorbiditieServiceImpl;
 import com.aditum.cardiorehabcr.web.rest.errors.BadRequestAlertException;
 import com.aditum.cardiorehabcr.service.dto.ComorbiditieDTO;
 
@@ -39,9 +40,9 @@ public class ComorbiditieResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ComorbiditieService comorbiditieService;
+    private final ComorbiditieServiceImpl comorbiditieService;
 
-    public ComorbiditieResource(ComorbiditieService comorbiditieService) {
+    public ComorbiditieResource(ComorbiditieServiceImpl comorbiditieService) {
         this.comorbiditieService = comorbiditieService;
     }
 
@@ -94,12 +95,13 @@ public class ComorbiditieResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of comorbidities in body.
      */
     @GetMapping("/comorbidities")
-    public ResponseEntity<List<ComorbiditieDTO>> getAllComorbidities(Pageable pageable) {
+    public ResponseEntity<List<ComorbiditieDTO>> getAllComorbidities(Pageable pageable, Long rehabilitationId) {
         log.debug("REST request to get a page of Comorbidities");
-        Page<ComorbiditieDTO> page = comorbiditieService.findAll(pageable);
+        Page<ComorbiditieDTO> page = comorbiditieService.findAll(pageable,rehabilitationId);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
+
 
     /**
      * {@code GET  /comorbidities/:id} : get the "id" comorbiditie.

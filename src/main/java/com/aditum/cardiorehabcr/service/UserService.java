@@ -1,13 +1,16 @@
 package com.aditum.cardiorehabcr.service;
 
 import com.aditum.cardiorehabcr.config.Constants;
+import com.aditum.cardiorehabcr.domain.AppUser;
 import com.aditum.cardiorehabcr.domain.Authority;
 import com.aditum.cardiorehabcr.domain.User;
 import com.aditum.cardiorehabcr.repository.AuthorityRepository;
 import com.aditum.cardiorehabcr.repository.UserRepository;
 import com.aditum.cardiorehabcr.security.AuthoritiesConstants;
 import com.aditum.cardiorehabcr.security.SecurityUtils;
+import com.aditum.cardiorehabcr.service.dto.AppUserDTO;
 import com.aditum.cardiorehabcr.service.dto.UserDTO;
+import com.aditum.cardiorehabcr.service.impl.AppUserServiceImpl;
 import com.aditum.cardiorehabcr.service.util.RandomUtil;
 
 import org.slf4j.Logger;
@@ -42,7 +45,10 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, CacheManager cacheManager) {
+    private final AppUserServiceImpl appUserService;
+
+    public UserService(AppUserServiceImpl appUserService,UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, CacheManager cacheManager) {
+        this.appUserService = appUserService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
@@ -222,6 +228,10 @@ public class UserService {
 
     public void deleteUser(String login) {
         userRepository.findOneByLogin(login).ifPresent(user -> {
+            Optional<AppUserDTO> appUser = this.appUserService.findOneByUserId(user.getId());
+            if(appUser.isPresent()){
+                this.appUserService.delete(appUser.get().getId());
+            }
             userRepository.delete(user);
             this.clearUserCaches(user);
             log.debug("Deleted User: {}", user);

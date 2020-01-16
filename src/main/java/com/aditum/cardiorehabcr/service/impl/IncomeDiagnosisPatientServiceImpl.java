@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -42,7 +44,12 @@ public class IncomeDiagnosisPatientServiceImpl implements IncomeDiagnosisPatient
     @Override
     public IncomeDiagnosisPatientDTO save(IncomeDiagnosisPatientDTO incomeDiagnosisPatientDTO) {
         log.debug("Request to save IncomeDiagnosisPatient : {}", incomeDiagnosisPatientDTO);
+
         IncomeDiagnosisPatient incomeDiagnosisPatient = incomeDiagnosisPatientMapper.toEntity(incomeDiagnosisPatientDTO);
+        Optional<IncomeDiagnosisPatient> incomeDiagnosisPatientOld = incomeDiagnosisPatientRepository.findFirstByInitialAssessmentIdAndIncomeDiagnosisId(incomeDiagnosisPatientDTO.getInitialAssessmentId(),incomeDiagnosisPatientDTO.getIncomeDiagnosisId());
+        if(incomeDiagnosisPatientOld.isPresent()){
+            this.delete(incomeDiagnosisPatientOld.get().getId());
+        }
         incomeDiagnosisPatient = incomeDiagnosisPatientRepository.save(incomeDiagnosisPatient);
         return incomeDiagnosisPatientMapper.toDto(incomeDiagnosisPatient);
     }
@@ -75,7 +82,15 @@ public class IncomeDiagnosisPatientServiceImpl implements IncomeDiagnosisPatient
         return incomeDiagnosisPatientRepository.findById(id)
             .map(incomeDiagnosisPatientMapper::toDto);
     }
-
+    @Transactional(readOnly = true)
+    public List<IncomeDiagnosisPatientDTO> findAllByInitialAsessment(Long initialAsessmentId) {
+        log.debug("Request to get all ComorbiditiesPatients");
+        List<IncomeDiagnosisPatientDTO> formatedIncomeDiagnosis= new ArrayList<>();
+        incomeDiagnosisPatientRepository.findByInitialAssessmentId(initialAsessmentId).forEach(incomeDiagnosisPatient -> {
+            formatedIncomeDiagnosis.add(this.incomeDiagnosisPatientMapper.toDto(incomeDiagnosisPatient));
+        });
+        return formatedIncomeDiagnosis;
+    }
     /**
      * Delete the incomeDiagnosisPatient by id.
      *

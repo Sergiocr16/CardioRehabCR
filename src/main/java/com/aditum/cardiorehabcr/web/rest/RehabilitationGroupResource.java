@@ -1,6 +1,7 @@
 package com.aditum.cardiorehabcr.web.rest;
 
 import com.aditum.cardiorehabcr.service.RehabilitationGroupService;
+import com.aditum.cardiorehabcr.service.impl.RehabilitationGroupServiceImpl;
 import com.aditum.cardiorehabcr.web.rest.errors.BadRequestAlertException;
 import com.aditum.cardiorehabcr.service.dto.RehabilitationGroupDTO;
 
@@ -39,9 +40,9 @@ public class RehabilitationGroupResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final RehabilitationGroupService rehabilitationGroupService;
+    private final RehabilitationGroupServiceImpl rehabilitationGroupService;
 
-    public RehabilitationGroupResource(RehabilitationGroupService rehabilitationGroupService) {
+    public RehabilitationGroupResource(RehabilitationGroupServiceImpl rehabilitationGroupService) {
         this.rehabilitationGroupService = rehabilitationGroupService;
     }
 
@@ -94,13 +95,13 @@ public class RehabilitationGroupResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of rehabilitationGroups in body.
      */
     @GetMapping("/rehabilitation-groups")
-    public ResponseEntity<List<RehabilitationGroupDTO>> getAllRehabilitationGroups(Pageable pageable, @RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public ResponseEntity<List<RehabilitationGroupDTO>> getAllRehabilitationGroups(Pageable pageable, @RequestParam(required = false, defaultValue = "false") boolean eagerload,Long rehabilitationId) {
         log.debug("REST request to get a page of RehabilitationGroups");
         Page<RehabilitationGroupDTO> page;
         if (eagerload) {
             page = rehabilitationGroupService.findAllWithEagerRelationships(pageable);
         } else {
-            page = rehabilitationGroupService.findAll(pageable);
+            page = rehabilitationGroupService.findAll(pageable,rehabilitationId);
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());

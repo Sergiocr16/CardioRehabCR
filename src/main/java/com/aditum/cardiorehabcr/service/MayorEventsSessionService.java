@@ -28,6 +28,9 @@ public interface MayorEventsSessionService {
      */
     Page<MayorEventsSessionDTO> findAll(Pageable pageable);
 
+    Page<MayorEventsSessionDTO> findAllBySession(Pageable pageable, Long sessionId);
+
+
 
     /**
      * Get the "id" mayorEventsSession.

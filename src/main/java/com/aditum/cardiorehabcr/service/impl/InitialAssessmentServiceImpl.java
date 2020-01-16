@@ -75,7 +75,18 @@ public class InitialAssessmentServiceImpl implements InitialAssessmentService {
         return initialAssessmentRepository.findById(id)
             .map(initialAssessmentMapper::toDto);
     }
-
+    /**
+     * Get one initialAssessment by id.
+     *
+     * @param patientId the id of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<InitialAssessmentDTO> findOneByPatient(Long patientId) {
+        log.debug("Request to get InitialAssessment : {}", patientId);
+        return initialAssessmentRepository.findByPatientId(patientId)
+            .map(initialAssessmentMapper::toDto);
+    }
     /**
      * Delete the initialAssessment by id.
      *

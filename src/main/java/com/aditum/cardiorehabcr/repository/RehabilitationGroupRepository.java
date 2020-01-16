@@ -25,4 +25,7 @@ public interface RehabilitationGroupRepository extends JpaRepository<Rehabilitat
     @Query("select rehabilitationGroup from RehabilitationGroup rehabilitationGroup left join fetch rehabilitationGroup.patients where rehabilitationGroup.id =:id")
     Optional<RehabilitationGroup> findOneWithEagerRelationships(@Param("id") Long id);
 
+    Page<RehabilitationGroup> findByRehabilitationCenterIdAndAndDeleted(Pageable pageable, Long rehabilitationId,Boolean deleted);
+
+
 }

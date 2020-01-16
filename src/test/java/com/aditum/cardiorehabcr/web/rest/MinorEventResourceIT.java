@@ -5,6 +5,7 @@ import com.aditum.cardiorehabcr.domain.MinorEvent;
 import com.aditum.cardiorehabcr.repository.MinorEventRepository;
 import com.aditum.cardiorehabcr.service.MinorEventService;
 import com.aditum.cardiorehabcr.service.dto.MinorEventDTO;
+import com.aditum.cardiorehabcr.service.impl.MinorEventServiceImpl;
 import com.aditum.cardiorehabcr.service.mapper.MinorEventMapper;
 import com.aditum.cardiorehabcr.web.rest.errors.ExceptionTranslator;
 
@@ -52,7 +53,7 @@ public class MinorEventResourceIT {
     private MinorEventMapper minorEventMapper;
 
     @Autowired
-    private MinorEventService minorEventService;
+    private MinorEventServiceImpl minorEventService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -193,7 +194,7 @@ public class MinorEventResourceIT {
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].deleted").value(hasItem(DEFAULT_DELETED.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getMinorEvent() throws Exception {

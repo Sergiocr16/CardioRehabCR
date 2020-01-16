@@ -5,6 +5,7 @@ import com.aditum.cardiorehabcr.domain.InitialAssessment;
 import com.aditum.cardiorehabcr.repository.InitialAssessmentRepository;
 import com.aditum.cardiorehabcr.service.InitialAssessmentService;
 import com.aditum.cardiorehabcr.service.dto.InitialAssessmentDTO;
+import com.aditum.cardiorehabcr.service.impl.InitialAssessmentServiceImpl;
 import com.aditum.cardiorehabcr.service.mapper.InitialAssessmentMapper;
 import com.aditum.cardiorehabcr.web.rest.errors.ExceptionTranslator;
 
@@ -73,7 +74,7 @@ public class InitialAssessmentResourceIT {
     private InitialAssessmentMapper initialAssessmentMapper;
 
     @Autowired
-    private InitialAssessmentService initialAssessmentService;
+    private InitialAssessmentServiceImpl initialAssessmentService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -299,7 +300,7 @@ public class InitialAssessmentResourceIT {
             .andExpect(jsonPath("$.[*].cardiovascularRisk").value(hasItem(DEFAULT_CARDIOVASCULAR_RISK)))
             .andExpect(jsonPath("$.[*].deleted").value(hasItem(DEFAULT_DELETED.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getInitialAssessment() throws Exception {

@@ -60,7 +60,13 @@ public class DepressiveSymptomsSessionServiceImpl implements DepressiveSymptomsS
         return depressiveSymptomsSessionRepository.findAll(pageable)
             .map(depressiveSymptomsSessionMapper::toDto);
     }
-
+    @Override
+    @Transactional(readOnly = true)
+    public Page<DepressiveSymptomsSessionDTO> findAllBySession(Pageable pageable,Long sessionId) {
+        log.debug("Request to get all DepressiveSymptomsSessions");
+        return depressiveSymptomsSessionRepository.findAllBySessionId(pageable,sessionId)
+            .map(depressiveSymptomsSessionMapper::toDto);
+    }
 
     /**
      * Get one depressiveSymptomsSession by id.

@@ -28,7 +28,7 @@
             <column name="ocupation" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="last_event_ocurred" type="datetime">
+            <column name="last_event_ocurred" type="integer">
                 <constraints nullable="false" />
             </column>
             <column name="deceased" type="boolean">
@@ -49,9 +49,11 @@
             <column name="deleted" type="boolean">
                 <constraints nullable="true" />
             </column>
+            <column name="scholarship" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
-        <dropDefaultValue tableName="patient" columnName="last_event_ocurred" columnDataType="datetime"/>
     </changeSet>
 
     <changeSet id="20191111163526-1-relations" author="jhipster">
@@ -84,6 +86,7 @@
             <column name="rehab_status" type="numeric"/>
             <column name="session_number" type="numeric"/>
             <column name="deleted" type="boolean"/>
+            <column name="scholarship" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

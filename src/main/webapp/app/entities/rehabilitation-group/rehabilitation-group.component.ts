@@ -10,6 +10,8 @@ import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { RehabilitationGroupService } from './rehabilitation-group.service';
+import { ModalService } from 'app/shared/util/modal.service';
+import { GlobalVariablesService } from 'app/shared/util/global-variables.service';
 
 @Component({
   selector: 'jhi-rehabilitation-group',
@@ -25,12 +27,14 @@ export class RehabilitationGroupComponent implements OnInit, OnDestroy {
   predicate: any;
   reverse: any;
   totalItems: number;
-
+  ready;
   constructor(
     protected rehabilitationGroupService: RehabilitationGroupService,
     protected eventManager: JhiEventManager,
     protected parseLinks: JhiParseLinks,
-    protected accountService: AccountService
+    protected accountService: AccountService,
+    protected modal: ModalService,
+    private global: GlobalVariablesService
   ) {
     this.rehabilitationGroups = [];
     this.itemsPerPage = ITEMS_PER_PAGE;
@@ -47,7 +51,8 @@ export class RehabilitationGroupComponent implements OnInit, OnDestroy {
       .query({
         page: this.page,
         size: this.itemsPerPage,
-        sort: this.sort()
+        sort: this.sort(),
+        rehabilitationId: this.global.rehabCenter
       })
       .subscribe((res: HttpResponse<IRehabilitationGroup[]>) => this.paginateRehabilitationGroups(res.body, res.headers));
   }
@@ -91,11 +96,21 @@ export class RehabilitationGroupComponent implements OnInit, OnDestroy {
     return result;
   }
 
+  delete(rehabGroup) {
+    this.modal.confirmDialog('delete', () => {
+      this.rehabilitationGroupService.delete(rehabGroup.id).subscribe(response => {
+        this.rehabilitationGroups.splice(this.rehabilitationGroups.indexOf(rehabGroup), 1);
+        this.modal.message('Se ha eliminado el grupo correctamente');
+      });
+    });
+  }
+
   protected paginateRehabilitationGroups(data: IRehabilitationGroup[], headers: HttpHeaders) {
     this.links = this.parseLinks.parse(headers.get('link'));
     this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
     for (let i = 0; i < data.length; i++) {
       this.rehabilitationGroups.push(data[i]);
     }
+    this.ready = true;
   }
 }

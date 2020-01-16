@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -9,17 +9,27 @@ import { filter, map } from 'rxjs/operators';
 import { JhiAlertService } from 'ng-jhipster';
 import { IFinalAssessment, FinalAssessment } from 'app/shared/model/final-assessment.model';
 import { FinalAssessmentService } from './final-assessment.service';
-import { IPatient } from 'app/shared/model/patient.model';
+import { IPatient, Patient } from 'app/shared/model/patient.model';
 import { PatientService } from 'app/entities/patient/patient.service';
+import { GlobalVariablesService } from 'app/shared/util/global-variables.service';
+import { ModalService } from 'app/shared/util/modal.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'jhi-final-assessment-update',
   templateUrl: './final-assessment-update.component.html'
 })
-export class FinalAssessmentUpdateComponent implements OnInit {
+export class FinalAssessmentUpdateComponent implements OnInit, OnDestroy {
   isSaving: boolean;
 
   patients: IPatient[];
+  title;
+  modalConfirm;
+  modalSuccessMessage;
+  patient;
+  patientId;
+  smokingOptions = ['Activo', 'Inactivo'];
+  isReevaluation;
 
   editForm = this.fb.group({
     id: [],
@@ -46,6 +56,9 @@ export class FinalAssessmentUpdateComponent implements OnInit {
     protected finalAssessmentService: FinalAssessmentService,
     protected patientService: PatientService,
     protected activatedRoute: ActivatedRoute,
+    protected global: GlobalVariablesService,
+    protected route: ActivatedRoute,
+    protected modal: ModalService,
     private fb: FormBuilder
   ) {}
 
@@ -53,20 +66,34 @@ export class FinalAssessmentUpdateComponent implements OnInit {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ finalAssessment }) => {
       this.updateForm(finalAssessment);
+      this.title = finalAssessment.id == null ? 'Evaluación final' : 'Editar paciente';
+      this.modalConfirm = finalAssessment.id == null ? 'new' : 'update';
+      this.modalSuccessMessage =
+        finalAssessment.id == null ? 'Evaluación final creada correctamente.' : 'Evaluación final editada correctamente.';
     });
+    this.patientId = this.route.snapshot.params['patientId'];
     this.patientService
-      .query()
+      .find(this.patientId)
       .pipe(
-        filter((mayBeOk: HttpResponse<IPatient[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IPatient[]>) => response.body)
+        filter((response: HttpResponse<Patient>) => response.ok),
+        map((patient: HttpResponse<Patient>) => patient.body)
       )
-      .subscribe((res: IPatient[]) => (this.patients = res), (res: HttpErrorResponse) => this.onError(res.message));
+      .subscribe(patient => {
+        this.patient = patient;
+        this.isReevaluation = this.route.routeConfig.path.split('/')[1] === 'new-reevaluation';
+        this.title = 'Paciente ' + this.patient.code + ', ' + (this.isReevaluation ? 'Reevaluación final' : 'Evaluación final');
+        this.global.setTitle(this.title);
+      });
+    this.global.enteringForm();
   }
 
+  setInvalidForm(isSaving) {
+    this.global.setFormStatus(isSaving);
+  }
   updateForm(finalAssessment: IFinalAssessment) {
     this.editForm.patchValue({
       id: finalAssessment.id,
-      smoking: finalAssessment.smoking,
+      smoking: this.patient.smoking,
       weight: finalAssessment.weight,
       size: finalAssessment.size,
       iMC: finalAssessment.iMC,
@@ -81,7 +108,7 @@ export class FinalAssessmentUpdateComponent implements OnInit {
       abandonmentMedicCause: finalAssessment.abandonmentMedicCause,
       hospitalized: finalAssessment.hospitalized,
       deleted: finalAssessment.deleted,
-      patientId: finalAssessment.patientId
+      patientId: this.patient.id
     });
   }
 
@@ -90,13 +117,21 @@ export class FinalAssessmentUpdateComponent implements OnInit {
   }
 
   save() {
-    this.isSaving = true;
-    const finalAssessment = this.createFromForm();
-    if (finalAssessment.id !== undefined) {
-      this.subscribeToSaveResponse(this.finalAssessmentService.update(finalAssessment));
-    } else {
-      this.subscribeToSaveResponse(this.finalAssessmentService.create(finalAssessment));
-    }
+    this.modal.confirmCustomDialog(
+      '¿Está seguro que desea registrar la evaluación final?',
+      'Una vez registrada no podrá modificarse',
+      () => {
+        this.isSaving = true;
+        const finalAssessment = this.createFromForm();
+        if (finalAssessment.id !== null) {
+          this.subscribeToSaveResponse(this.finalAssessmentService.update(finalAssessment));
+        } else {
+          finalAssessment.reevaluation = this.isReevaluation;
+          finalAssessment.executionDate = moment(new Date());
+          this.subscribeToSaveResponse(this.finalAssessmentService.create(finalAssessment));
+        }
+      }
+    );
   }
 
   private createFromForm(): IFinalAssessment {
@@ -115,10 +150,10 @@ export class FinalAssessmentUpdateComponent implements OnInit {
       isWorking: this.editForm.get(['isWorking']).value,
       deceased: this.editForm.get(['deceased']).value,
       abandonment: this.editForm.get(['abandonment']).value,
-      abandonmentMedicCause: this.editForm.get(['abandonmentMedicCause']).value,
-      hospitalized: this.editForm.get(['hospitalized']).value,
+      abandonmentMedicCause: this.editForm.get(['abandonmentMedicCause']).value === '1',
+      hospitalized: this.editForm.get(['abandonmentMedicCause']).value === '2',
       deleted: this.editForm.get(['deleted']).value,
-      patientId: this.editForm.get(['patientId']).value
+      patientId: this.patient.id
     };
   }
 
@@ -127,10 +162,18 @@ export class FinalAssessmentUpdateComponent implements OnInit {
   }
 
   protected onSaveSuccess() {
-    this.isSaving = false;
-    this.previousState();
+    this.patient.rehabStatus = this.isReevaluation ? 3 : 2;
+    this.subscribeToSaveResponsePatientt(this.patientService.update(this.patient));
+  }
+  protected subscribeToSaveResponsePatientt(result: Observable<HttpResponse<IFinalAssessment>>) {
+    result.subscribe(() => this.onSaveSuccessPatient(), () => this.onSaveError());
   }
 
+  protected onSaveSuccessPatient() {
+    this.isSaving = false;
+    this.previousState();
+    this.modal.message('Se ha registrado la evaluación correctamente.');
+  }
   protected onSaveError() {
     this.isSaving = false;
   }
@@ -140,5 +183,8 @@ export class FinalAssessmentUpdateComponent implements OnInit {
 
   trackPatientById(index: number, item: IPatient) {
     return item.id;
+  }
+  ngOnDestroy() {
+    this.global.leavingForm();
   }
 }

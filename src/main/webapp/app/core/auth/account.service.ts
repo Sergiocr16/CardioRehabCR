@@ -13,6 +13,7 @@ import { JhiTrackerService } from '../tracker/tracker.service';
 export class AccountService {
   private userIdentity: Account;
   private authenticated = false;
+  private loadedAccount = false;
   private authenticationState = new Subject<any>();
   private accountCache$: Observable<Account>;
 
@@ -34,6 +35,7 @@ export class AccountService {
   authenticate(identity) {
     this.userIdentity = identity;
     this.authenticated = identity !== null;
+    this.loadedAccount = true;
     this.authenticationState.next(this.userIdentity);
   }
 
@@ -61,6 +63,7 @@ export class AccountService {
             if (account) {
               this.userIdentity = account;
               this.authenticated = true;
+              this.loadedAccount = true;
               this.trackerService.connect();
               // After retrieve the account info, the language will be changed to
               // the user's preferred language configured in the account setting
@@ -80,6 +83,7 @@ export class AccountService {
             }
             this.userIdentity = null;
             this.authenticated = false;
+            this.loadedAccount = true;
             this.authenticationState.next(this.userIdentity);
           }
         ),
@@ -92,7 +96,9 @@ export class AccountService {
   isAuthenticated(): boolean {
     return this.authenticated;
   }
-
+  isAccountChecked(): boolean {
+    return this.loadedAccount;
+  }
   isIdentityResolved(): boolean {
     return this.userIdentity !== undefined;
   }

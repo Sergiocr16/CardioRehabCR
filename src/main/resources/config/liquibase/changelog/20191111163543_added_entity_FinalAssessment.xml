@@ -61,11 +61,18 @@
             <column name="deleted" type="boolean">
                 <constraints nullable="true" />
             </column>
+            <column name="reevaluation" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="execution_date" type="datetime">
+                <constraints nullable="true" />
+            </column>
             <column name="patient_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
+        <dropDefaultValue tableName="final_assessment" columnName="execution_date" columnDataType="datetime"/>
     </changeSet>
 
     <changeSet id="20191111163543-1-relations" author="jhipster">
@@ -102,6 +109,8 @@
             <column name="abandonment_medic_cause" type="boolean"/>
             <column name="hospitalized" type="boolean"/>
             <column name="deleted" type="boolean"/>
+            <column name="reevaluation" type="boolean"/>
+            <column name="execution_date" type="datetime"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

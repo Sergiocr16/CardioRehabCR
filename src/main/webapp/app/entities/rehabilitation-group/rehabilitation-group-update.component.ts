@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -15,18 +15,21 @@ import { IPatient } from 'app/shared/model/patient.model';
 import { PatientService } from 'app/entities/patient/patient.service';
 import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
 import { RehabilitationCenterService } from 'app/entities/rehabilitation-center/rehabilitation-center.service';
+import { ModalService } from 'app/shared/util/modal.service';
+import { GlobalVariablesService } from 'app/shared/util/global-variables.service';
 
 @Component({
   selector: 'jhi-rehabilitation-group-update',
   templateUrl: './rehabilitation-group-update.component.html'
 })
-export class RehabilitationGroupUpdateComponent implements OnInit {
+export class RehabilitationGroupUpdateComponent implements OnInit, OnDestroy {
   isSaving: boolean;
 
   patients: IPatient[];
-
+  title;
+  modalSuccessMessage;
   rehabilitationcenters: IRehabilitationCenter[];
-
+  modalConfirm;
   editForm = this.fb.group({
     id: [],
     name: [null, [Validators.required]],
@@ -36,11 +39,16 @@ export class RehabilitationGroupUpdateComponent implements OnInit {
     patients: [],
     rehabilitationCenterId: []
   });
+  page = 0;
+  itemsPerPage = 1000;
+  programStatusArray = [{ d: 'Sin iniciar', v: 0 }, { d: 'En proceso', v: 1 }, { d: 'Finalizado', v: 2 }];
 
   constructor(
     protected jhiAlertService: JhiAlertService,
     protected rehabilitationGroupService: RehabilitationGroupService,
     protected patientService: PatientService,
+    protected modal: ModalService,
+    private global: GlobalVariablesService,
     protected rehabilitationCenterService: RehabilitationCenterService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
@@ -50,24 +58,23 @@ export class RehabilitationGroupUpdateComponent implements OnInit {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ rehabilitationGroup }) => {
       this.updateForm(rehabilitationGroup);
+      this.title = rehabilitationGroup.id == null ? 'Crear grupo' : 'Editar grupo';
+      this.modalConfirm = rehabilitationGroup.id == null ? 'new' : 'update';
+      this.modalSuccessMessage = rehabilitationGroup.id == null ? 'Grupo creado correctamente.' : 'Grupo editado correctamente.';
+      this.global.setTitle(this.title);
     });
+    this.global.enteringForm();
+
     this.patientService
-      .query()
+      .query({
+        page: this.page - 1,
+        size: this.itemsPerPage
+      })
       .pipe(
         filter((mayBeOk: HttpResponse<IPatient[]>) => mayBeOk.ok),
         map((response: HttpResponse<IPatient[]>) => response.body)
       )
       .subscribe((res: IPatient[]) => (this.patients = res), (res: HttpErrorResponse) => this.onError(res.message));
-    this.rehabilitationCenterService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IRehabilitationCenter[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IRehabilitationCenter[]>) => response.body)
-      )
-      .subscribe(
-        (res: IRehabilitationCenter[]) => (this.rehabilitationcenters = res),
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
   }
 
   updateForm(rehabilitationGroup: IRehabilitationGroup) {
@@ -87,13 +94,22 @@ export class RehabilitationGroupUpdateComponent implements OnInit {
   }
 
   save() {
-    this.isSaving = true;
-    const rehabilitationGroup = this.createFromForm();
-    if (rehabilitationGroup.id !== undefined) {
-      this.subscribeToSaveResponse(this.rehabilitationGroupService.update(rehabilitationGroup));
-    } else {
-      this.subscribeToSaveResponse(this.rehabilitationGroupService.create(rehabilitationGroup));
-    }
+    this.modal.confirmDialog(this.modalConfirm, () => {
+      this.isSaving = true;
+      const rehabilitationGroup = this.createFromForm();
+      rehabilitationGroup.rehabilitationCenterId = this.global.rehabCenter;
+      if (rehabilitationGroup.id !== undefined) {
+        this.subscribeToSaveResponse(this.rehabilitationGroupService.update(rehabilitationGroup));
+      } else {
+        rehabilitationGroup.programStatus = 1;
+        rehabilitationGroup.creationDate = moment(new Date());
+        this.subscribeToSaveResponse(this.rehabilitationGroupService.create(rehabilitationGroup));
+      }
+    });
+  }
+
+  setInvalidForm(isSaving) {
+    this.global.setFormStatus(isSaving);
   }
 
   private createFromForm(): IRehabilitationGroup {
@@ -104,9 +120,7 @@ export class RehabilitationGroupUpdateComponent implements OnInit {
       creationDate:
         this.editForm.get(['creationDate']).value != null ? moment(this.editForm.get(['creationDate']).value, DATE_TIME_FORMAT) : undefined,
       programStatus: this.editForm.get(['programStatus']).value,
-      deleted: this.editForm.get(['deleted']).value,
-      patients: this.editForm.get(['patients']).value,
-      rehabilitationCenterId: this.editForm.get(['rehabilitationCenterId']).value
+      patients: this.editForm.get(['patients']).value
     };
   }
 
@@ -122,6 +136,7 @@ export class RehabilitationGroupUpdateComponent implements OnInit {
   protected onSaveError() {
     this.isSaving = false;
   }
+
   protected onError(errorMessage: string) {
     this.jhiAlertService.error(errorMessage, null, null);
   }
@@ -143,5 +158,9 @@ export class RehabilitationGroupUpdateComponent implements OnInit {
       }
     }
     return option;
+  }
+
+  ngOnDestroy() {
+    this.global.leavingForm();
   }
 }

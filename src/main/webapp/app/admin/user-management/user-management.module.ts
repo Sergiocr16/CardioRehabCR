@@ -7,9 +7,10 @@ import { UserManagementDetailComponent } from './user-management-detail.componen
 import { UserManagementUpdateComponent } from './user-management-update.component';
 import { UserManagementDeleteDialogComponent } from './user-management-delete-dialog.component';
 import { userManagementRoute } from './user-management.route';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
-  imports: [CardioRehabCrSharedModule, RouterModule.forChild(userManagementRoute)],
+  imports: [CardioRehabCrSharedModule, RouterModule.forChild(userManagementRoute), FlexLayoutModule],
   declarations: [
     UserManagementComponent,
     UserManagementDetailComponent,

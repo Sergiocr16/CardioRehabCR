@@ -2,7 +2,7 @@
   "cardioRehabCrApp": {
     "rehabilitationGroup": {
       "home": {
-        "title": "Rehabilitation Groups",
+        "title": "Grupos de rehabilitación",
         "createLabel": "Crear nuevo Rehabilitation Group",
         "createOrEditLabel": "Crear o editar Rehabilitation Group",
         "notFound": "No Rehabilitation Groups found"
@@ -16,11 +16,11 @@
       "detail": {
         "title": "Rehabilitation Group"
       },
-      "name": "Name",
-      "creationDate": "Creation Date",
-      "programStatus": "Program Status",
+      "name": "Nombre",
+      "creationDate": "Fecha de creación",
+      "programStatus": "Estado del programa",
       "deleted": "Deleted",
-      "patient": "Patient",
+      "patient": "Pacientes",
       "rehabilitationCenter": "Rehabilitation Center"
     }
   }

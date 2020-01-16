@@ -24,7 +24,7 @@ public class PatientDTO implements Serializable {
     private String ocupation;
 
     @NotNull
-    private Instant lastEventOcurred;
+    private Integer lastEventOcurred;
 
     private Boolean deceased;
 
@@ -37,6 +37,8 @@ public class PatientDTO implements Serializable {
     private Integer sessionNumber;
 
     private Boolean deleted;
+
+    private String scholarship;
 
 
     public Long getId() {
@@ -79,11 +81,11 @@ public class PatientDTO implements Serializable {
         this.ocupation = ocupation;
     }
 
-    public Instant getLastEventOcurred() {
+    public Integer getLastEventOcurred() {
         return lastEventOcurred;
     }
 
-    public void setLastEventOcurred(Instant lastEventOcurred) {
+    public void setLastEventOcurred(Integer lastEventOcurred) {
         this.lastEventOcurred = lastEventOcurred;
     }
 
@@ -135,6 +137,14 @@ public class PatientDTO implements Serializable {
         this.deleted = deleted;
     }
 
+    public String getScholarship() {
+        return scholarship;
+    }
+
+    public void setScholarship(String scholarship) {
+        this.scholarship = scholarship;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -171,6 +181,7 @@ public class PatientDTO implements Serializable {
             ", rehabStatus=" + getRehabStatus() +
             ", sessionNumber=" + getSessionNumber() +
             ", deleted='" + isDeleted() + "'" +
+            ", scholarship='" + getScholarship() + "'" +
             "}";
     }
 }

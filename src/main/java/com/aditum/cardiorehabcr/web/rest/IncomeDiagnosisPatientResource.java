@@ -1,6 +1,7 @@
 package com.aditum.cardiorehabcr.web.rest;
 
 import com.aditum.cardiorehabcr.service.IncomeDiagnosisPatientService;
+import com.aditum.cardiorehabcr.service.impl.IncomeDiagnosisPatientServiceImpl;
 import com.aditum.cardiorehabcr.web.rest.errors.BadRequestAlertException;
 import com.aditum.cardiorehabcr.service.dto.IncomeDiagnosisPatientDTO;
 
@@ -39,9 +40,9 @@ public class IncomeDiagnosisPatientResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final IncomeDiagnosisPatientService incomeDiagnosisPatientService;
+    private final IncomeDiagnosisPatientServiceImpl incomeDiagnosisPatientService;
 
-    public IncomeDiagnosisPatientResource(IncomeDiagnosisPatientService incomeDiagnosisPatientService) {
+    public IncomeDiagnosisPatientResource(IncomeDiagnosisPatientServiceImpl incomeDiagnosisPatientService) {
         this.incomeDiagnosisPatientService = incomeDiagnosisPatientService;
     }
 
@@ -114,6 +115,12 @@ public class IncomeDiagnosisPatientResource {
         return ResponseUtil.wrapOrNotFound(incomeDiagnosisPatientDTO);
     }
 
+    @GetMapping("/income-diagnosis-patients/by-asessment/")
+    public ResponseEntity<List<IncomeDiagnosisPatientDTO>> getAllComorbiditiesPatients(Long id) {
+        log.debug("REST request to get a page of ComorbiditiesPatients");
+        List<IncomeDiagnosisPatientDTO> list = incomeDiagnosisPatientService.findAllByInitialAsessment(id);
+        return ResponseEntity.ok().body(list);
+    }
     /**
      * {@code DELETE  /income-diagnosis-patients/:id} : delete the "id" incomeDiagnosisPatient.
      *

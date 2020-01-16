@@ -55,9 +55,9 @@ public class MinorEventServiceImpl implements MinorEventService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<MinorEventDTO> findAll(Pageable pageable) {
+    public Page<MinorEventDTO> findAll(Pageable pageable, Long rehabilitationId) {
         log.debug("Request to get all MinorEvents");
-        return minorEventRepository.findAll(pageable)
+        return minorEventRepository.findByRehabilitationCenterIdAndAndDeleted(pageable,rehabilitationId,false)
             .map(minorEventMapper::toDto);
     }
 

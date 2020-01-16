@@ -5,10 +5,21 @@ import { JhiAlertComponent } from './alert/alert.component';
 import { JhiAlertErrorComponent } from './alert/alert-error.component';
 import { JhiLoginModalComponent } from './login/login.component';
 import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
+import { MaterialModule } from 'app/shared/util/material.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { NoContentComponent } from 'app/layouts/no-content/no-content.component';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
-  imports: [CardioRehabCrSharedLibsModule],
-  declarations: [FindLanguageFromKeyPipe, JhiAlertComponent, JhiAlertErrorComponent, JhiLoginModalComponent, HasAnyAuthorityDirective],
+  imports: [CardioRehabCrSharedLibsModule, MaterialModule, FlexLayoutModule, ChartsModule],
+  declarations: [
+    FindLanguageFromKeyPipe,
+    JhiAlertComponent,
+    JhiAlertErrorComponent,
+    JhiLoginModalComponent,
+    HasAnyAuthorityDirective,
+    NoContentComponent
+  ],
   entryComponents: [JhiLoginModalComponent],
   exports: [
     CardioRehabCrSharedLibsModule,
@@ -16,7 +27,10 @@ import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
     JhiAlertComponent,
     JhiAlertErrorComponent,
     JhiLoginModalComponent,
-    HasAnyAuthorityDirective
+    HasAnyAuthorityDirective,
+    MaterialModule,
+    FlexLayoutModule,
+    NoContentComponent
   ]
 })
 export class CardioRehabCrSharedModule {}

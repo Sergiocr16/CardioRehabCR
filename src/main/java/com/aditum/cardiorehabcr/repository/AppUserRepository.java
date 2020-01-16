@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data  repository for the AppUser entity.
@@ -13,6 +14,7 @@ import java.util.List;
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     @Query("select appUser from AppUser appUser where appUser.user.login = ?#{principal.username}")
-    List<AppUser> findByUserIsCurrentUser();
+    List<Optional<AppUser>> findByUserIsCurrentUser();
 
+    Optional<AppUser> findAppUserByUserId(Long userId);
 }

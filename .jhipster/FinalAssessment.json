@@ -60,6 +60,14 @@
         {
             "fieldName": "deleted",
             "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "reevaluation",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "executionDate",
+            "fieldType": "ZonedDateTime"
         }
     ],
     "relationships": [
@@ -80,5 +88,7 @@
     "fluentMethods": true,
     "readOnly": false,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "searchEngine": false,
+    "databaseType": "sql"
 }

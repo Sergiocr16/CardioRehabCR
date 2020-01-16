@@ -12,7 +12,7 @@ import { PasswordResetFinishService } from './password-reset-finish.service';
   templateUrl: './password-reset-finish.component.html'
 })
 export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
-  doNotMatch: string;
+  doNotMatch;
   error: string;
   keyMissing: boolean;
   success: string;

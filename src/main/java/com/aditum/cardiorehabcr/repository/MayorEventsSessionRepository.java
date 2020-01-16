@@ -1,5 +1,7 @@
 package com.aditum.cardiorehabcr.repository;
 import com.aditum.cardiorehabcr.domain.MayorEventsSession;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MayorEventsSessionRepository extends JpaRepository<MayorEventsSession, Long> {
 
+
+    Page<MayorEventsSession> findAllBySessionId(Pageable page, Long sessionId);
 }

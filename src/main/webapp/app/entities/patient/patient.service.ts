@@ -20,30 +20,24 @@ export class PatientService {
   constructor(protected http: HttpClient) {}
 
   create(patient: IPatient): Observable<EntityResponseType> {
-    const copy = this.convertDateFromClient(patient);
-    return this.http
-      .post<IPatient>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+    // const copy = this.convertDateFromClient(patient);
+    return this.http.post<IPatient>(this.resourceUrl, patient, { observe: 'response' }).pipe(map((res: EntityResponseType) => res));
   }
 
   update(patient: IPatient): Observable<EntityResponseType> {
-    const copy = this.convertDateFromClient(patient);
-    return this.http
-      .put<IPatient>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+    // const copy = this.convertDateFromClient(patient);
+    return this.http.put<IPatient>(this.resourceUrl, patient, { observe: 'response' }).pipe(map((res: EntityResponseType) => res));
   }
 
   find(id: number): Observable<EntityResponseType> {
-    return this.http
-      .get<IPatient>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+    return this.http.get<IPatient>(`${this.resourceUrl}/${id}`, { observe: 'response' }).pipe(map((res: EntityResponseType) => res));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
       .get<IPatient[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .pipe(map((res: EntityArrayResponseType) => res));
   }
 
   delete(id: number): Observable<HttpResponse<any>> {

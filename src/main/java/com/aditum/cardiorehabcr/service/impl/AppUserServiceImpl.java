@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -76,6 +77,28 @@ public class AppUserServiceImpl implements AppUserService {
             .map(appUserMapper::toDto);
     }
 
+    /**
+     * Get one appUser  logged in.
+     *
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<AppUserDTO> findLoggedIn() {
+        log.debug("Request to get AppUser Logged In");
+        return appUserRepository.findByUserIsCurrentUser().get(0)
+            .map(appUserMapper::toDto);
+    }
+    /**
+     * Get one appUser  logged in.
+     *
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<AppUserDTO> findOneByUserId(Long userId) {
+        log.debug("Request to get AppUser Logged In");
+        return appUserRepository.findAppUserByUserId(userId)
+            .map(appUserMapper::toDto);
+    }
     /**
      * Delete the appUser by id.
      *

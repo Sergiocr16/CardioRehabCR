@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -11,14 +11,19 @@ import { IMayorEvent, MayorEvent } from 'app/shared/model/mayor-event.model';
 import { MayorEventService } from './mayor-event.service';
 import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
 import { RehabilitationCenterService } from 'app/entities/rehabilitation-center/rehabilitation-center.service';
+import { ModalService } from 'app/shared/util/modal.service';
+import { GlobalVariablesService } from 'app/shared/util/global-variables.service';
 
 @Component({
   selector: 'jhi-mayor-event-update',
   templateUrl: './mayor-event-update.component.html'
 })
-export class MayorEventUpdateComponent implements OnInit {
+export class MayorEventUpdateComponent implements OnInit, OnDestroy {
   isSaving: boolean;
-
+  title;
+  modalSuccessMessage;
+  mayorEvent: MayorEvent;
+  confirmMessage;
   rehabilitationcenters: IRehabilitationCenter[];
 
   editForm = this.fb.group({
@@ -34,13 +39,19 @@ export class MayorEventUpdateComponent implements OnInit {
     protected mayorEventService: MayorEventService,
     protected rehabilitationCenterService: RehabilitationCenterService,
     protected activatedRoute: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    protected modal: ModalService,
+    private global: GlobalVariablesService
   ) {}
 
   ngOnInit() {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ mayorEvent }) => {
       this.updateForm(mayorEvent);
+      this.title = !mayorEvent.id ? 'Crear un evento mayor' : 'Editar  un evento mayor';
+      this.modalSuccessMessage = !mayorEvent.id ? 'Evento mayor creado correctamente.' : 'Evento mayor editado correctamente.';
+      this.confirmMessage = !mayorEvent.id ? 'new' : 'update';
+      this.global.setTitle(this.title);
     });
     this.rehabilitationCenterService
       .query()
@@ -52,6 +63,15 @@ export class MayorEventUpdateComponent implements OnInit {
         (res: IRehabilitationCenter[]) => (this.rehabilitationcenters = res),
         (res: HttpErrorResponse) => this.onError(res.message)
       );
+    this.global.enteringForm();
+  }
+
+  setInvalidForm(isSaving) {
+    this.global.setFormStatus(isSaving);
+  }
+
+  ngOnDestroy() {
+    this.global.leavingForm();
   }
 
   updateForm(mayorEvent: IMayorEvent) {
@@ -69,13 +89,15 @@ export class MayorEventUpdateComponent implements OnInit {
   }
 
   save() {
-    this.isSaving = true;
-    const mayorEvent = this.createFromForm();
-    if (mayorEvent.id !== undefined) {
-      this.subscribeToSaveResponse(this.mayorEventService.update(mayorEvent));
-    } else {
-      this.subscribeToSaveResponse(this.mayorEventService.create(mayorEvent));
-    }
+    this.modal.confirmDialog(this.confirmMessage, () => {
+      this.isSaving = true;
+      const mayorEvent = this.createFromForm();
+      if (mayorEvent.id !== undefined) {
+        this.subscribeToSaveResponse(this.mayorEventService.update(mayorEvent));
+      } else {
+        this.subscribeToSaveResponse(this.mayorEventService.create(mayorEvent));
+      }
+    });
   }
 
   private createFromForm(): IMayorEvent {
@@ -95,12 +117,14 @@ export class MayorEventUpdateComponent implements OnInit {
 
   protected onSaveSuccess() {
     this.isSaving = false;
+    this.modal.message(this.modalSuccessMessage);
     this.previousState();
   }
 
   protected onSaveError() {
     this.isSaving = false;
   }
+
   protected onError(errorMessage: string) {
     this.jhiAlertService.error(errorMessage, null, null);
   }

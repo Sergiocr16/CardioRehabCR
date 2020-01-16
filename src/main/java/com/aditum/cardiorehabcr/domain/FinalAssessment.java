@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 
 /**
  * A FinalAssessment.
@@ -62,6 +63,12 @@ public class FinalAssessment implements Serializable {
 
     @Column(name = "deleted")
     private Boolean deleted;
+
+    @Column(name = "reevaluation")
+    private Boolean reevaluation;
+
+    @Column(name = "execution_date")
+    private ZonedDateTime executionDate;
 
     @ManyToOne
     @JsonIgnoreProperties("finalAssessments")
@@ -271,6 +278,32 @@ public class FinalAssessment implements Serializable {
         this.deleted = deleted;
     }
 
+    public Boolean isReevaluation() {
+        return reevaluation;
+    }
+
+    public FinalAssessment reevaluation(Boolean reevaluation) {
+        this.reevaluation = reevaluation;
+        return this;
+    }
+
+    public void setReevaluation(Boolean reevaluation) {
+        this.reevaluation = reevaluation;
+    }
+
+    public ZonedDateTime getExecutionDate() {
+        return executionDate;
+    }
+
+    public FinalAssessment executionDate(ZonedDateTime executionDate) {
+        this.executionDate = executionDate;
+        return this;
+    }
+
+    public void setExecutionDate(ZonedDateTime executionDate) {
+        this.executionDate = executionDate;
+    }
+
     public Patient getPatient() {
         return patient;
     }
@@ -320,6 +353,8 @@ public class FinalAssessment implements Serializable {
             ", abandonmentMedicCause='" + isAbandonmentMedicCause() + "'" +
             ", hospitalized='" + isHospitalized() + "'" +
             ", deleted='" + isDeleted() + "'" +
+            ", reevaluation='" + isReevaluation() + "'" +
+            ", executionDate='" + getExecutionDate() + "'" +
             "}";
     }
 }

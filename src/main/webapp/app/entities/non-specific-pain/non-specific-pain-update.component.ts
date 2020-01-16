@@ -11,6 +11,8 @@ import { INonSpecificPain, NonSpecificPain } from 'app/shared/model/non-specific
 import { NonSpecificPainService } from './non-specific-pain.service';
 import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
 import { RehabilitationCenterService } from 'app/entities/rehabilitation-center/rehabilitation-center.service';
+import { ModalService } from 'app/shared/util/modal.service';
+import { GlobalVariablesService } from 'app/shared/util/global-variables.service';
 
 @Component({
   selector: 'jhi-non-specific-pain-update',
@@ -18,9 +20,11 @@ import { RehabilitationCenterService } from 'app/entities/rehabilitation-center/
 })
 export class NonSpecificPainUpdateComponent implements OnInit {
   isSaving: boolean;
-
+  title;
+  nonSpecificPain: NonSpecificPain;
+  modalSuccessMessage;
   rehabilitationcenters: IRehabilitationCenter[];
-
+  confirmMessage;
   editForm = this.fb.group({
     id: [],
     description: [null, [Validators.required]],
@@ -34,6 +38,8 @@ export class NonSpecificPainUpdateComponent implements OnInit {
     protected nonSpecificPainService: NonSpecificPainService,
     protected rehabilitationCenterService: RehabilitationCenterService,
     protected activatedRoute: ActivatedRoute,
+    protected modal: ModalService,
+    private global: GlobalVariablesService,
     private fb: FormBuilder
   ) {}
 
@@ -41,7 +47,14 @@ export class NonSpecificPainUpdateComponent implements OnInit {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ nonSpecificPain }) => {
       this.updateForm(nonSpecificPain);
+      this.confirmMessage = !nonSpecificPain.id ? 'new' : 'update';
+      this.title = !nonSpecificPain.id ? 'Crear un dolor no identificado ' : 'Editar un dolor no identificado';
+      this.modalSuccessMessage = !nonSpecificPain.id
+        ? 'Dolor agudo no específico creado correctamente.'
+        : 'Dolor agudo no específico editado correctamente.';
+      this.global.setTitle(this.title);
     });
+    this.global.enteringForm();
     this.rehabilitationCenterService
       .query()
       .pipe(
@@ -52,6 +65,10 @@ export class NonSpecificPainUpdateComponent implements OnInit {
         (res: IRehabilitationCenter[]) => (this.rehabilitationcenters = res),
         (res: HttpErrorResponse) => this.onError(res.message)
       );
+  }
+
+  setInvalidForm(isSaving) {
+    this.global.setFormStatus(isSaving);
   }
 
   updateForm(nonSpecificPain: INonSpecificPain) {
@@ -69,13 +86,15 @@ export class NonSpecificPainUpdateComponent implements OnInit {
   }
 
   save() {
-    this.isSaving = true;
-    const nonSpecificPain = this.createFromForm();
-    if (nonSpecificPain.id !== undefined) {
-      this.subscribeToSaveResponse(this.nonSpecificPainService.update(nonSpecificPain));
-    } else {
-      this.subscribeToSaveResponse(this.nonSpecificPainService.create(nonSpecificPain));
-    }
+    this.modal.confirmDialog(this.confirmMessage, () => {
+      this.isSaving = true;
+      const nonSpecificPain = this.createFromForm();
+      if (nonSpecificPain.id !== undefined) {
+        this.subscribeToSaveResponse(this.nonSpecificPainService.update(nonSpecificPain));
+      } else {
+        this.subscribeToSaveResponse(this.nonSpecificPainService.create(nonSpecificPain));
+      }
+    });
   }
 
   private createFromForm(): INonSpecificPain {
@@ -95,12 +114,14 @@ export class NonSpecificPainUpdateComponent implements OnInit {
 
   protected onSaveSuccess() {
     this.isSaving = false;
+    this.modal.message(this.modalSuccessMessage);
     this.previousState();
   }
 
   protected onSaveError() {
     this.isSaving = false;
   }
+
   protected onError(errorMessage: string) {
     this.jhiAlertService.error(errorMessage, null, null);
   }

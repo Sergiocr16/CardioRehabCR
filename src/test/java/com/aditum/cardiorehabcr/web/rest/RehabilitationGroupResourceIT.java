@@ -5,6 +5,7 @@ import com.aditum.cardiorehabcr.domain.RehabilitationGroup;
 import com.aditum.cardiorehabcr.repository.RehabilitationGroupRepository;
 import com.aditum.cardiorehabcr.service.RehabilitationGroupService;
 import com.aditum.cardiorehabcr.service.dto.RehabilitationGroupDTO;
+import com.aditum.cardiorehabcr.service.impl.RehabilitationGroupServiceImpl;
 import com.aditum.cardiorehabcr.service.mapper.RehabilitationGroupMapper;
 import com.aditum.cardiorehabcr.web.rest.errors.ExceptionTranslator;
 
@@ -65,10 +66,10 @@ public class RehabilitationGroupResourceIT {
     private RehabilitationGroupMapper rehabilitationGroupMapper;
 
     @Mock
-    private RehabilitationGroupService rehabilitationGroupServiceMock;
+    private RehabilitationGroupServiceImpl rehabilitationGroupServiceMock;
 
     @Autowired
-    private RehabilitationGroupService rehabilitationGroupService;
+    private RehabilitationGroupServiceImpl rehabilitationGroupService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -213,7 +214,7 @@ public class RehabilitationGroupResourceIT {
             .andExpect(jsonPath("$.[*].programStatus").value(hasItem(DEFAULT_PROGRAM_STATUS)))
             .andExpect(jsonPath("$.[*].deleted").value(hasItem(DEFAULT_DELETED.booleanValue())));
     }
-    
+
     @SuppressWarnings({"unchecked"})
     public void getAllRehabilitationGroupsWithEagerRelationshipsIsEnabled() throws Exception {
         RehabilitationGroupResource rehabilitationGroupResource = new RehabilitationGroupResource(rehabilitationGroupServiceMock);

@@ -1,3 +1,5 @@
+import { Moment } from 'moment';
+
 export interface IFinalAssessment {
   id?: number;
   smoking?: string;
@@ -12,9 +14,11 @@ export interface IFinalAssessment {
   isWorking?: boolean;
   deceased?: boolean;
   abandonment?: boolean;
+  executionDate?: Moment;
   abandonmentMedicCause?: boolean;
   hospitalized?: boolean;
   deleted?: boolean;
+  reevaluation?: boolean;
   patientId?: number;
 }
 
@@ -33,9 +37,11 @@ export class FinalAssessment implements IFinalAssessment {
     public isWorking?: boolean,
     public deceased?: boolean,
     public abandonment?: boolean,
+    public executionDate?: Moment,
     public abandonmentMedicCause?: boolean,
     public hospitalized?: boolean,
     public deleted?: boolean,
+    public reevaluation?: boolean,
     public patientId?: number
   ) {
     this.isWorking = this.isWorking || false;
@@ -44,5 +50,6 @@ export class FinalAssessment implements IFinalAssessment {
     this.abandonmentMedicCause = this.abandonmentMedicCause || false;
     this.hospitalized = this.hospitalized || false;
     this.deleted = this.deleted || false;
+    this.reevaluation = this.reevaluation || false;
   }
 }

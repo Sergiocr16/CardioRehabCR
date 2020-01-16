@@ -1,6 +1,7 @@
 package com.aditum.cardiorehabcr.web.rest;
 
 import com.aditum.cardiorehabcr.service.ComorbiditiesPatientService;
+import com.aditum.cardiorehabcr.service.impl.ComorbiditiesPatientServiceImpl;
 import com.aditum.cardiorehabcr.web.rest.errors.BadRequestAlertException;
 import com.aditum.cardiorehabcr.service.dto.ComorbiditiesPatientDTO;
 
@@ -39,9 +40,9 @@ public class ComorbiditiesPatientResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ComorbiditiesPatientService comorbiditiesPatientService;
+    private final ComorbiditiesPatientServiceImpl comorbiditiesPatientService;
 
-    public ComorbiditiesPatientResource(ComorbiditiesPatientService comorbiditiesPatientService) {
+    public ComorbiditiesPatientResource(ComorbiditiesPatientServiceImpl comorbiditiesPatientService) {
         this.comorbiditiesPatientService = comorbiditiesPatientService;
     }
 
@@ -100,6 +101,12 @@ public class ComorbiditiesPatientResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
+    @GetMapping("/comorbidities-patients/by-asessment/")
+    public ResponseEntity<List<ComorbiditiesPatientDTO>> getAllComorbiditiesPatients(Long id) {
+        log.debug("REST request to get a page of ComorbiditiesPatients");
+        List<ComorbiditiesPatientDTO> list = comorbiditiesPatientService.findAllByInitialAsessment(id);
+        return ResponseEntity.ok().body(list);
+    }
 
     /**
      * {@code GET  /comorbidities-patients/:id} : get the "id" comorbiditiesPatient.
@@ -108,7 +115,7 @@ public class ComorbiditiesPatientResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the comorbiditiesPatientDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/comorbidities-patients/{id}")
-    public ResponseEntity<ComorbiditiesPatientDTO> getComorbiditiesPatient(@PathVariable Long id) {
+    public ResponseEntity<ComorbiditiesPatientDTO> getComorbidities(@PathVariable Long id) {
         log.debug("REST request to get ComorbiditiesPatient : {}", id);
         Optional<ComorbiditiesPatientDTO> comorbiditiesPatientDTO = comorbiditiesPatientService.findOne(id);
         return ResponseUtil.wrapOrNotFound(comorbiditiesPatientDTO);

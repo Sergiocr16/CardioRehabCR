@@ -3,6 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { take, map } from 'rxjs/operators';
 import { FinalAssessmentService } from 'app/entities/final-assessment/final-assessment.service';
 import { IFinalAssessment, FinalAssessment } from 'app/shared/model/final-assessment.model';
+import * as moment from 'moment';
 
 describe('Service Tests', () => {
   describe('FinalAssessment Service', () => {
@@ -34,7 +35,7 @@ describe('Service Tests', () => {
         false,
         false,
         false,
-        false,
+        moment(new Date()),
         false,
         false
       );
