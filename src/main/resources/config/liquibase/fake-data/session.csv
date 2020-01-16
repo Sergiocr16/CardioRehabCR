@@ -1,11 +1,2 @@
 id;code;execution_date;abscence;hospitalization;status;deleted;currently_working
-1;mobile Fish;2019-12-27T23:17:49;true;true;15601;false;false
-2;Practical Fresh Pants;2019-12-28T03:34:58;false;true;65088;false;false
-3;transmitter Implementation Electronics;2019-12-27T18:11:48;false;true;30424;true;true
-4;web-readiness;2019-12-28T11:01:12;true;true;39986;false;false
-5;Coordinator;2019-12-28T12:25:23;false;false;78517;true;false
-6;Cambridgeshire Mississippi;2019-12-28T16:53:41;true;true;68030;false;false
-7;Automotive;2019-12-27T19:23:49;true;true;80839;false;false
-8;Intelligent;2019-12-28T01:35:17;false;false;68326;false;true
-9;backing up Salad;2019-12-28T08:37:27;false;false;66252;true;false
-10;Costa Rica Mayotte;2019-12-28T13:34:23;false;true;84228;true;false
+

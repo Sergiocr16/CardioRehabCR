@@ -37,6 +37,7 @@ export class SessionUpdateComponent implements OnInit, OnDestroy {
   depressiveSymptoms = [];
   patientId;
   patient;
+  after = 'after';
   editForm = this.fb.group({
     id: [],
     code: [null],

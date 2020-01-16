@@ -6,8 +6,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import * as moment from 'moment';
-import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
+// import * as moment from 'moment';
+// import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService } from 'ng-jhipster';
 import { IPatient, Patient } from 'app/shared/model/patient.model';
 import { PatientService } from './patient.service';
@@ -37,6 +37,10 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
   incomeDiagnoses = [];
   comorbidities = [];
   comorbiditiesDisplay = [];
+  itemsPerPage = 1000;
+  page = 0;
+  imc = 0;
+  patient;
   sexArray = ['Masculino', 'Femenino'];
   smokingOptions = ['Activo', 'Inactivo'];
   cardiovascularRiskOptions = ['Alto', 'Moderado', 'Bajo'];
@@ -80,8 +84,8 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
   });
 
   measuresForm = this.fb.group({
-    weight: [null, [Validators.required]],
-    size: [null, [Validators.required]],
+    weight: [0, [Validators.required]],
+    size: [0, [Validators.required]],
     iMC: [null, [Validators.required]],
     hbiac: [null, [Validators.required]],
     baselineFunctionalCapacity: [null, [Validators.required]],
@@ -106,15 +110,16 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ patient }) => {
+      this.patient = patient;
       this.updateFormInitialInfo(patient);
       this.title = patient.id == null ? 'Crear paciente' : 'Editar paciente';
       this.modalConfirm = patient.id == null ? 'new' : 'update';
       this.modalSuccessMessage = patient.id == null ? 'Paciente creado correctamente.' : 'Paciente editado correctamente.';
       this.global.setTitle(this.title);
-      if (patient.id == null) {
-        this.loadDiagnosis();
-        this.loadComorbidities();
-      }
+      // if (patient.id == null) {
+      this.loadDiagnosis();
+      this.loadComorbidities();
+      // }
     });
     this.global.enteringForm();
     // this.rehabilitationGroupService
@@ -126,9 +131,16 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
     //   .subscribe((res: IRehabilitationGroup[]) => (this.rehabilitationgroups = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
+  calculateIMC() {
+    this.measuresForm
+      .get('iMC')
+      .setValue(parseFloat(this.measuresForm.get('weight').value / Math.pow(this.measuresForm.get('size').value, 2) + '').toFixed(3));
+  }
   loadDiagnosis() {
     this.incomeDiagnosisService
       .query({
+        page: this.page - 1,
+        size: this.itemsPerPage,
         rehabilitationId: this.global.rehabCenter
       })
       .pipe(
@@ -141,6 +153,8 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
   loadComorbidities() {
     this.comorbiditieService
       .query({
+        page: this.page - 1,
+        size: this.itemsPerPage,
         rehabilitationId: this.global.rehabCenter
       })
       .pipe(
@@ -178,13 +192,13 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
       sex: patient.sex,
       ocupation: patient.ocupation,
       scholarship: patient.scholarship,
-      lastEventOcurred: patient.lastEventOcurred != null ? new Date(patient.lastEventOcurred.toDate()) : null
-      // deceased: patient.deceased,
-      // abandonment: patient.abandonment,
-      // abandonmentMedicCause: patient.abandonmentMedicCause,
-      // rehabStatus: patient.rehabStatus,
-      // sessionNumber: patient.sessionNumber,
-      // deleted: patient.deleted
+      lastEventOcurred: patient.lastEventOcurred,
+      deceased: patient.deceased,
+      abandonment: patient.abandonment,
+      abandonmentMedicCause: patient.abandonmentMedicCause,
+      rehabStatus: patient.rehabStatus,
+      sessionNumber: patient.sessionNumber,
+      deleted: patient.deleted
     });
     this.updateFormDiagnosis(patient);
   }
@@ -310,9 +324,17 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
       this.global.loading();
       const patient = this.createFromForm();
       if (patient.id !== undefined) {
+        patient.rehabStatus = this.patient.rehabStatus;
+        patient.sessionNumber = this.patient.sessionNumber;
+        patient.deceased = this.patient.deceased;
+        patient.abandonment = this.patient.abandonment;
+        patient.abandonmentMedicCause = this.patient.abandonmentMedicCause;
+        patient.deleted = this.patient.deleted;
         this.subscribeToSaveResponse(this.patientService.update(patient));
       } else {
         patient.rehabStatus = 0;
+        patient.sessionNumber = 0;
+
         this.subscribeToSaveResponse(this.patientService.create(patient));
       }
     });
@@ -327,15 +349,11 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
       sex: this.initialInfoForm.get(['sex']).value,
       ocupation: this.initialInfoForm.get(['ocupation']).value,
       scholarship: this.initialInfoForm.get(['scholarship']).value,
-      lastEventOcurred:
-        this.initialInfoForm.get(['lastEventOcurred']).value != null
-          ? moment(this.initialInfoForm.get(['lastEventOcurred']).value, DATE_TIME_FORMAT)
-          : undefined,
+      lastEventOcurred: this.initialInfoForm.get(['lastEventOcurred']).value
       // deceased: this.initialInfoForm.get(['deceased']).value,
       // abandonment: this.initialInfoForm.get(['abandonment']).value,
       // abandonmentMedicCause: this.initialInfoForm.get(['abandonmentMedicCause']).value,
       // rehabStatus: this.initialInfoForm.get(['rehabStatus']).value,
-      sessionNumber: 0
       // deleted: this.initialInfoForm.get(['deleted']).value
     };
   }

@@ -39,7 +39,8 @@ export class RehabilitationGroupUpdateComponent implements OnInit, OnDestroy {
     patients: [],
     rehabilitationCenterId: []
   });
-
+  page = 0;
+  itemsPerPage = 1000;
   programStatusArray = [{ d: 'Sin iniciar', v: 0 }, { d: 'En proceso', v: 1 }, { d: 'Finalizado', v: 2 }];
 
   constructor(
@@ -65,7 +66,10 @@ export class RehabilitationGroupUpdateComponent implements OnInit, OnDestroy {
     this.global.enteringForm();
 
     this.patientService
-      .query()
+      .query({
+        page: this.page - 1,
+        size: this.itemsPerPage
+      })
       .pipe(
         filter((mayBeOk: HttpResponse<IPatient[]>) => mayBeOk.ok),
         map((response: HttpResponse<IPatient[]>) => response.body)

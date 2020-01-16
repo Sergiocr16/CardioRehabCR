@@ -90,10 +90,8 @@
                                    for="field_lastEventOcurred">
                             Last Event Ocurred
                         </mat-label>
-                        <input matInput [matDatepicker]="picker" id="field_lastEventOcurred" (focus)="picker.open()"
-                               name="lastEventOcurred" formControlName="lastEventOcurred" placeholder="dd/mm/yyyy">
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker touchUi #picker></mat-datepicker>
+                        <input matInput type="number" id="field_lastEventOcurred"
+                               name="lastEventOcurred" formControlName="lastEventOcurred" placeholder="En meses">
                         <mat-hint
                             *ngIf="initialInfoForm.get('lastEventOcurred').invalid && (initialInfoForm.get('lastEventOcurred').dirty || initialInfoForm.get('lastEventOcurred').touched)"
                             class="form-text text-danger">
@@ -196,8 +194,8 @@
                             <mat-label jhiTranslate="cardioRehabCrApp.initialAssessment.weight" for="field_weight">
                                 Weight
                             </mat-label>
-                            <input matInput type="text" name="weight" id="field_weight"
-                                   formControlName="weight">
+                            <input matInput type="number" step="0.1" name="weight" id="field_weight"
+                                   formControlName="weight" (change)="calculateIMC()">
                             <span matSuffix>kilogramos</span>
                             <mat-hint
                                 *ngIf="measuresForm.get('weight').invalid && (measuresForm.get('weight').dirty || measuresForm.get('weight').touched)"
@@ -211,9 +209,9 @@
                         <mat-form-field appearance="outline">
                             <mat-label jhiTranslate="cardioRehabCrApp.initialAssessment.size" for="field_size">Size
                             </mat-label>
-                            <input matInput type="text" name="size" id="field_size"
-                                   formControlName="size">
-                            <span matSuffix>cm</span>
+                            <input matInput type="number" step="0.1" name="size" id="field_size"
+                                   formControlName="size" (change)="calculateIMC()">
+                            <span matSuffix>m</span>
                             <mat-hint
                                 *ngIf="measuresForm.get('size').invalid && (measuresForm.get('size').dirty || measuresForm.get('size').touched)"
                                 class="form-text text-danger">
@@ -226,24 +224,16 @@
                         <mat-form-field appearance="outline">
                             <mat-label jhiTranslate="cardioRehabCrApp.initialAssessment.iMC" for="field_iMC">IMC
                             </mat-label>
-                            <input matInput type="text" name="iMC" id="field_iMC"
-                                   formControlName="iMC">
+                            <input [disabled]='true' disabled matInput type="number" step="0.1" name="iMC" id="field_iMC"
+                                   formControlName="iMC" >
                             <span matSuffix>Kg/m2</span>
-                            <mat-hint
-                                *ngIf="measuresForm.get('iMC').invalid && (measuresForm.get('iMC').dirty || measuresForm.get('iMC').touched)"
-                                class="form-text text-danger">
-                    <span *ngIf="measuresForm.get('iMC').errors.required"
-                          jhiTranslate="entity.validation.required">
-                        This field is required.
-                    </span>
-                            </mat-hint>
                         </mat-form-field>
                     </div>
                     <div fxLayout="column" fxLayoutAlign="start stretch" fxFlex>
                         <mat-form-field appearance="outline">
                             <mat-label jhiTranslate="cardioRehabCrApp.initialAssessment.lDL" for="field_lDL">L DL
                             </mat-label>
-                            <input matInput type="text" name="lDL" id="field_lDL"
+                            <input matInput type="number" step="0.1" name="lDL" id="field_lDL"
                                    formControlName="lDL">
                             <span matSuffix>mg/dL</span>
                             <mat-hint
@@ -258,7 +248,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label jhiTranslate="cardioRehabCrApp.initialAssessment.hDL" for="field_hDL">H DL
                             </mat-label>
-                            <input matInput type="text" name="hDL" id="field_hDL"
+                            <input matInput type="number" step="0.1" name="hDL" id="field_hDL"
                                    formControlName="hDL">
                             <span matSuffix>mg/dL</span>
                             <mat-hint
@@ -273,7 +263,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label jhiTranslate="cardioRehabCrApp.initialAssessment.hbiac" for="field_hbiac">Hbiac
                             </mat-label>
-                            <input matInput type="text" name="hbiac" id="field_hbiac"
+                            <input matInput type="number" step="0.1" name="hbiac" id="field_hbiac"
                                    formControlName="hbiac">
                             <span matSuffix>%</span>
                             <mat-hint
@@ -289,7 +279,7 @@
                             <mat-label jhiTranslate="cardioRehabCrApp.initialAssessment.baselineFunctionalCapacity"
                                        for="field_baselineFunctionalCapacity">Baseline Functional Capacity
                             </mat-label>
-                            <input matInput type="text" name="baselineFunctionalCapacity"
+                            <input matInput type="number" name="baselineFunctionalCapacity"
                                    id="field_baselineFunctionalCapacity"
                                    formControlName="baselineFunctionalCapacity">
                             <span matSuffix>METS</span>

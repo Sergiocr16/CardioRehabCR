@@ -28,7 +28,7 @@
             <column name="ocupation" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="last_event_ocurred" type="datetime">
+            <column name="last_event_ocurred" type="integer">
                 <constraints nullable="false" />
             </column>
             <column name="deceased" type="boolean">
@@ -54,7 +54,6 @@
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
-        <dropDefaultValue tableName="patient" columnName="last_event_ocurred" columnDataType="datetime"/>
     </changeSet>
 
     <changeSet id="20191111163526-1-relations" author="jhipster">

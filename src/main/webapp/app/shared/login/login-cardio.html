@@ -3,9 +3,9 @@
         <form *ngIf="!reseting" class="no-outline" role="form" (ngSubmit)="login()" [formGroup]="loginForm"
               fxLayout="column">
             <h5 class="text-center">
-                <img mat-card-image
-                     src="https://res.cloudinary.com/aditum/image/upload/v1573798868/Sin_t%C3%ADtulo-3.png"
-                     height="250">
+                <img
+                     src="../../../content/images/logo-nombre1.png"
+                     height="250" width="250">
             </h5>
             <!--            <mat-form-field class="no-outline">-->
             <!--                <input matInput type="text" class="form-control no-outline" name="username" id="username" placeholder="Nombre de usuario"-->
@@ -96,7 +96,7 @@
             </form>
         </div>
     </div>
-    <div fxFlex="50" flex-xs="0" hidden-xs style="background-image: url(content/images/login2.jpg) ;
+    <div fxFlex="50" flex-xs="0" fxHide.xs="true" style="background-image: url(content/images/login2.jpg) ;
         background-size: cover;
         background-position-x: center;">
     </div>

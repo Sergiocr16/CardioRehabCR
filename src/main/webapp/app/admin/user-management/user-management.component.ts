@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, Subscription } from 'rxjs';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
@@ -10,7 +9,8 @@ import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { AccountService } from 'app/core/auth/account.service';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.model';
-import { UserManagementDeleteDialogComponent } from './user-management-delete-dialog.component';
+import { ModalService } from 'app/shared/util/modal.service';
+import { IComorbiditie } from 'app/shared/model/comorbiditie.model';
 
 @Component({
   selector: 'jhi-user-mgmt',
@@ -39,7 +39,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private eventManager: JhiEventManager,
-    private modalService: NgbModal
+    protected modal: ModalService
   ) {
     this.itemsPerPage = ITEMS_PER_PAGE;
     this.routeData = this.activatedRoute.data.subscribe(data => {
@@ -125,11 +125,22 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     this.loadAll();
   }
 
-  deleteUser(user: User) {
-    const modalRef = this.modalService.open(UserManagementDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.user = user;
+  deleteUser(user) {
+    this.modal.confirmDialog('delete', () => {
+      this.subscribeToSaveResponse(this.userService.delete(user.login));
+    });
+  }
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IComorbiditie>>) {
+    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+  }
+  protected onSaveSuccess() {
+    this.loadAll();
+    this.modal.message('El usuario se ha eliminado correctamente.');
   }
 
+  protected onSaveError() {
+    this.modal.message('Ups! Sucedió un error.');
+  }
   private onSuccess(data, headers) {
     this.links = this.parseLinks.parse(headers.get('link'));
     this.totalItems = headers.get('X-Total-Count');

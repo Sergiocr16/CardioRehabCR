@@ -10,6 +10,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { LoginModalService } from 'app/core/login/login-modal.service';
 import { LoginService } from 'app/core/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
+import { JhiMainComponent } from 'app/layouts/main/main.component';
 
 @Component({
   selector: 'jhi-navbar',
@@ -32,7 +33,8 @@ export class NavbarComponent implements OnInit {
     private accountService: AccountService,
     private loginModalService: LoginModalService,
     private profileService: ProfileService,
-    private router: Router
+    private router: Router,
+    private jhiMainComponent: JhiMainComponent
   ) {
     this.version = VERSION ? (VERSION.toLowerCase().startsWith('v') ? VERSION : 'v' + VERSION) : '';
     this.isNavbarCollapsed = true;
@@ -40,7 +42,6 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.languages = this.languageHelper.getAll();
-
     this.profileService.getProfileInfo().subscribe(profileInfo => {
       this.inProduction = profileInfo.inProduction;
       this.swaggerEnabled = profileInfo.swaggerEnabled;
@@ -52,6 +53,11 @@ export class NavbarComponent implements OnInit {
     this.languageService.changeLanguage(languageKey);
   }
 
+  closeNavBar() {
+    if (this.jhiMainComponent.isExtraSmallDevice()) {
+      this.jhiMainComponent.collapseNavBar();
+    }
+  }
   collapseNavbar() {
     this.isNavbarCollapsed = true;
   }

@@ -27,7 +27,7 @@ export class RehabilitationGroupComponent implements OnInit, OnDestroy {
   predicate: any;
   reverse: any;
   totalItems: number;
-
+  ready;
   constructor(
     protected rehabilitationGroupService: RehabilitationGroupService,
     protected eventManager: JhiEventManager,
@@ -111,5 +111,6 @@ export class RehabilitationGroupComponent implements OnInit, OnDestroy {
     for (let i = 0; i < data.length; i++) {
       this.rehabilitationGroups.push(data[i]);
     }
+    this.ready = true;
   }
 }

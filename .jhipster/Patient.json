@@ -31,7 +31,7 @@
         },
         {
             "fieldName": "lastEventOcurred",
-            "fieldType": "Instant",
+            "fieldType": "Integer",
             "fieldValidateRules": [
                 "required"
             ]

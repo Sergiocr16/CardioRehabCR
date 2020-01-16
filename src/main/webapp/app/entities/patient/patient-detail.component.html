@@ -79,12 +79,12 @@
     </mat-card-header>
     <mat-card-content>
         <div class="margin-left-20">
-            <mat-card-subtitle><span>Edad: {{patient.sessionNumber}}</span></mat-card-subtitle>
+            <mat-card-subtitle><span>Edad: {{patient.age}}</span></mat-card-subtitle>
             <mat-card-subtitle><span>Sexo: {{patient.sex}}</span></mat-card-subtitle>
             <mat-card-subtitle><span>Ocupation: {{patient.ocupation}}</span></mat-card-subtitle>
             <mat-card-subtitle><span>Escolaridad: {{patient.scholarship}}</span></mat-card-subtitle>
             <mat-card-subtitle>
-                <span>Tiempo desde el último evento coronario: {{patient.lastEventOcurred | date }}</span>
+                <span>Tiempo desde el último evento coronario: {{patient.lastEventOcurred}} meses</span>
             </mat-card-subtitle>
         </div>
         <mat-accordion class="example-headers-align">

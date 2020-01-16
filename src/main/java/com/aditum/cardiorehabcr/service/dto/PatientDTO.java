@@ -24,7 +24,7 @@ public class PatientDTO implements Serializable {
     private String ocupation;
 
     @NotNull
-    private Instant lastEventOcurred;
+    private Integer lastEventOcurred;
 
     private Boolean deceased;
 
@@ -81,11 +81,11 @@ public class PatientDTO implements Serializable {
         this.ocupation = ocupation;
     }
 
-    public Instant getLastEventOcurred() {
+    public Integer getLastEventOcurred() {
         return lastEventOcurred;
     }
 
-    public void setLastEventOcurred(Instant lastEventOcurred) {
+    public void setLastEventOcurred(Integer lastEventOcurred) {
         this.lastEventOcurred = lastEventOcurred;
     }
 

@@ -26,6 +26,7 @@ export class UserManagementUpdateComponent implements OnInit, OnDestroy {
   title;
   modalSuccessMessage;
   rehabilitationcenters: IRehabilitationCenter[];
+  confirmMessage;
 
   editForm = this.fb.group({
     id: [null],
@@ -66,6 +67,7 @@ export class UserManagementUpdateComponent implements OnInit, OnDestroy {
       this.title = !this.user.id ? 'Crear un usuario' : 'Editar un usuario';
       this.modalSuccessMessage = !this.user.id ? 'Usuario creado correctamente.' : 'Usuario editado correctamente.';
       this.global.setTitle(this.title);
+      this.confirmMessage = !user.id ? 'new' : 'update';
     });
     this.global.enteringForm();
 
@@ -130,13 +132,15 @@ export class UserManagementUpdateComponent implements OnInit, OnDestroy {
   }
 
   save() {
-    this.isSaving = true;
-    this.updateUser(this.user, this.appUser);
-    if (this.user.id !== null) {
-      this.userService.update(this.user).subscribe(response => this.onSaveSuccess(response), () => this.onSaveError());
-    } else {
-      this.userService.create(this.user).subscribe(response => this.onSaveSuccess(response), () => this.onSaveError());
-    }
+    this.modal.confirmDialog(this.confirmMessage, () => {
+      this.isSaving = true;
+      this.updateUser(this.user, this.appUser);
+      if (this.user.id !== null) {
+        this.userService.update(this.user).subscribe(response => this.onSaveSuccess(response), () => this.onSaveError());
+      } else {
+        this.userService.create(this.user).subscribe(response => this.onSaveSuccess(response), () => this.onSaveError());
+      }
+    });
   }
 
   private updateUser(user: User, appUser): void {

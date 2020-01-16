@@ -51,7 +51,7 @@ export class LoginComponent implements AfterViewInit {
         rememberMe: this.loginForm.get('rememberMe').value
       })
       .subscribe(
-        () => {
+        user => {
           this.authenticationError = false;
           if (
             this.router.url === '/account/register' ||
@@ -65,7 +65,20 @@ export class LoginComponent implements AfterViewInit {
             name: 'authenticationSuccess',
             content: 'Sending Authentication Success'
           });
-
+          switch (user.authorities[0]) {
+            case 'ROLE_ADMIN':
+              this.router.navigateByUrl('/admin/user-management');
+              break;
+            case 'ROLE_MANAGER':
+              this.router.navigateByUrl('/panel-data');
+              break;
+            case 'ROLE_CONSULTANT':
+              this.router.navigateByUrl('/panel-data');
+              break;
+            case 'ROLE_USER':
+              this.router.navigateByUrl('/evaluation');
+              break;
+          }
           // previousState was set in the authExpiredInterceptor before being redirected to login modal.
           // since login is successful, go to stored previousState and clear previousState
           const redirect = this.stateStorageService.getUrl();
