@@ -1,0 +1,42 @@
+{
+    "name": "DepressiveSymptomsSession",
+    "fields": [
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "depressiveSymptomId",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "exist",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "session",
+            "otherEntityRelationshipName": "depressiveSymptomsSession",
+            "relationshipName": "session",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200116214307",
+    "entityTableName": "depressive_symptoms_session",
+    "dto": "mapstruct",
+    "pagination": "infinite-scroll",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,117 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-final-assessment-heading" jhiTranslate="cardioRehabCrApp.finalAssessment.home.createOrEditLabel">Create or edit a Final Assessment</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.finalAssessment.smoking" for="field_smoking">Smoking</label>
+                    <input type="text" class="form-control" name="smoking" id="field_smoking"
+                           formControlName="smoking"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.finalAssessment.weight" for="field_weight">Weight</label>
+                    <input type="text" class="form-control" name="weight" id="field_weight"
+                           formControlName="weight"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.finalAssessment.size" for="field_size">Size</label>
+                    <input type="text" class="form-control" name="size" id="field_size"
+                           formControlName="size"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.finalAssessment.iMC" for="field_iMC">I MC</label>
+                    <input type="text" class="form-control" name="iMC" id="field_iMC"
+                           formControlName="iMC"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.finalAssessment.hbiac" for="field_hbiac">Hbiac</label>
+                    <input type="text" class="form-control" name="hbiac" id="field_hbiac"
+                           formControlName="hbiac"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.finalAssessment.baselineFunctionalCapacity" for="field_baselineFunctionalCapacity">Baseline Functional Capacity</label>
+                    <input type="text" class="form-control" name="baselineFunctionalCapacity" id="field_baselineFunctionalCapacity"
+                           formControlName="baselineFunctionalCapacity"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.finalAssessment.lDL" for="field_lDL">L DL</label>
+                    <input type="text" class="form-control" name="lDL" id="field_lDL"
+                           formControlName="lDL"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.finalAssessment.hDL" for="field_hDL">H DL</label>
+                    <input type="text" class="form-control" name="hDL" id="field_hDL"
+                           formControlName="hDL"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.finalAssessment.cardiovascularRisk" for="field_cardiovascularRisk">Cardiovascular Risk</label>
+                    <input type="text" class="form-control" name="cardiovascularRisk" id="field_cardiovascularRisk"
+                           formControlName="cardiovascularRisk"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.finalAssessment.isWorking" for="field_isWorking">Is Working</label>
+                    <input type="checkbox" class="form-control" name="isWorking" id="field_isWorking"
+                           formControlName="isWorking"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.finalAssessment.deceased" for="field_deceased">Deceased</label>
+                    <input type="checkbox" class="form-control" name="deceased" id="field_deceased"
+                           formControlName="deceased"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.finalAssessment.abandonment" for="field_abandonment">Abandonment</label>
+                    <input type="checkbox" class="form-control" name="abandonment" id="field_abandonment"
+                           formControlName="abandonment"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.finalAssessment.abandonmentMedicCause" for="field_abandonmentMedicCause">Abandonment Medic Cause</label>
+                    <input type="checkbox" class="form-control" name="abandonmentMedicCause" id="field_abandonmentMedicCause"
+                           formControlName="abandonmentMedicCause"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.finalAssessment.hospitalized" for="field_hospitalized">Hospitalized</label>
+                    <input type="checkbox" class="form-control" name="hospitalized" id="field_hospitalized"
+                           formControlName="hospitalized"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.finalAssessment.deleted" for="field_deleted">Deleted</label>
+                    <input type="checkbox" class="form-control" name="deleted" id="field_deleted"
+                           formControlName="deleted"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.finalAssessment.reevaluation" for="field_reevaluation">Reevaluation</label>
+                    <input type="checkbox" class="form-control" name="reevaluation" id="field_reevaluation"
+                           formControlName="reevaluation"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.finalAssessment.executionDate" for="field_executionDate">Execution Date</label>
+                    <div class="d-flex">
+                        <input id="field_executionDate" type="datetime-local" class="form-control" name="executionDate" formControlName="executionDate" placeholder="YYYY-MM-DD HH:mm"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="cardioRehabCrApp.finalAssessment.patient" for="field_patient">Patient</label>
+                    <select class="form-control" id="field_patient" name="patient" formControlName="patientId">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="patientOption.id" *ngFor="let patientOption of patients; trackBy: trackById">{{patientOption.id}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

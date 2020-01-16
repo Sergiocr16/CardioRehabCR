@@ -1,0 +1,51 @@
+{
+    "name": "RehabilitationGroup",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "creationDate",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "programStatus",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "deleted",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "patient",
+            "otherEntityRelationshipName": "rehabilitationGroup",
+            "relationshipName": "patient",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "rehabilitationCenter",
+            "otherEntityRelationshipName": "rehabilitationGroup",
+            "relationshipName": "rehabilitationCenter",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200116214320",
+    "entityTableName": "rehabilitation_group",
+    "dto": "mapstruct",
+    "pagination": "infinite-scroll",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

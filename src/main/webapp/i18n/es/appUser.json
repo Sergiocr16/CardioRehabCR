@@ -1,0 +1,27 @@
+{
+  "cardioRehabCrApp": {
+    "appUser": {
+      "home": {
+        "title": "App Users",
+        "createLabel": "Crear nuevo App User",
+        "createOrEditLabel": "Crear o editar App User",
+        "notFound": "Ningún App Users encontrado"
+      },
+      "created": "Un nuevo App User ha sido creado con el identificador {{ param }}",
+      "updated": "Un App User ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un App User ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar App User {{ id }}?"
+      },
+      "detail": {
+        "title": "App User"
+      },
+      "name": "Name",
+      "lastName": "Last Name",
+      "authorityType": "Authority Type",
+      "status": "Status",
+      "user": "User",
+      "rehabilitationCenter": "Rehabilitation Center"
+    }
+  }
+}

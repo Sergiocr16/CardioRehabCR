@@ -1,0 +1,35 @@
+{
+    "name": "Comorbiditie",
+    "fields": [
+        {
+            "fieldName": "description",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "deleted",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "rehabilitationCenter",
+            "otherEntityRelationshipName": "comorbiditie",
+            "relationshipName": "rehabilitationCenter",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200116214304",
+    "entityTableName": "comorbiditie",
+    "dto": "mapstruct",
+    "pagination": "infinite-scroll",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}
