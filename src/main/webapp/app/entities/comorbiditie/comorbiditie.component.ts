@@ -6,10 +6,10 @@ import { ModalService } from 'app/shared/util/modal.service';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
 import { IComorbiditie } from 'app/shared/model/comorbiditie.model';
-import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { ComorbiditieService } from './comorbiditie.service';
@@ -21,8 +21,7 @@ import { RehabilitationCenterService } from 'app/entities/rehabilitation-center/
 export class ComorbiditieComponent implements OnInit, OnDestroy {
   rehabilitationCenters: IRehabilitationCenter[];
   comorbidities: IComorbiditie[];
-  currentAccount: any;
-  eventSubscriber: Subscription;
+  eventSubscriber?: Subscription;
   itemsPerPage: number;
   links: any;
   page: any;
@@ -48,10 +47,10 @@ export class ComorbiditieComponent implements OnInit, OnDestroy {
       last: 0
     };
     this.predicate = 'id';
-    this.reverse = true;
+    this.ascending = true;
   }
 
-  loadAll() {
+  loadAll(): void {
     this.comorbiditieService
       .query({
         page: this.page,
@@ -99,20 +98,28 @@ export class ComorbiditieComponent implements OnInit, OnDestroy {
     this.registerChangeInComorbidities();
   }
 
-  ngOnDestroy() {
-    this.eventManager.destroy(this.eventSubscriber);
+  ngOnDestroy(): void {
+    if (this.eventSubscriber) {
+      this.eventManager.destroy(this.eventSubscriber);
+    }
   }
 
-  trackId(index: number, item: IComorbiditie) {
-    return item.id;
+  trackId(index: number, item: IComorbiditie): number {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    return item.id!;
   }
 
-  registerChangeInComorbidities() {
-    this.eventSubscriber = this.eventManager.subscribe('comorbiditieListModification', response => this.reset());
+  registerChangeInComorbidities(): void {
+    this.eventSubscriber = this.eventManager.subscribe('comorbiditieListModification', () => this.reset());
   }
 
-  sort() {
-    const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
+  delete(comorbiditie: IComorbiditie): void {
+    const modalRef = this.modalService.open(ComorbiditieDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.comorbiditie = comorbiditie;
+  }
+
+  sort(): string[] {
+    const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
     if (this.predicate !== 'id') {
       result.push('id');
     }

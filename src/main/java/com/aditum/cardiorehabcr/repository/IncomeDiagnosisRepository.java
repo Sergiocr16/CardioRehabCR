@@ -1,4 +1,5 @@
 package com.aditum.cardiorehabcr.repository;
+
 import com.aditum.cardiorehabcr.domain.IncomeDiagnosis;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

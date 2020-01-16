@@ -306,42 +306,4 @@ public class DepressiveSymptomsSessionResourceIT {
         List<DepressiveSymptomsSession> depressiveSymptomsSessionList = depressiveSymptomsSessionRepository.findAll();
         assertThat(depressiveSymptomsSessionList).hasSize(databaseSizeBeforeDelete - 1);
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(DepressiveSymptomsSession.class);
-        DepressiveSymptomsSession depressiveSymptomsSession1 = new DepressiveSymptomsSession();
-        depressiveSymptomsSession1.setId(1L);
-        DepressiveSymptomsSession depressiveSymptomsSession2 = new DepressiveSymptomsSession();
-        depressiveSymptomsSession2.setId(depressiveSymptomsSession1.getId());
-        assertThat(depressiveSymptomsSession1).isEqualTo(depressiveSymptomsSession2);
-        depressiveSymptomsSession2.setId(2L);
-        assertThat(depressiveSymptomsSession1).isNotEqualTo(depressiveSymptomsSession2);
-        depressiveSymptomsSession1.setId(null);
-        assertThat(depressiveSymptomsSession1).isNotEqualTo(depressiveSymptomsSession2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(DepressiveSymptomsSessionDTO.class);
-        DepressiveSymptomsSessionDTO depressiveSymptomsSessionDTO1 = new DepressiveSymptomsSessionDTO();
-        depressiveSymptomsSessionDTO1.setId(1L);
-        DepressiveSymptomsSessionDTO depressiveSymptomsSessionDTO2 = new DepressiveSymptomsSessionDTO();
-        assertThat(depressiveSymptomsSessionDTO1).isNotEqualTo(depressiveSymptomsSessionDTO2);
-        depressiveSymptomsSessionDTO2.setId(depressiveSymptomsSessionDTO1.getId());
-        assertThat(depressiveSymptomsSessionDTO1).isEqualTo(depressiveSymptomsSessionDTO2);
-        depressiveSymptomsSessionDTO2.setId(2L);
-        assertThat(depressiveSymptomsSessionDTO1).isNotEqualTo(depressiveSymptomsSessionDTO2);
-        depressiveSymptomsSessionDTO1.setId(null);
-        assertThat(depressiveSymptomsSessionDTO1).isNotEqualTo(depressiveSymptomsSessionDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(depressiveSymptomsSessionMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(depressiveSymptomsSessionMapper.fromId(null)).isNull();
-    }
 }

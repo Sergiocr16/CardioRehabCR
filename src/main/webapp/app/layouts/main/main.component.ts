@@ -57,13 +57,31 @@ export class JhiMainComponent implements OnInit {
 
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this.jhiLanguageHelper.updateTitle(this.getPageTitle(this.router.routerState.snapshot.root));
+        this.updateTitle();
       }
       if (event instanceof NavigationError && event.error.status === 404) {
         this.router.navigate(['/404']);
       }
       this.isCreatingNewPassWord = this.router.url.split('?')[0] === '/account/reset/finish';
     });
+
+    this.translateService.onLangChange.subscribe(() => this.updateTitle());
+  }
+
+  private getPageTitle(routeSnapshot: ActivatedRouteSnapshot): string {
+    let title: string = routeSnapshot.data && routeSnapshot.data['pageTitle'] ? routeSnapshot.data['pageTitle'] : '';
+    if (routeSnapshot.firstChild) {
+      title = this.getPageTitle(routeSnapshot.firstChild) || title;
+    }
+    return title;
+  }
+
+  private updateTitle(): void {
+    let pageTitle = this.getPageTitle(this.router.routerState.snapshot.root);
+    if (!pageTitle) {
+      pageTitle = 'global.title';
+    }
+    this.translateService.get(pageTitle).subscribe(title => this.titleService.setTitle(title));
   }
 
   isAuthenticated() {

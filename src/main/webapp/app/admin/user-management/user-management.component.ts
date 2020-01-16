@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
-
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
-import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/user/account.model';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.model';
 import { ModalService } from 'app/shared/util/modal.service';
@@ -17,25 +18,19 @@ import { IComorbiditie } from 'app/shared/model/comorbiditie.model';
   templateUrl: './user-management.component.html'
 })
 export class UserManagementComponent implements OnInit, OnDestroy {
-  currentAccount: any;
-  users: User[];
-  error: any;
-  success: any;
-  userListSubscription: Subscription;
-  routeData: Subscription;
-  links: any;
-  totalItems: any;
-  itemsPerPage: any;
-  page: any;
-  predicate: any;
-  previousPage: any;
-  reverse: any;
+  currentAccount: Account | null = null;
+  users: User[] | null = null;
+  userListSubscription?: Subscription;
+  totalItems = 0;
+  itemsPerPage = ITEMS_PER_PAGE;
+  page!: number;
+  predicate!: string;
+  previousPage!: number;
+  ascending!: boolean;
 
   constructor(
     private userService: UserService,
-    private alertService: JhiAlertService,
     private accountService: AccountService,
-    private parseLinks: JhiParseLinks,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private eventManager: JhiEventManager,
@@ -58,74 +53,39 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    this.routeData.unsubscribe();
+  ngOnDestroy(): void {
     if (this.userListSubscription) {
       this.eventManager.destroy(this.userListSubscription);
     }
   }
 
-  registerChangeInUsers() {
-    this.userListSubscription = this.eventManager.subscribe('userListModification', response => this.loadAll());
+  setActive(user: User, isActivated: boolean): void {
+    this.userService.update({ ...user, activated: isActivated }).subscribe(() => this.loadAll());
   }
 
-  setActive(user, isActivated) {
-    user.activated = isActivated;
-
-    this.userService.update(user).subscribe(
-      response => {
-        this.error = null;
-        this.success = 'OK';
-        this.loadAll();
-      },
-      () => {
-        this.success = null;
-        this.error = 'ERROR';
-      }
-    );
-  }
-
-  loadAll() {
-    this.userService
-      .query({
-        page: this.page - 1,
-        size: this.itemsPerPage,
-        sort: this.sort()
-      })
-      .subscribe((res: HttpResponse<User[]>) => this.onSuccess(res.body, res.headers), (res: HttpResponse<any>) => this.onError(res.body));
-  }
-
-  trackIdentity(index, item: User) {
+  trackIdentity(index: number, item: User): any {
     return item.id;
   }
 
-  sort() {
-    const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
-    if (this.predicate !== 'id') {
-      result.push('id');
-    }
-    return result;
-  }
-
-  loadPage(page: number) {
+  loadPage(page: number): void {
     if (page !== this.previousPage) {
       this.previousPage = page;
       this.transition();
     }
   }
 
-  transition() {
+  transition(): void {
     this.router.navigate(['./'], {
       relativeTo: this.activatedRoute.parent,
       queryParams: {
         page: this.page,
-        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+        sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')
       }
     });
     this.loadAll();
   }
 
-  deleteUser(user) {
+  deleteUser(user: any) {
     this.modal.confirmDialog('delete', () => {
       this.subscribeToSaveResponse(this.userService.delete(user.login));
     });
@@ -147,7 +107,8 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     this.users = data;
   }
 
-  private onError(error) {
-    this.alertService.error(error.error, error.message, null);
+  private onSuccess(users: User[] | null, headers: HttpHeaders): void {
+    this.totalItems = Number(headers.get('X-Total-Count'));
+    this.users = users;
   }
 }

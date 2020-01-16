@@ -414,42 +414,4 @@ public class InitialAssessmentResourceIT {
         List<InitialAssessment> initialAssessmentList = initialAssessmentRepository.findAll();
         assertThat(initialAssessmentList).hasSize(databaseSizeBeforeDelete - 1);
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(InitialAssessment.class);
-        InitialAssessment initialAssessment1 = new InitialAssessment();
-        initialAssessment1.setId(1L);
-        InitialAssessment initialAssessment2 = new InitialAssessment();
-        initialAssessment2.setId(initialAssessment1.getId());
-        assertThat(initialAssessment1).isEqualTo(initialAssessment2);
-        initialAssessment2.setId(2L);
-        assertThat(initialAssessment1).isNotEqualTo(initialAssessment2);
-        initialAssessment1.setId(null);
-        assertThat(initialAssessment1).isNotEqualTo(initialAssessment2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(InitialAssessmentDTO.class);
-        InitialAssessmentDTO initialAssessmentDTO1 = new InitialAssessmentDTO();
-        initialAssessmentDTO1.setId(1L);
-        InitialAssessmentDTO initialAssessmentDTO2 = new InitialAssessmentDTO();
-        assertThat(initialAssessmentDTO1).isNotEqualTo(initialAssessmentDTO2);
-        initialAssessmentDTO2.setId(initialAssessmentDTO1.getId());
-        assertThat(initialAssessmentDTO1).isEqualTo(initialAssessmentDTO2);
-        initialAssessmentDTO2.setId(2L);
-        assertThat(initialAssessmentDTO1).isNotEqualTo(initialAssessmentDTO2);
-        initialAssessmentDTO1.setId(null);
-        assertThat(initialAssessmentDTO1).isNotEqualTo(initialAssessmentDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(initialAssessmentMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(initialAssessmentMapper.fromId(null)).isNull();
-    }
 }

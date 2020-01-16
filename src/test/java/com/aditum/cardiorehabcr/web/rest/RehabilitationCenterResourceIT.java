@@ -297,42 +297,4 @@ public class RehabilitationCenterResourceIT {
         List<RehabilitationCenter> rehabilitationCenterList = rehabilitationCenterRepository.findAll();
         assertThat(rehabilitationCenterList).hasSize(databaseSizeBeforeDelete - 1);
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(RehabilitationCenter.class);
-        RehabilitationCenter rehabilitationCenter1 = new RehabilitationCenter();
-        rehabilitationCenter1.setId(1L);
-        RehabilitationCenter rehabilitationCenter2 = new RehabilitationCenter();
-        rehabilitationCenter2.setId(rehabilitationCenter1.getId());
-        assertThat(rehabilitationCenter1).isEqualTo(rehabilitationCenter2);
-        rehabilitationCenter2.setId(2L);
-        assertThat(rehabilitationCenter1).isNotEqualTo(rehabilitationCenter2);
-        rehabilitationCenter1.setId(null);
-        assertThat(rehabilitationCenter1).isNotEqualTo(rehabilitationCenter2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(RehabilitationCenterDTO.class);
-        RehabilitationCenterDTO rehabilitationCenterDTO1 = new RehabilitationCenterDTO();
-        rehabilitationCenterDTO1.setId(1L);
-        RehabilitationCenterDTO rehabilitationCenterDTO2 = new RehabilitationCenterDTO();
-        assertThat(rehabilitationCenterDTO1).isNotEqualTo(rehabilitationCenterDTO2);
-        rehabilitationCenterDTO2.setId(rehabilitationCenterDTO1.getId());
-        assertThat(rehabilitationCenterDTO1).isEqualTo(rehabilitationCenterDTO2);
-        rehabilitationCenterDTO2.setId(2L);
-        assertThat(rehabilitationCenterDTO1).isNotEqualTo(rehabilitationCenterDTO2);
-        rehabilitationCenterDTO1.setId(null);
-        assertThat(rehabilitationCenterDTO1).isNotEqualTo(rehabilitationCenterDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(rehabilitationCenterMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(rehabilitationCenterMapper.fromId(null)).isNull();
-    }
 }

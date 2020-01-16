@@ -5,10 +5,10 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
-import { JhiAlertService } from 'ng-jhipster';
+
 import { ISession, Session } from 'app/shared/model/session.model';
 import { SessionService } from './session.service';
 import { IPatient, Patient } from 'app/shared/model/patient.model';
@@ -51,7 +51,6 @@ export class SessionUpdateComponent implements OnInit, OnDestroy {
   });
 
   constructor(
-    protected jhiAlertService: JhiAlertService,
     protected sessionService: SessionService,
     protected patientService: PatientService,
     protected activatedRoute: ActivatedRoute,
@@ -65,8 +64,7 @@ export class SessionUpdateComponent implements OnInit, OnDestroy {
     private fb: FormBuilder
   ) {}
 
-  ngOnInit() {
-    this.isSaving = false;
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ session }) => {
       session.executionDate = moment(new Date());
       this.updateForm(session);
@@ -155,22 +153,22 @@ export class SessionUpdateComponent implements OnInit, OnDestroy {
       );
   }
 
-  formatCheckBoxArray(res, array) {
+  formatCheckBoxArray(res:any, array:any) {
     for (const o of res) {
       o.checked = false;
       array.push(o);
     }
   }
 
-  valueChange(array, i, $event) {
+  valueChange(array:any, i:any, $event:any) {
     array[i].checked = $event.checked;
   }
 
-  setInvalidForm(isSaving) {
+  setInvalidForm(isSaving:any) {
     this.global.setFormStatus(isSaving);
   }
 
-  updateForm(session: ISession) {
+  updateForm(session: ISession): void {
     this.editForm.patchValue({
       id: session.id,
       code: session.code,
@@ -184,7 +182,7 @@ export class SessionUpdateComponent implements OnInit, OnDestroy {
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 
@@ -206,8 +204,8 @@ export class SessionUpdateComponent implements OnInit, OnDestroy {
       id: this.editForm.get(['id']).value,
       code: this.patient.sessionNumber,
       executionDate:
-        this.editForm.get(['executionDate']).value != null
-          ? moment(this.editForm.get(['executionDate']).value, DATE_TIME_FORMAT)
+        this.editForm.get(['executionDate'])!.value != null
+          ? moment(this.editForm.get(['executionDate'])!.value, DATE_TIME_FORMAT)
           : undefined,
       abscence: this.editForm.get(['abscence']).value,
       hospitalization: this.editForm.get(['hospitalization']).value,
@@ -222,7 +220,7 @@ export class SessionUpdateComponent implements OnInit, OnDestroy {
     };
   }
 
-  formatMinorEventsChecked(array) {
+  formatMinorEventsChecked(array:any) {
     const newArray = [];
     for (const o of array) {
       const obj = {
@@ -237,7 +235,7 @@ export class SessionUpdateComponent implements OnInit, OnDestroy {
     return newArray;
   }
 
-  formatMayorEventsChecked(array) {
+  formatMayorEventsChecked(array:any) {
     const newArray = [];
     for (const o of array) {
       const obj = {
@@ -252,7 +250,7 @@ export class SessionUpdateComponent implements OnInit, OnDestroy {
     return newArray;
   }
 
-  formatDepressiveSymptomsChecked(array) {
+  formatDepressiveSymptomsChecked(array:any) {
     const newArray = [];
     for (const o of array) {
       const obj = {
@@ -267,7 +265,7 @@ export class SessionUpdateComponent implements OnInit, OnDestroy {
     return newArray;
   }
 
-  formatNonSpecificPainChecked(array) {
+  formatNonSpecificPainChecked(array:any) {
     const newArray = [];
     for (const o of array) {
       const obj = {
@@ -309,7 +307,7 @@ export class SessionUpdateComponent implements OnInit, OnDestroy {
     this.jhiAlertService.error(errorMessage, null, null);
   }
 
-  trackPatientById(index: number, item: IPatient) {
+  trackById(index: number, item: IPatient): any {
     return item.id;
   }
 

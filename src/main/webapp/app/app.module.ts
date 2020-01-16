@@ -13,6 +13,7 @@ import { GlobalVariablesService } from 'app/shared/util/global-variables.service
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { JhiMainComponent } from './layouts/main/main.component';
+
 import { NavbarComponent } from './layouts/navbar/navbar.component';
 import { LoginComponent } from './shared/login/login-cardio.component';
 import { FooterComponent } from './layouts/footer/footer.component';

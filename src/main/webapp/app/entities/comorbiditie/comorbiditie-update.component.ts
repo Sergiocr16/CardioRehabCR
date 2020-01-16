@@ -5,8 +5,8 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { JhiAlertService } from 'ng-jhipster';
+import { map } from 'rxjs/operators';
+
 import { IComorbiditie, Comorbiditie } from 'app/shared/model/comorbiditie.model';
 import { ComorbiditieService } from './comorbiditie.service';
 import { GlobalVariablesService } from 'app/shared/util/global-variables.service';
@@ -34,7 +34,6 @@ export class ComorbiditieUpdateComponent implements OnInit, OnDestroy {
   });
 
   constructor(
-    protected jhiAlertService: JhiAlertService,
     protected comorbiditieService: ComorbiditieService,
     protected rehabilitationCenterService: RehabilitationCenterService,
     protected activatedRoute: ActivatedRoute,
@@ -84,7 +83,7 @@ export class ComorbiditieUpdateComponent implements OnInit, OnDestroy {
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 
@@ -103,24 +102,24 @@ export class ComorbiditieUpdateComponent implements OnInit, OnDestroy {
   private createFromForm(): IComorbiditie {
     return {
       ...new Comorbiditie(),
-      id: this.editForm.get(['id']).value,
-      description: this.editForm.get(['description']).value,
-      deleted: this.editForm.get(['deleted']).value,
-      rehabilitationCenterId: this.editForm.get(['rehabilitationCenterId']).value
+      id: this.editForm.get(['id'])!.value,
+      description: this.editForm.get(['description'])!.value,
+      deleted: this.editForm.get(['deleted'])!.value,
+      rehabilitationCenterId: this.editForm.get(['rehabilitationCenterId'])!.value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IComorbiditie>>) {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IComorbiditie>>): void {
     result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
 
-  protected onSaveSuccess() {
+  protected onSaveSuccess(): void {
     this.isSaving = false;
     this.modal.message(this.modalSuccessMessage);
     this.previousState();
   }
 
-  protected onSaveError() {
+  protected onSaveError(): void {
     this.isSaving = false;
   }
 
@@ -128,7 +127,7 @@ export class ComorbiditieUpdateComponent implements OnInit, OnDestroy {
     this.jhiAlertService.error(errorMessage, null, null);
   }
 
-  trackRehabilitationCenterById(index: number, item: IRehabilitationCenter) {
+  trackById(index: number, item: IRehabilitationCenter): any {
     return item.id;
   }
 }

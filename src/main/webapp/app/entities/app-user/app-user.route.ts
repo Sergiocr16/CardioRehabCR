@@ -1,27 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
+import { Observable, of, EMPTY } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { AppUser } from 'app/shared/model/app-user.model';
+import { IAppUser, AppUser } from 'app/shared/model/app-user.model';
 import { AppUserService } from './app-user.service';
 import { AppUserComponent } from './app-user.component';
 import { AppUserDetailComponent } from './app-user-detail.component';
 import { AppUserUpdateComponent } from './app-user-update.component';
-import { AppUserDeletePopupComponent } from './app-user-delete-dialog.component';
-import { IAppUser } from 'app/shared/model/app-user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AppUserResolve implements Resolve<IAppUser> {
-  constructor(private service: AppUserService) {}
+  constructor(private service: AppUserService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IAppUser> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IAppUser> | Observable<never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        filter((response: HttpResponse<AppUser>) => response.ok),
-        map((appUser: HttpResponse<AppUser>) => appUser.body)
+        flatMap((appUser: HttpResponse<AppUser>) => {
+          if (appUser.body) {
+            return of(appUser.body);
+          } else {
+            this.router.navigate(['404']);
+            return EMPTY;
+          }
+        })
       );
     }
     return of(new AppUser());
@@ -73,21 +78,5 @@ export const appUserRoute: Routes = [
       pageTitle: 'cardioRehabCrApp.appUser.home.title'
     },
     canActivate: [UserRouteAccessService]
-  }
-];
-
-export const appUserPopupRoute: Routes = [
-  {
-    path: ':id/delete',
-    component: AppUserDeletePopupComponent,
-    resolve: {
-      appUser: AppUserResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'cardioRehabCrApp.appUser.home.title'
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
   }
 ];

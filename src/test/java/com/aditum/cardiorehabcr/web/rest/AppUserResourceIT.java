@@ -297,42 +297,4 @@ public class AppUserResourceIT {
         List<AppUser> appUserList = appUserRepository.findAll();
         assertThat(appUserList).hasSize(databaseSizeBeforeDelete - 1);
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AppUser.class);
-        AppUser appUser1 = new AppUser();
-        appUser1.setId(1L);
-        AppUser appUser2 = new AppUser();
-        appUser2.setId(appUser1.getId());
-        assertThat(appUser1).isEqualTo(appUser2);
-        appUser2.setId(2L);
-        assertThat(appUser1).isNotEqualTo(appUser2);
-        appUser1.setId(null);
-        assertThat(appUser1).isNotEqualTo(appUser2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AppUserDTO.class);
-        AppUserDTO appUserDTO1 = new AppUserDTO();
-        appUserDTO1.setId(1L);
-        AppUserDTO appUserDTO2 = new AppUserDTO();
-        assertThat(appUserDTO1).isNotEqualTo(appUserDTO2);
-        appUserDTO2.setId(appUserDTO1.getId());
-        assertThat(appUserDTO1).isEqualTo(appUserDTO2);
-        appUserDTO2.setId(2L);
-        assertThat(appUserDTO1).isNotEqualTo(appUserDTO2);
-        appUserDTO1.setId(null);
-        assertThat(appUserDTO1).isNotEqualTo(appUserDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(appUserMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(appUserMapper.fromId(null)).isNull();
-    }
 }

@@ -18,7 +18,7 @@ describe('Service Tests', () => {
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule]
       });
-      expectedResult = {};
+      expectedResult = null;
       injector = getTestBed();
       service = injector.get(PatientService);
       httpMock = injector.get(HttpTestingController);
@@ -38,11 +38,11 @@ describe('Service Tests', () => {
         service
           .find(123)
           .pipe(take(1))
-          .subscribe(resp => (expectedResult = resp));
+          .subscribe(resp => (expectedResult = resp.body));
 
         const req = httpMock.expectOne({ method: 'GET' });
         req.flush(returnedFromService);
-        expect(expectedResult).toMatchObject({ body: elemDefault });
+        expect(expectedResult).toMatchObject(elemDefault);
       });
 
       it('should create a Patient', () => {
@@ -60,12 +60,12 @@ describe('Service Tests', () => {
           returnedFromService
         );
         service
-          .create(new Patient(null))
+          .create(new Patient())
           .pipe(take(1))
-          .subscribe(resp => (expectedResult = resp));
+          .subscribe(resp => (expectedResult = resp.body));
         const req = httpMock.expectOne({ method: 'POST' });
         req.flush(returnedFromService);
-        expect(expectedResult).toMatchObject({ body: expected });
+        expect(expectedResult).toMatchObject(expected);
       });
 
       it('should update a Patient', () => {
@@ -95,10 +95,10 @@ describe('Service Tests', () => {
         service
           .update(expected)
           .pipe(take(1))
-          .subscribe(resp => (expectedResult = resp));
+          .subscribe(resp => (expectedResult = resp.body));
         const req = httpMock.expectOne({ method: 'PUT' });
         req.flush(returnedFromService);
-        expect(expectedResult).toMatchObject({ body: expected });
+        expect(expectedResult).toMatchObject(expected);
       });
 
       it('should return a list of Patient', () => {
@@ -125,7 +125,7 @@ describe('Service Tests', () => {
           returnedFromService
         );
         service
-          .query(expected)
+          .query()
           .pipe(
             take(1),
             map(resp => resp.body)

@@ -8,17 +8,17 @@ import { IInitialAssessment } from 'app/shared/model/initial-assessment.model';
   templateUrl: './initial-assessment-detail.component.html'
 })
 export class InitialAssessmentDetailComponent implements OnInit {
-  initialAssessment: IInitialAssessment;
+  initialAssessment: IInitialAssessment | null = null;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ initialAssessment }) => {
       this.initialAssessment = initialAssessment;
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 }

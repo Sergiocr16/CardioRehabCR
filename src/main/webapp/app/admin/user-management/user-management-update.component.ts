@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { JhiLanguageHelper } from 'app/core/language/language.helper';
+import { LANGUAGES } from 'app/core/language/language.constants';
 import { User } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
 import { GlobalVariablesService } from 'app/shared/util/global-variables.service';
@@ -29,7 +29,7 @@ export class UserManagementUpdateComponent implements OnInit, OnDestroy {
   confirmMessage;
 
   editForm = this.fb.group({
-    id: [null],
+    id: [],
     login: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), Validators.pattern('^[_.@A-Za-z0-9-]*')]],
     firstName: ['', [Validators.required, Validators.maxLength(50)]],
     lastName: ['', [Validators.required, Validators.maxLength(50)]],
@@ -51,8 +51,7 @@ export class UserManagementUpdateComponent implements OnInit, OnDestroy {
     protected modal: ModalService
   ) {}
 
-  ngOnInit() {
-    this.isSaving = false;
+  ngOnInit(): void {
     this.route.data.subscribe(({ user }) => {
       this.user = user.body ? user.body : user;
       if (user.id != null) {
@@ -200,7 +199,7 @@ export class UserManagementUpdateComponent implements OnInit, OnDestroy {
     // this.jhiAlertService.error(errorMessage, null, null);
   }
 
-  private onSaveError() {
+  private onSaveError(): void {
     this.isSaving = false;
   }
 

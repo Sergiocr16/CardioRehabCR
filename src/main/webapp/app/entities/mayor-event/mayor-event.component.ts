@@ -6,9 +6,9 @@ import { ModalService } from 'app/shared/util/modal.service';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IMayorEvent } from 'app/shared/model/mayor-event.model';
-import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { MayorEventService } from './mayor-event.service';
@@ -22,8 +22,7 @@ import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.mo
 export class MayorEventComponent implements OnInit, OnDestroy {
   rehabilitationCenters: IRehabilitationCenter[];
   mayorEvents: IMayorEvent[];
-  currentAccount: any;
-  eventSubscriber: Subscription;
+  eventSubscriber?: Subscription;
   itemsPerPage: number;
   links: any;
   page: any;
@@ -49,10 +48,10 @@ export class MayorEventComponent implements OnInit, OnDestroy {
       last: 0
     };
     this.predicate = 'id';
-    this.reverse = true;
+    this.ascending = true;
   }
 
-  loadAll() {
+  loadAll(): void {
     this.mayorEventService
       .query({
         page: this.page,
@@ -80,7 +79,7 @@ export class MayorEventComponent implements OnInit, OnDestroy {
     this.loadAll();
   }
 
-  loadPage(page) {
+  loadPage(page: number): void {
     this.page = page;
     this.loadAll();
   }
@@ -98,20 +97,28 @@ export class MayorEventComponent implements OnInit, OnDestroy {
     this.registerChangeInMayorEvents();
   }
 
-  ngOnDestroy() {
-    this.eventManager.destroy(this.eventSubscriber);
+  ngOnDestroy(): void {
+    if (this.eventSubscriber) {
+      this.eventManager.destroy(this.eventSubscriber);
+    }
   }
 
-  trackId(index: number, item: IMayorEvent) {
-    return item.id;
+  trackId(index: number, item: IMayorEvent): number {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    return item.id!;
   }
 
-  registerChangeInMayorEvents() {
-    this.eventSubscriber = this.eventManager.subscribe('mayorEventListModification', response => this.reset());
+  registerChangeInMayorEvents(): void {
+    this.eventSubscriber = this.eventManager.subscribe('mayorEventListModification', () => this.reset());
   }
 
-  sort() {
-    const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
+  delete(mayorEvent: IMayorEvent): void {
+    const modalRef = this.modalService.open(MayorEventDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.mayorEvent = mayorEvent;
+  }
+
+  sort(): string[] {
+    const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
     if (this.predicate !== 'id') {
       result.push('id');
     }

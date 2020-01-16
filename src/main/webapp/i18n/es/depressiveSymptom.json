@@ -5,7 +5,7 @@
         "title": "Depressive Symptoms",
         "createLabel": "Crear nuevo Depressive Symptom",
         "createOrEditLabel": "Crear o editar Depressive Symptom",
-        "notFound": "No Depressive Symptoms found"
+        "notFound": "Ningún Depressive Symptoms encontrado"
       },
       "created": "Un nuevo Depressive Symptom ha sido creado con el identificador {{ param }}",
       "updated": "Un Depressive Symptom ha sido actualizado con el identificador {{ param }}",

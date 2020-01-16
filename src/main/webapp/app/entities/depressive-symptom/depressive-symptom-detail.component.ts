@@ -8,17 +8,17 @@ import { IDepressiveSymptom } from 'app/shared/model/depressive-symptom.model';
   templateUrl: './depressive-symptom-detail.component.html'
 })
 export class DepressiveSymptomDetailComponent implements OnInit {
-  depressiveSymptom: IDepressiveSymptom;
+  depressiveSymptom: IDepressiveSymptom | null = null;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ depressiveSymptom }) => {
       this.depressiveSymptom = depressiveSymptom;
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 }

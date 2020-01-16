@@ -3,11 +3,9 @@ import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRouteSnapshot } from '@angular/router';
 // import { TranslateService } from '@ngx-translate/core';
 
-import { LANGUAGES } from 'app/core/language/language.constants';
-
 @Injectable({ providedIn: 'root' })
-export class JhiLanguageHelper {
-  private renderer: Renderer2 = null;
+export class LanguageHelper {
+  private renderer: Renderer2;
 
   constructor(
     // private translateService: TranslateService,

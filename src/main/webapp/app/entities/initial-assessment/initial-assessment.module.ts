@@ -5,22 +5,16 @@ import { CardioRehabCrSharedModule } from 'app/shared/shared.module';
 import { InitialAssessmentComponent } from './initial-assessment.component';
 import { InitialAssessmentDetailComponent } from './initial-assessment-detail.component';
 import { InitialAssessmentUpdateComponent } from './initial-assessment-update.component';
-import {
-  InitialAssessmentDeletePopupComponent,
-  InitialAssessmentDeleteDialogComponent
-} from './initial-assessment-delete-dialog.component';
-import { initialAssessmentRoute, initialAssessmentPopupRoute } from './initial-assessment.route';
-
-const ENTITY_STATES = [...initialAssessmentRoute, ...initialAssessmentPopupRoute];
+import { InitialAssessmentDeleteDialogComponent } from './initial-assessment-delete-dialog.component';
+import { initialAssessmentRoute } from './initial-assessment.route';
 
 @NgModule({
-  imports: [CardioRehabCrSharedModule, RouterModule.forChild(ENTITY_STATES)],
+  imports: [CardioRehabCrSharedModule, RouterModule.forChild(initialAssessmentRoute)],
   declarations: [
     InitialAssessmentComponent,
     InitialAssessmentDetailComponent,
     InitialAssessmentUpdateComponent,
-    InitialAssessmentDeleteDialogComponent,
-    InitialAssessmentDeletePopupComponent
+    InitialAssessmentDeleteDialogComponent
   ],
   entryComponents: [InitialAssessmentDeleteDialogComponent]
 })

@@ -107,8 +107,7 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
     protected incomeDiagnosisPatientService: IncomeDiagnosisPatientService
   ) {}
 
-  ngOnInit() {
-    this.isSaving = false;
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ patient }) => {
       this.patient = patient;
       this.updateFormInitialInfo(patient);
@@ -258,7 +257,7 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
       );
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 
@@ -458,7 +457,7 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
     return newIncomeDiagnosis;
   }
 
-  protected onSaveError() {
+  protected onSaveError(): void {
     this.isSaving = false;
   }
 

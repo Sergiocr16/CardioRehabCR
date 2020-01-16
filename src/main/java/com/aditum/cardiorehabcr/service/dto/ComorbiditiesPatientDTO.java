@@ -89,7 +89,7 @@ public class ComorbiditiesPatientDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", comorbiditietId=" + getComorbiditietId() +
             ", exist='" + isExist() + "'" +
-            ", initialAssessment=" + getInitialAssessmentId() +
+            ", initialAssessmentId=" + getInitialAssessmentId() +
             "}";
     }
 }

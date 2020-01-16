@@ -287,42 +287,4 @@ public class DepressiveSymptomResourceIT {
         List<DepressiveSymptom> depressiveSymptomList = depressiveSymptomRepository.findAll();
         assertThat(depressiveSymptomList).hasSize(databaseSizeBeforeDelete - 1);
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(DepressiveSymptom.class);
-        DepressiveSymptom depressiveSymptom1 = new DepressiveSymptom();
-        depressiveSymptom1.setId(1L);
-        DepressiveSymptom depressiveSymptom2 = new DepressiveSymptom();
-        depressiveSymptom2.setId(depressiveSymptom1.getId());
-        assertThat(depressiveSymptom1).isEqualTo(depressiveSymptom2);
-        depressiveSymptom2.setId(2L);
-        assertThat(depressiveSymptom1).isNotEqualTo(depressiveSymptom2);
-        depressiveSymptom1.setId(null);
-        assertThat(depressiveSymptom1).isNotEqualTo(depressiveSymptom2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(DepressiveSymptomDTO.class);
-        DepressiveSymptomDTO depressiveSymptomDTO1 = new DepressiveSymptomDTO();
-        depressiveSymptomDTO1.setId(1L);
-        DepressiveSymptomDTO depressiveSymptomDTO2 = new DepressiveSymptomDTO();
-        assertThat(depressiveSymptomDTO1).isNotEqualTo(depressiveSymptomDTO2);
-        depressiveSymptomDTO2.setId(depressiveSymptomDTO1.getId());
-        assertThat(depressiveSymptomDTO1).isEqualTo(depressiveSymptomDTO2);
-        depressiveSymptomDTO2.setId(2L);
-        assertThat(depressiveSymptomDTO1).isNotEqualTo(depressiveSymptomDTO2);
-        depressiveSymptomDTO1.setId(null);
-        assertThat(depressiveSymptomDTO1).isNotEqualTo(depressiveSymptomDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(depressiveSymptomMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(depressiveSymptomMapper.fromId(null)).isNull();
-    }
 }

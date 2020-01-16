@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
+import { Observable, of, EMPTY } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { RehabilitationGroup } from 'app/shared/model/rehabilitation-group.model';
+import { IRehabilitationGroup, RehabilitationGroup } from 'app/shared/model/rehabilitation-group.model';
 import { RehabilitationGroupService } from './rehabilitation-group.service';
 import { RehabilitationGroupComponent } from './rehabilitation-group.component';
 import { RehabilitationGroupDetailComponent } from './rehabilitation-group-detail.component';
@@ -15,14 +16,20 @@ import { RehabilitationGroupPanelComponent } from 'app/entities/rehabilitation-g
 
 @Injectable({ providedIn: 'root' })
 export class RehabilitationGroupResolve implements Resolve<IRehabilitationGroup> {
-  constructor(private service: RehabilitationGroupService) {}
+  constructor(private service: RehabilitationGroupService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IRehabilitationGroup> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IRehabilitationGroup> | Observable<never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        filter((response: HttpResponse<RehabilitationGroup>) => response.ok),
-        map((rehabilitationGroup: HttpResponse<RehabilitationGroup>) => rehabilitationGroup.body)
+        flatMap((rehabilitationGroup: HttpResponse<RehabilitationGroup>) => {
+          if (rehabilitationGroup.body) {
+            return of(rehabilitationGroup.body);
+          } else {
+            this.router.navigate(['404']);
+            return EMPTY;
+          }
+        })
       );
     }
     return of(new RehabilitationGroup());

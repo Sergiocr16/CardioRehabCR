@@ -343,42 +343,4 @@ public class RehabilitationGroupResourceIT {
         List<RehabilitationGroup> rehabilitationGroupList = rehabilitationGroupRepository.findAll();
         assertThat(rehabilitationGroupList).hasSize(databaseSizeBeforeDelete - 1);
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(RehabilitationGroup.class);
-        RehabilitationGroup rehabilitationGroup1 = new RehabilitationGroup();
-        rehabilitationGroup1.setId(1L);
-        RehabilitationGroup rehabilitationGroup2 = new RehabilitationGroup();
-        rehabilitationGroup2.setId(rehabilitationGroup1.getId());
-        assertThat(rehabilitationGroup1).isEqualTo(rehabilitationGroup2);
-        rehabilitationGroup2.setId(2L);
-        assertThat(rehabilitationGroup1).isNotEqualTo(rehabilitationGroup2);
-        rehabilitationGroup1.setId(null);
-        assertThat(rehabilitationGroup1).isNotEqualTo(rehabilitationGroup2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(RehabilitationGroupDTO.class);
-        RehabilitationGroupDTO rehabilitationGroupDTO1 = new RehabilitationGroupDTO();
-        rehabilitationGroupDTO1.setId(1L);
-        RehabilitationGroupDTO rehabilitationGroupDTO2 = new RehabilitationGroupDTO();
-        assertThat(rehabilitationGroupDTO1).isNotEqualTo(rehabilitationGroupDTO2);
-        rehabilitationGroupDTO2.setId(rehabilitationGroupDTO1.getId());
-        assertThat(rehabilitationGroupDTO1).isEqualTo(rehabilitationGroupDTO2);
-        rehabilitationGroupDTO2.setId(2L);
-        assertThat(rehabilitationGroupDTO1).isNotEqualTo(rehabilitationGroupDTO2);
-        rehabilitationGroupDTO1.setId(null);
-        assertThat(rehabilitationGroupDTO1).isNotEqualTo(rehabilitationGroupDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(rehabilitationGroupMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(rehabilitationGroupMapper.fromId(null)).isNull();
-    }
 }

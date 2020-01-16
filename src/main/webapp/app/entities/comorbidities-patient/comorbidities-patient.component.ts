@@ -1,15 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IComorbiditiesPatient } from 'app/shared/model/comorbidities-patient.model';
-import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { ComorbiditiesPatientService } from './comorbidities-patient.service';
+import { ComorbiditiesPatientDeleteDialogComponent } from './comorbidities-patient-delete-dialog.component';
 
 @Component({
   selector: 'jhi-comorbidities-patient',
@@ -17,20 +16,18 @@ import { ComorbiditiesPatientService } from './comorbidities-patient.service';
 })
 export class ComorbiditiesPatientComponent implements OnInit, OnDestroy {
   comorbiditiesPatients: IComorbiditiesPatient[];
-  currentAccount: any;
-  eventSubscriber: Subscription;
+  eventSubscriber?: Subscription;
   itemsPerPage: number;
   links: any;
-  page: any;
-  predicate: any;
-  reverse: any;
-  totalItems: number;
+  page: number;
+  predicate: string;
+  ascending: boolean;
 
   constructor(
     protected comorbiditiesPatientService: ComorbiditiesPatientService,
     protected eventManager: JhiEventManager,
-    protected parseLinks: JhiParseLinks,
-    protected accountService: AccountService
+    protected modalService: NgbModal,
+    protected parseLinks: JhiParseLinks
   ) {
     this.comorbiditiesPatients = [];
     this.itemsPerPage = ITEMS_PER_PAGE;
@@ -39,10 +36,10 @@ export class ComorbiditiesPatientComponent implements OnInit, OnDestroy {
       last: 0
     };
     this.predicate = 'id';
-    this.reverse = true;
+    this.ascending = true;
   }
 
-  loadAll() {
+  loadAll(): void {
     this.comorbiditiesPatientService
       .query({
         page: this.page,
@@ -52,50 +49,57 @@ export class ComorbiditiesPatientComponent implements OnInit, OnDestroy {
       .subscribe((res: HttpResponse<IComorbiditiesPatient[]>) => this.paginateComorbiditiesPatients(res.body, res.headers));
   }
 
-  reset() {
+  reset(): void {
     this.page = 0;
     this.comorbiditiesPatients = [];
     this.loadAll();
   }
 
-  loadPage(page) {
+  loadPage(page: number): void {
     this.page = page;
     this.loadAll();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadAll();
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInComorbiditiesPatients();
   }
 
-  ngOnDestroy() {
-    this.eventManager.destroy(this.eventSubscriber);
+  ngOnDestroy(): void {
+    if (this.eventSubscriber) {
+      this.eventManager.destroy(this.eventSubscriber);
+    }
   }
 
-  trackId(index: number, item: IComorbiditiesPatient) {
-    return item.id;
+  trackId(index: number, item: IComorbiditiesPatient): number {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    return item.id!;
   }
 
-  registerChangeInComorbiditiesPatients() {
-    this.eventSubscriber = this.eventManager.subscribe('comorbiditiesPatientListModification', response => this.reset());
+  registerChangeInComorbiditiesPatients(): void {
+    this.eventSubscriber = this.eventManager.subscribe('comorbiditiesPatientListModification', () => this.reset());
   }
 
-  sort() {
-    const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
+  delete(comorbiditiesPatient: IComorbiditiesPatient): void {
+    const modalRef = this.modalService.open(ComorbiditiesPatientDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.comorbiditiesPatient = comorbiditiesPatient;
+  }
+
+  sort(): string[] {
+    const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
     if (this.predicate !== 'id') {
       result.push('id');
     }
     return result;
   }
 
-  protected paginateComorbiditiesPatients(data: IComorbiditiesPatient[], headers: HttpHeaders) {
-    this.links = this.parseLinks.parse(headers.get('link'));
-    this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
-    for (let i = 0; i < data.length; i++) {
-      this.comorbiditiesPatients.push(data[i]);
+  protected paginateComorbiditiesPatients(data: IComorbiditiesPatient[] | null, headers: HttpHeaders): void {
+    const headersLink = headers.get('link');
+    this.links = this.parseLinks.parse(headersLink ? headersLink : '');
+    if (data) {
+      for (let i = 0; i < data.length; i++) {
+        this.comorbiditiesPatients.push(data[i]);
+      }
     }
   }
 }

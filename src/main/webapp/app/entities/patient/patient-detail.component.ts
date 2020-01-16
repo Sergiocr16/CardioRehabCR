@@ -37,7 +37,7 @@ export class PatientDetailComponent implements OnInit {
     protected finalAssessmentService: FinalAssessmentService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ patient }) => {
       this.patient = patient;
       this.initialAssessmentService

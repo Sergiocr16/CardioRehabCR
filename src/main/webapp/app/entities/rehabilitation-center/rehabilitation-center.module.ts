@@ -20,8 +20,7 @@ const ENTITY_STATES = [...rehabilitationCenterRoute, ...rehabilitationCenterPopu
     RehabilitationCenterComponent,
     RehabilitationCenterDetailComponent,
     RehabilitationCenterUpdateComponent,
-    RehabilitationCenterDeleteDialogComponent,
-    RehabilitationCenterDeletePopupComponent
+    RehabilitationCenterDeleteDialogComponent
   ],
   exports: [],
   entryComponents: [RehabilitationCenterDeleteDialogComponent]

@@ -52,7 +52,6 @@ export class FinalAssessmentUpdateComponent implements OnInit, OnDestroy {
   });
 
   constructor(
-    protected jhiAlertService: JhiAlertService,
     protected finalAssessmentService: FinalAssessmentService,
     protected patientService: PatientService,
     protected activatedRoute: ActivatedRoute,
@@ -62,8 +61,7 @@ export class FinalAssessmentUpdateComponent implements OnInit, OnDestroy {
     private fb: FormBuilder
   ) {}
 
-  ngOnInit() {
-    this.isSaving = false;
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ finalAssessment }) => {
       this.updateForm(finalAssessment);
       this.title = finalAssessment.id == null ? 'Evaluación final' : 'Editar paciente';
@@ -112,7 +110,7 @@ export class FinalAssessmentUpdateComponent implements OnInit, OnDestroy {
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 
@@ -157,8 +155,11 @@ export class FinalAssessmentUpdateComponent implements OnInit, OnDestroy {
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IFinalAssessment>>) {
-    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IFinalAssessment>>): void {
+    result.subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
   }
 
   protected onSaveSuccess() {
@@ -177,11 +178,8 @@ export class FinalAssessmentUpdateComponent implements OnInit, OnDestroy {
   protected onSaveError() {
     this.isSaving = false;
   }
-  protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
-  }
 
-  trackPatientById(index: number, item: IPatient) {
+  trackById(index: number, item: IPatient): any {
     return item.id;
   }
   ngOnDestroy() {

@@ -5,6 +5,7 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+
 import { IRehabilitationCenter, RehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
 import { RehabilitationCenterService } from './rehabilitation-center.service';
 import { GlobalVariablesService } from 'app/shared/util/global-variables.service';
@@ -35,8 +36,7 @@ export class RehabilitationCenterUpdateComponent implements OnInit, OnDestroy {
     private modal: ModalService
   ) {}
 
-  ngOnInit() {
-    this.isSaving = false;
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ rehabilitationCenter }) => {
       this.updateForm(rehabilitationCenter);
       this.title = !rehabilitationCenter.id ? 'Crear un centro' : 'Editar un centro';
@@ -48,7 +48,7 @@ export class RehabilitationCenterUpdateComponent implements OnInit, OnDestroy {
     });
   }
 
-  updateForm(rehabilitationCenter: IRehabilitationCenter) {
+  updateForm(rehabilitationCenter: IRehabilitationCenter): void {
     this.editForm.patchValue({
       id: rehabilitationCenter.id,
       name: rehabilitationCenter.name,
@@ -58,7 +58,7 @@ export class RehabilitationCenterUpdateComponent implements OnInit, OnDestroy {
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 
@@ -86,25 +86,28 @@ export class RehabilitationCenterUpdateComponent implements OnInit, OnDestroy {
   private createFromForm(): IRehabilitationCenter {
     return {
       ...new RehabilitationCenter(),
-      id: this.editForm.get(['id']).value,
-      name: this.editForm.get(['name']).value,
-      telephone: this.editForm.get(['telephone']).value,
-      deleted: this.editForm.get(['deleted']).value,
-      status: this.editForm.get(['status']).value
+      id: this.editForm.get(['id'])!.value,
+      name: this.editForm.get(['name'])!.value,
+      telephone: this.editForm.get(['telephone'])!.value,
+      deleted: this.editForm.get(['deleted'])!.value,
+      status: this.editForm.get(['status'])!.value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IRehabilitationCenter>>) {
-    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IRehabilitationCenter>>): void {
+    result.subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
   }
 
-  protected onSaveSuccess() {
+  protected onSaveSuccess(): void {
     this.isSaving = false;
     this.modal.message(this.modalSuccessMessage);
     this.previousState();
   }
 
-  protected onSaveError() {
+  protected onSaveError(): void {
     this.isSaving = false;
   }
 }

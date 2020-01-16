@@ -287,42 +287,4 @@ public class MayorEventResourceIT {
         List<MayorEvent> mayorEventList = mayorEventRepository.findAll();
         assertThat(mayorEventList).hasSize(databaseSizeBeforeDelete - 1);
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(MayorEvent.class);
-        MayorEvent mayorEvent1 = new MayorEvent();
-        mayorEvent1.setId(1L);
-        MayorEvent mayorEvent2 = new MayorEvent();
-        mayorEvent2.setId(mayorEvent1.getId());
-        assertThat(mayorEvent1).isEqualTo(mayorEvent2);
-        mayorEvent2.setId(2L);
-        assertThat(mayorEvent1).isNotEqualTo(mayorEvent2);
-        mayorEvent1.setId(null);
-        assertThat(mayorEvent1).isNotEqualTo(mayorEvent2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(MayorEventDTO.class);
-        MayorEventDTO mayorEventDTO1 = new MayorEventDTO();
-        mayorEventDTO1.setId(1L);
-        MayorEventDTO mayorEventDTO2 = new MayorEventDTO();
-        assertThat(mayorEventDTO1).isNotEqualTo(mayorEventDTO2);
-        mayorEventDTO2.setId(mayorEventDTO1.getId());
-        assertThat(mayorEventDTO1).isEqualTo(mayorEventDTO2);
-        mayorEventDTO2.setId(2L);
-        assertThat(mayorEventDTO1).isNotEqualTo(mayorEventDTO2);
-        mayorEventDTO1.setId(null);
-        assertThat(mayorEventDTO1).isNotEqualTo(mayorEventDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(mayorEventMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(mayorEventMapper.fromId(null)).isNull();
-    }
 }

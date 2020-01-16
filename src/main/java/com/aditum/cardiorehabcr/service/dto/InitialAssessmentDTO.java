@@ -168,7 +168,7 @@ public class InitialAssessmentDTO implements Serializable {
             ", hDL='" + gethDL() + "'" +
             ", cardiovascularRisk='" + getCardiovascularRisk() + "'" +
             ", deleted='" + isDeleted() + "'" +
-            ", patient=" + getPatientId() +
+            ", patientId=" + getPatientId() +
             "}";
     }
 }

@@ -1,15 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IFinalAssessment } from 'app/shared/model/final-assessment.model';
-import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { FinalAssessmentService } from './final-assessment.service';
+import { FinalAssessmentDeleteDialogComponent } from './final-assessment-delete-dialog.component';
 
 @Component({
   selector: 'jhi-final-assessment',
@@ -17,20 +16,18 @@ import { FinalAssessmentService } from './final-assessment.service';
 })
 export class FinalAssessmentComponent implements OnInit, OnDestroy {
   finalAssessments: IFinalAssessment[];
-  currentAccount: any;
-  eventSubscriber: Subscription;
+  eventSubscriber?: Subscription;
   itemsPerPage: number;
   links: any;
-  page: any;
-  predicate: any;
-  reverse: any;
-  totalItems: number;
+  page: number;
+  predicate: string;
+  ascending: boolean;
 
   constructor(
     protected finalAssessmentService: FinalAssessmentService,
     protected eventManager: JhiEventManager,
-    protected parseLinks: JhiParseLinks,
-    protected accountService: AccountService
+    protected modalService: NgbModal,
+    protected parseLinks: JhiParseLinks
   ) {
     this.finalAssessments = [];
     this.itemsPerPage = ITEMS_PER_PAGE;
@@ -39,10 +36,10 @@ export class FinalAssessmentComponent implements OnInit, OnDestroy {
       last: 0
     };
     this.predicate = 'id';
-    this.reverse = true;
+    this.ascending = true;
   }
 
-  loadAll() {
+  loadAll(): void {
     this.finalAssessmentService
       .query({
         page: this.page,
@@ -52,50 +49,57 @@ export class FinalAssessmentComponent implements OnInit, OnDestroy {
       .subscribe((res: HttpResponse<IFinalAssessment[]>) => this.paginateFinalAssessments(res.body, res.headers));
   }
 
-  reset() {
+  reset(): void {
     this.page = 0;
     this.finalAssessments = [];
     this.loadAll();
   }
 
-  loadPage(page) {
+  loadPage(page: number): void {
     this.page = page;
     this.loadAll();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadAll();
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInFinalAssessments();
   }
 
-  ngOnDestroy() {
-    this.eventManager.destroy(this.eventSubscriber);
+  ngOnDestroy(): void {
+    if (this.eventSubscriber) {
+      this.eventManager.destroy(this.eventSubscriber);
+    }
   }
 
-  trackId(index: number, item: IFinalAssessment) {
-    return item.id;
+  trackId(index: number, item: IFinalAssessment): number {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    return item.id!;
   }
 
-  registerChangeInFinalAssessments() {
-    this.eventSubscriber = this.eventManager.subscribe('finalAssessmentListModification', response => this.reset());
+  registerChangeInFinalAssessments(): void {
+    this.eventSubscriber = this.eventManager.subscribe('finalAssessmentListModification', () => this.reset());
   }
 
-  sort() {
-    const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
+  delete(finalAssessment: IFinalAssessment): void {
+    const modalRef = this.modalService.open(FinalAssessmentDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.finalAssessment = finalAssessment;
+  }
+
+  sort(): string[] {
+    const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
     if (this.predicate !== 'id') {
       result.push('id');
     }
     return result;
   }
 
-  protected paginateFinalAssessments(data: IFinalAssessment[], headers: HttpHeaders) {
-    this.links = this.parseLinks.parse(headers.get('link'));
-    this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
-    for (let i = 0; i < data.length; i++) {
-      this.finalAssessments.push(data[i]);
+  protected paginateFinalAssessments(data: IFinalAssessment[] | null, headers: HttpHeaders): void {
+    const headersLink = headers.get('link');
+    this.links = this.parseLinks.parse(headersLink ? headersLink : '');
+    if (data) {
+      for (let i = 0; i < data.length; i++) {
+        this.finalAssessments.push(data[i]);
+      }
     }
   }
 }

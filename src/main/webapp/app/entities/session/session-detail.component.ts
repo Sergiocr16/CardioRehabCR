@@ -36,7 +36,7 @@ export class SessionDetailComponent implements OnInit {
     protected minorEventsSessionService: MinorEventsSessionService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ session }) => {
       this.session = session;
       this.patientService

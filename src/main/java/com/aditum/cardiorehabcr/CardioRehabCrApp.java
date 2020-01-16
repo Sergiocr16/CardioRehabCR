@@ -1,8 +1,8 @@
 package com.aditum.cardiorehabcr;
 
 import com.aditum.cardiorehabcr.config.ApplicationProperties;
-import com.aditum.cardiorehabcr.config.DefaultProfileUtil;
 
+import io.github.jhipster.config.DefaultProfileUtil;
 import io.github.jhipster.config.JHipsterConstants;
 
 import org.apache.commons.lang3.StringUtils;

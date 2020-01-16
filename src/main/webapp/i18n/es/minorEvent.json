@@ -5,7 +5,7 @@
         "title": "Minor Events",
         "createLabel": "Crear nuevo Minor Event",
         "createOrEditLabel": "Crear o editar Minor Event",
-        "notFound": "No Minor Events found"
+        "notFound": "Ningún Minor Events encontrado"
       },
       "created": "Un nuevo Minor Event ha sido creado con el identificador {{ param }}",
       "updated": "Un Minor Event ha sido actualizado con el identificador {{ param }}",

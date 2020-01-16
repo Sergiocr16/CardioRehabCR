@@ -5,7 +5,7 @@
         "title": "Income Diagnoses",
         "createLabel": "Crear nuevo Income Diagnosis",
         "createOrEditLabel": "Crear o editar Income Diagnosis",
-        "notFound": "No Income Diagnoses found"
+        "notFound": "Ningún Income Diagnoses encontrado"
       },
       "created": "Un nuevo Income Diagnosis ha sido creado con el identificador {{ param }}",
       "updated": "Un Income Diagnosis ha sido actualizado con el identificador {{ param }}",

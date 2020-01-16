@@ -1,27 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
+import { Observable, of, EMPTY } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { DepressiveSymptom } from 'app/shared/model/depressive-symptom.model';
+import { IDepressiveSymptom, DepressiveSymptom } from 'app/shared/model/depressive-symptom.model';
 import { DepressiveSymptomService } from './depressive-symptom.service';
 import { DepressiveSymptomComponent } from './depressive-symptom.component';
 import { DepressiveSymptomDetailComponent } from './depressive-symptom-detail.component';
 import { DepressiveSymptomUpdateComponent } from './depressive-symptom-update.component';
-import { DepressiveSymptomDeletePopupComponent } from './depressive-symptom-delete-dialog.component';
-import { IDepressiveSymptom } from 'app/shared/model/depressive-symptom.model';
 
 @Injectable({ providedIn: 'root' })
 export class DepressiveSymptomResolve implements Resolve<IDepressiveSymptom> {
-  constructor(private service: DepressiveSymptomService) {}
+  constructor(private service: DepressiveSymptomService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IDepressiveSymptom> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IDepressiveSymptom> | Observable<never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        filter((response: HttpResponse<DepressiveSymptom>) => response.ok),
-        map((depressiveSymptom: HttpResponse<DepressiveSymptom>) => depressiveSymptom.body)
+        flatMap((depressiveSymptom: HttpResponse<DepressiveSymptom>) => {
+          if (depressiveSymptom.body) {
+            return of(depressiveSymptom.body);
+          } else {
+            this.router.navigate(['404']);
+            return EMPTY;
+          }
+        })
       );
     }
     return of(new DepressiveSymptom());

@@ -1,27 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
+import { Observable, of, EMPTY } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { MinorEvent } from 'app/shared/model/minor-event.model';
+import { IMinorEvent, MinorEvent } from 'app/shared/model/minor-event.model';
 import { MinorEventService } from './minor-event.service';
 import { MinorEventComponent } from './minor-event.component';
 import { MinorEventDetailComponent } from './minor-event-detail.component';
 import { MinorEventUpdateComponent } from './minor-event-update.component';
-import { MinorEventDeletePopupComponent } from './minor-event-delete-dialog.component';
-import { IMinorEvent } from 'app/shared/model/minor-event.model';
 
 @Injectable({ providedIn: 'root' })
 export class MinorEventResolve implements Resolve<IMinorEvent> {
-  constructor(private service: MinorEventService) {}
+  constructor(private service: MinorEventService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IMinorEvent> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IMinorEvent> | Observable<never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        filter((response: HttpResponse<MinorEvent>) => response.ok),
-        map((minorEvent: HttpResponse<MinorEvent>) => minorEvent.body)
+        flatMap((minorEvent: HttpResponse<MinorEvent>) => {
+          if (minorEvent.body) {
+            return of(minorEvent.body);
+          } else {
+            this.router.navigate(['404']);
+            return EMPTY;
+          }
+        })
       );
     }
     return of(new MinorEvent());

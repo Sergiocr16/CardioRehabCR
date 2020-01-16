@@ -191,7 +191,7 @@ public class SessionDTO implements Serializable {
             ", status=" + getStatus() +
             ", deleted='" + isDeleted() + "'" +
             ", currentlyWorking='" + isCurrentlyWorking() + "'" +
-            ", patient=" + getPatientId() +
+            ", patientId=" + getPatientId() +
             "}";
     }
 }

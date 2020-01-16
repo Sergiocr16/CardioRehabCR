@@ -5,7 +5,7 @@
         "title": "Minor Events Sessions",
         "createLabel": "Crear nuevo Minor Events Session",
         "createOrEditLabel": "Crear o editar Minor Events Session",
-        "notFound": "No Minor Events Sessions found"
+        "notFound": "Ningún Minor Events Sessions encontrado"
       },
       "created": "Un nuevo Minor Events Session ha sido creado con el identificador {{ param }}",
       "updated": "Un Minor Events Session ha sido actualizado con el identificador {{ param }}",

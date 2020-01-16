@@ -277,42 +277,4 @@ public class IncomeDiagnosisResourceIT {
         List<IncomeDiagnosis> incomeDiagnosisList = incomeDiagnosisRepository.findAll();
         assertThat(incomeDiagnosisList).hasSize(databaseSizeBeforeDelete - 1);
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(IncomeDiagnosis.class);
-        IncomeDiagnosis incomeDiagnosis1 = new IncomeDiagnosis();
-        incomeDiagnosis1.setId(1L);
-        IncomeDiagnosis incomeDiagnosis2 = new IncomeDiagnosis();
-        incomeDiagnosis2.setId(incomeDiagnosis1.getId());
-        assertThat(incomeDiagnosis1).isEqualTo(incomeDiagnosis2);
-        incomeDiagnosis2.setId(2L);
-        assertThat(incomeDiagnosis1).isNotEqualTo(incomeDiagnosis2);
-        incomeDiagnosis1.setId(null);
-        assertThat(incomeDiagnosis1).isNotEqualTo(incomeDiagnosis2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(IncomeDiagnosisDTO.class);
-        IncomeDiagnosisDTO incomeDiagnosisDTO1 = new IncomeDiagnosisDTO();
-        incomeDiagnosisDTO1.setId(1L);
-        IncomeDiagnosisDTO incomeDiagnosisDTO2 = new IncomeDiagnosisDTO();
-        assertThat(incomeDiagnosisDTO1).isNotEqualTo(incomeDiagnosisDTO2);
-        incomeDiagnosisDTO2.setId(incomeDiagnosisDTO1.getId());
-        assertThat(incomeDiagnosisDTO1).isEqualTo(incomeDiagnosisDTO2);
-        incomeDiagnosisDTO2.setId(2L);
-        assertThat(incomeDiagnosisDTO1).isNotEqualTo(incomeDiagnosisDTO2);
-        incomeDiagnosisDTO1.setId(null);
-        assertThat(incomeDiagnosisDTO1).isNotEqualTo(incomeDiagnosisDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(incomeDiagnosisMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(incomeDiagnosisMapper.fromId(null)).isNull();
-    }
 }

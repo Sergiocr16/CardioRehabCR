@@ -6,9 +6,9 @@ import { ModalService } from 'app/shared/util/modal.service';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
-import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { RehabilitationCenterService } from './rehabilitation-center.service';
@@ -20,8 +20,7 @@ import { RehabilitationCenterService } from './rehabilitation-center.service';
 })
 export class RehabilitationCenterComponent implements OnInit, OnDestroy {
   rehabilitationCenters: IRehabilitationCenter[];
-  currentAccount: any;
-  eventSubscriber: Subscription;
+  eventSubscriber?: Subscription;
   itemsPerPage: number;
   links: any;
   page: any;
@@ -45,7 +44,7 @@ export class RehabilitationCenterComponent implements OnInit, OnDestroy {
       last: 0
     };
     this.predicate = 'id';
-    this.reverse = true;
+    this.ascending = true;
   }
 
   loadAll() {
@@ -59,52 +58,59 @@ export class RehabilitationCenterComponent implements OnInit, OnDestroy {
       .subscribe((res: HttpResponse<IRehabilitationCenter[]>) => this.paginateRehabilitationCenters(res.body, res.headers));
   }
 
-  reset() {
+  reset(): void {
     this.page = 0;
     this.rehabilitationCenters = [];
     this.loadAll();
   }
 
-  loadPage(page) {
+  loadPage(page: number): void {
     this.page = page;
     this.loadAll();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadAll();
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInRehabilitationCenters();
     this.global.setTitle('Centros de rehabilitación');
     this.rehabCenterId = this.global.rehabCenter;
   }
 
-  ngOnDestroy() {
-    this.eventManager.destroy(this.eventSubscriber);
+  ngOnDestroy(): void {
+    if (this.eventSubscriber) {
+      this.eventManager.destroy(this.eventSubscriber);
+    }
   }
 
-  trackId(index: number, item: IRehabilitationCenter) {
-    return item.id;
+  trackId(index: number, item: IRehabilitationCenter): number {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    return item.id!;
   }
 
-  registerChangeInRehabilitationCenters() {
-    this.eventSubscriber = this.eventManager.subscribe('rehabilitationCenterListModification', response => this.reset());
+  registerChangeInRehabilitationCenters(): void {
+    this.eventSubscriber = this.eventManager.subscribe('rehabilitationCenterListModification', () => this.reset());
   }
 
-  sort() {
-    const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
+  delete(rehabilitationCenter: IRehabilitationCenter): void {
+    const modalRef = this.modalService.open(RehabilitationCenterDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.rehabilitationCenter = rehabilitationCenter;
+  }
+
+  sort(): string[] {
+    const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
     if (this.predicate !== 'id') {
       result.push('id');
     }
     return result;
   }
 
-  protected paginateRehabilitationCenters(data: IRehabilitationCenter[], headers: HttpHeaders) {
-    this.links = this.parseLinks.parse(headers.get('link'));
-    this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
-    for (let i = 0; i < data.length; i++) {
-      this.rehabilitationCenters.push(data[i]);
+  protected paginateRehabilitationCenters(data: IRehabilitationCenter[] | null, headers: HttpHeaders): void {
+    const headersLink = headers.get('link');
+    this.links = this.parseLinks.parse(headersLink ? headersLink : '');
+    if (data) {
+      for (let i = 0; i < data.length; i++) {
+        this.rehabilitationCenters.push(data[i]);
+      }
     }
   }
 

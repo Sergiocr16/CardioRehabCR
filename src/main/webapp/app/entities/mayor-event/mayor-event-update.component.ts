@@ -5,8 +5,8 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { JhiAlertService } from 'ng-jhipster';
+import { map } from 'rxjs/operators';
+
 import { IMayorEvent, MayorEvent } from 'app/shared/model/mayor-event.model';
 import { MayorEventService } from './mayor-event.service';
 import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
@@ -35,7 +35,6 @@ export class MayorEventUpdateComponent implements OnInit, OnDestroy {
   });
 
   constructor(
-    protected jhiAlertService: JhiAlertService,
     protected mayorEventService: MayorEventService,
     protected rehabilitationCenterService: RehabilitationCenterService,
     protected activatedRoute: ActivatedRoute,
@@ -44,8 +43,7 @@ export class MayorEventUpdateComponent implements OnInit, OnDestroy {
     private global: GlobalVariablesService
   ) {}
 
-  ngOnInit() {
-    this.isSaving = false;
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ mayorEvent }) => {
       this.updateForm(mayorEvent);
       this.title = !mayorEvent.id ? 'Crear un evento mayor' : 'Editar  un evento mayor';
@@ -74,7 +72,7 @@ export class MayorEventUpdateComponent implements OnInit, OnDestroy {
     this.global.leavingForm();
   }
 
-  updateForm(mayorEvent: IMayorEvent) {
+  updateForm(mayorEvent: IMayorEvent): void {
     this.editForm.patchValue({
       id: mayorEvent.id,
       description: mayorEvent.description,
@@ -84,7 +82,7 @@ export class MayorEventUpdateComponent implements OnInit, OnDestroy {
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 
@@ -103,25 +101,28 @@ export class MayorEventUpdateComponent implements OnInit, OnDestroy {
   private createFromForm(): IMayorEvent {
     return {
       ...new MayorEvent(),
-      id: this.editForm.get(['id']).value,
-      description: this.editForm.get(['description']).value,
-      code: this.editForm.get(['code']).value,
-      deleted: this.editForm.get(['deleted']).value,
-      rehabilitationCenterId: this.editForm.get(['rehabilitationCenterId']).value
+      id: this.editForm.get(['id'])!.value,
+      description: this.editForm.get(['description'])!.value,
+      code: this.editForm.get(['code'])!.value,
+      deleted: this.editForm.get(['deleted'])!.value,
+      rehabilitationCenterId: this.editForm.get(['rehabilitationCenterId'])!.value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IMayorEvent>>) {
-    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IMayorEvent>>): void {
+    result.subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
   }
 
-  protected onSaveSuccess() {
+  protected onSaveSuccess(): void {
     this.isSaving = false;
     this.modal.message(this.modalSuccessMessage);
     this.previousState();
   }
 
-  protected onSaveError() {
+  protected onSaveError(): void {
     this.isSaving = false;
   }
 
@@ -129,7 +130,7 @@ export class MayorEventUpdateComponent implements OnInit, OnDestroy {
     this.jhiAlertService.error(errorMessage, null, null);
   }
 
-  trackRehabilitationCenterById(index: number, item: IRehabilitationCenter) {
+  trackById(index: number, item: IRehabilitationCenter): any {
     return item.id;
   }
 }

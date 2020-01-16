@@ -89,7 +89,7 @@ public class DepressiveSymptomsSessionDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", depressiveSymptomId=" + getDepressiveSymptomId() +
             ", exist='" + isExist() + "'" +
-            ", session=" + getSessionId() +
+            ", sessionId=" + getSessionId() +
             "}";
     }
 }

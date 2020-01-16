@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CardioRehabCrSharedLibsModule } from './shared-libs.module';
 import { FindLanguageFromKeyPipe } from './language/find-language-from-key.pipe';
-import { JhiAlertComponent } from './alert/alert.component';
-import { JhiAlertErrorComponent } from './alert/alert-error.component';
-import { JhiLoginModalComponent } from './login/login.component';
+import { AlertComponent } from './alert/alert.component';
+import { AlertErrorComponent } from './alert/alert-error.component';
+import { LoginModalComponent } from './login/login.component';
 import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
 import { MaterialModule } from 'app/shared/util/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';

@@ -8,17 +8,17 @@ import { IMayorEvent } from 'app/shared/model/mayor-event.model';
   templateUrl: './mayor-event-detail.component.html'
 })
 export class MayorEventDetailComponent implements OnInit {
-  mayorEvent: IMayorEvent;
+  mayorEvent: IMayorEvent | null = null;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ mayorEvent }) => {
       this.mayorEvent = mayorEvent;
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 }

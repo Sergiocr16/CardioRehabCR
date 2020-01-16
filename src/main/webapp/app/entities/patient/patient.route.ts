@@ -1,27 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
+import { Observable, of, EMPTY } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { Patient } from 'app/shared/model/patient.model';
+import { IPatient, Patient } from 'app/shared/model/patient.model';
 import { PatientService } from './patient.service';
 import { PatientComponent } from './patient.component';
 import { PatientDetailComponent } from './patient-detail.component';
 import { PatientUpdateComponent } from './patient-update.component';
-import { PatientDeletePopupComponent } from './patient-delete-dialog.component';
-import { IPatient } from 'app/shared/model/patient.model';
 
 @Injectable({ providedIn: 'root' })
 export class PatientResolve implements Resolve<IPatient> {
-  constructor(private service: PatientService) {}
+  constructor(private service: PatientService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IPatient> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IPatient> | Observable<never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        filter((response: HttpResponse<Patient>) => response.ok),
-        map((patient: HttpResponse<Patient>) => patient.body)
+        flatMap((patient: HttpResponse<Patient>) => {
+          if (patient.body) {
+            return of(patient.body);
+          } else {
+            this.router.navigate(['404']);
+            return EMPTY;
+          }
+        })
       );
     }
     return of(new Patient());

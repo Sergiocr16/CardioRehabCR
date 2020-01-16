@@ -5,10 +5,10 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
-import { JhiAlertService } from 'ng-jhipster';
+
 import { IRehabilitationGroup, RehabilitationGroup } from 'app/shared/model/rehabilitation-group.model';
 import { RehabilitationGroupService } from './rehabilitation-group.service';
 import { IPatient } from 'app/shared/model/patient.model';
@@ -17,6 +17,8 @@ import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.mo
 import { RehabilitationCenterService } from 'app/entities/rehabilitation-center/rehabilitation-center.service';
 import { ModalService } from 'app/shared/util/modal.service';
 import { GlobalVariablesService } from 'app/shared/util/global-variables.service';
+
+type SelectableEntity = IPatient | IRehabilitationCenter;
 
 @Component({
   selector: 'jhi-rehabilitation-group-update',
@@ -44,7 +46,6 @@ export class RehabilitationGroupUpdateComponent implements OnInit, OnDestroy {
   programStatusArray = [{ d: 'Sin iniciar', v: 0 }, { d: 'En proceso', v: 1 }, { d: 'Finalizado', v: 2 }];
 
   constructor(
-    protected jhiAlertService: JhiAlertService,
     protected rehabilitationGroupService: RehabilitationGroupService,
     protected patientService: PatientService,
     protected modal: ModalService,
@@ -54,8 +55,7 @@ export class RehabilitationGroupUpdateComponent implements OnInit, OnDestroy {
     private fb: FormBuilder
   ) {}
 
-  ngOnInit() {
-    this.isSaving = false;
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ rehabilitationGroup }) => {
       this.updateForm(rehabilitationGroup);
       this.title = rehabilitationGroup.id == null ? 'Crear grupo' : 'Editar grupo';
@@ -77,7 +77,7 @@ export class RehabilitationGroupUpdateComponent implements OnInit, OnDestroy {
       .subscribe((res: IPatient[]) => (this.patients = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
-  updateForm(rehabilitationGroup: IRehabilitationGroup) {
+  updateForm(rehabilitationGroup: IRehabilitationGroup): void {
     this.editForm.patchValue({
       id: rehabilitationGroup.id,
       name: rehabilitationGroup.name,
@@ -89,7 +89,7 @@ export class RehabilitationGroupUpdateComponent implements OnInit, OnDestroy {
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 
@@ -115,8 +115,8 @@ export class RehabilitationGroupUpdateComponent implements OnInit, OnDestroy {
   private createFromForm(): IRehabilitationGroup {
     return {
       ...new RehabilitationGroup(),
-      id: this.editForm.get(['id']).value,
-      name: this.editForm.get(['name']).value,
+      id: this.editForm.get(['id'])!.value,
+      name: this.editForm.get(['name'])!.value,
       creationDate:
         this.editForm.get(['creationDate']).value != null ? moment(this.editForm.get(['creationDate']).value, DATE_TIME_FORMAT) : undefined,
       programStatus: this.editForm.get(['programStatus']).value,
@@ -124,16 +124,19 @@ export class RehabilitationGroupUpdateComponent implements OnInit, OnDestroy {
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IRehabilitationGroup>>) {
-    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IRehabilitationGroup>>): void {
+    result.subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
   }
 
-  protected onSaveSuccess() {
+  protected onSaveSuccess(): void {
     this.isSaving = false;
     this.previousState();
   }
 
-  protected onSaveError() {
+  protected onSaveError(): void {
     this.isSaving = false;
   }
 
@@ -145,11 +148,11 @@ export class RehabilitationGroupUpdateComponent implements OnInit, OnDestroy {
     return item.id;
   }
 
-  trackRehabilitationCenterById(index: number, item: IRehabilitationCenter) {
+  trackById(index: number, item: SelectableEntity): any {
     return item.id;
   }
 
-  getSelected(selectedVals: any[], option: any) {
+  getSelected(selectedVals: IPatient[], option: IPatient): IPatient {
     if (selectedVals) {
       for (let i = 0; i < selectedVals.length; i++) {
         if (option.id === selectedVals[i].id) {

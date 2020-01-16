@@ -2,9 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { JhiEventManager, JhiParseLinks } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IPatient } from 'app/shared/model/patient.model';
-import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { PatientService } from './patient.service';
@@ -49,7 +49,7 @@ export class PatientComponent implements OnInit, OnDestroy {
       last: 0
     };
     this.predicate = 'id';
-    this.reverse = true;
+    this.ascending = true;
   }
   trackIdentity(index, item) {
     return item.id;
@@ -67,7 +67,7 @@ export class PatientComponent implements OnInit, OnDestroy {
       );
   }
 
-  reset() {
+  reset(): void {
     this.page = 0;
     this.patients = [];
     this.loadAll();
@@ -91,26 +91,31 @@ export class PatientComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.loadAll();
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInPatients();
   }
 
-  ngOnDestroy() {
-    this.eventManager.destroy(this.eventSubscriber);
+  ngOnDestroy(): void {
+    if (this.eventSubscriber) {
+      this.eventManager.destroy(this.eventSubscriber);
+    }
   }
 
-  trackId(index: number, item: IPatient) {
-    return item.id;
+  trackId(index: number, item: IPatient): number {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    return item.id!;
   }
 
-  registerChangeInPatients() {
-    this.eventSubscriber = this.eventManager.subscribe('patientListModification', response => this.reset());
+  registerChangeInPatients(): void {
+    this.eventSubscriber = this.eventManager.subscribe('patientListModification', () => this.reset());
   }
 
-  sort() {
-    const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
+  delete(patient: IPatient): void {
+    const modalRef = this.modalService.open(PatientDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.patient = patient;
+  }
+
+  sort(): string[] {
+    const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
     if (this.predicate !== 'id') {
       result.push('id');
     }

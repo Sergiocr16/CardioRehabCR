@@ -348,42 +348,4 @@ public class SessionResourceIT {
         List<Session> sessionList = sessionRepository.findAll();
         assertThat(sessionList).hasSize(databaseSizeBeforeDelete - 1);
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(Session.class);
-        Session session1 = new Session();
-        session1.setId(1L);
-        Session session2 = new Session();
-        session2.setId(session1.getId());
-        assertThat(session1).isEqualTo(session2);
-        session2.setId(2L);
-        assertThat(session1).isNotEqualTo(session2);
-        session1.setId(null);
-        assertThat(session1).isNotEqualTo(session2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(SessionDTO.class);
-        SessionDTO sessionDTO1 = new SessionDTO();
-        sessionDTO1.setId(1L);
-        SessionDTO sessionDTO2 = new SessionDTO();
-        assertThat(sessionDTO1).isNotEqualTo(sessionDTO2);
-        sessionDTO2.setId(sessionDTO1.getId());
-        assertThat(sessionDTO1).isEqualTo(sessionDTO2);
-        sessionDTO2.setId(2L);
-        assertThat(sessionDTO1).isNotEqualTo(sessionDTO2);
-        sessionDTO1.setId(null);
-        assertThat(sessionDTO1).isNotEqualTo(sessionDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(sessionMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(sessionMapper.fromId(null)).isNull();
-    }
 }

@@ -5,20 +5,12 @@ import { CardioRehabCrSharedModule } from 'app/shared/shared.module';
 import { ComorbiditieComponent } from './comorbiditie.component';
 import { ComorbiditieDetailComponent } from './comorbiditie-detail.component';
 import { ComorbiditieUpdateComponent } from './comorbiditie-update.component';
-import { ComorbiditieDeletePopupComponent, ComorbiditieDeleteDialogComponent } from './comorbiditie-delete-dialog.component';
-import { comorbiditieRoute, comorbiditiePopupRoute } from './comorbiditie.route';
-
-const ENTITY_STATES = [...comorbiditieRoute, ...comorbiditiePopupRoute];
+import { ComorbiditieDeleteDialogComponent } from './comorbiditie-delete-dialog.component';
+import { comorbiditieRoute } from './comorbiditie.route';
 
 @NgModule({
-  imports: [CardioRehabCrSharedModule, RouterModule.forChild(ENTITY_STATES)],
-  declarations: [
-    ComorbiditieComponent,
-    ComorbiditieDetailComponent,
-    ComorbiditieUpdateComponent,
-    ComorbiditieDeleteDialogComponent,
-    ComorbiditieDeletePopupComponent
-  ],
+  imports: [CardioRehabCrSharedModule, RouterModule.forChild(comorbiditieRoute)],
+  declarations: [ComorbiditieComponent, ComorbiditieDetailComponent, ComorbiditieUpdateComponent, ComorbiditieDeleteDialogComponent],
   entryComponents: [ComorbiditieDeleteDialogComponent]
 })
 export class CardioRehabCrComorbiditieModule {}

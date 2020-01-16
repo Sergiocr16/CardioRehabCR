@@ -88,7 +88,7 @@ public class MayorEventDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", code='" + getCode() + "'" +
             ", deleted='" + isDeleted() + "'" +
-            ", rehabilitationCenter=" + getRehabilitationCenterId() +
+            ", rehabilitationCenterId=" + getRehabilitationCenterId() +
             "}";
     }
 }

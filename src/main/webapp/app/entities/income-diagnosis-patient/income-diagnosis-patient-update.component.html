@@ -4,7 +4,7 @@
             <h2 id="jhi-income-diagnosis-patient-heading" jhiTranslate="cardioRehabCrApp.incomeDiagnosisPatient.home.createOrEditLabel">Create or edit a Income Diagnosis Patient</h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!editForm.get('id').value">
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
                     <label for="id" jhiTranslate="global.field.id">ID</label>
                     <input type="text" class="form-control" id="id" name="id" formControlName="id"
                         readonly />
@@ -18,9 +18,9 @@
                     <label class="form-control-label" jhiTranslate="cardioRehabCrApp.incomeDiagnosisPatient.incomeDiagnosisId" for="field_incomeDiagnosisId">Income Diagnosis Id</label>
                     <input type="number" class="form-control" name="incomeDiagnosisId" id="field_incomeDiagnosisId"
                            formControlName="incomeDiagnosisId"/>
-                    <div *ngIf="editForm.get('incomeDiagnosisId').invalid && (editForm.get('incomeDiagnosisId').dirty || editForm.get('incomeDiagnosisId').touched)">
+                    <div *ngIf="editForm.get('incomeDiagnosisId')!.invalid && (editForm.get('incomeDiagnosisId')!.dirty || editForm.get('incomeDiagnosisId')!.touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('incomeDiagnosisId').errors.required" jhiTranslate="entity.validation.required">
+                               *ngIf="editForm.get('incomeDiagnosisId')?.errors?.required" jhiTranslate="entity.validation.required">
                         This field is required.
                         </small>
                         <small class="form-text text-danger"
@@ -33,9 +33,9 @@
                     <label class="form-control-label" jhiTranslate="cardioRehabCrApp.incomeDiagnosisPatient.exist" for="field_exist">Exist</label>
                     <input type="checkbox" class="form-control" name="exist" id="field_exist"
                            formControlName="exist"/>
-                    <div *ngIf="editForm.get('exist').invalid && (editForm.get('exist').dirty || editForm.get('exist').touched)">
+                    <div *ngIf="editForm.get('exist')!.invalid && (editForm.get('exist')!.dirty || editForm.get('exist')!.touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('exist').errors.required" jhiTranslate="entity.validation.required">
+                               *ngIf="editForm.get('exist')?.errors?.required" jhiTranslate="entity.validation.required">
                         This field is required.
                         </small>
                     </div>
@@ -45,7 +45,7 @@
                     <label class="form-control-label" jhiTranslate="cardioRehabCrApp.incomeDiagnosisPatient.initialAssessment" for="field_initialAssessment">Initial Assessment</label>
                     <select class="form-control" id="field_initialAssessment" name="initialAssessment" formControlName="initialAssessmentId">
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="initialAssessmentOption.id" *ngFor="let initialAssessmentOption of initialassessments; trackBy: trackInitialAssessmentById">{{initialAssessmentOption.id}}</option>
+                        <option [ngValue]="initialAssessmentOption.id" *ngFor="let initialAssessmentOption of initialassessments; trackBy: trackById">{{initialAssessmentOption.id}}</option>
                     </select>
                 </div>
             </div>

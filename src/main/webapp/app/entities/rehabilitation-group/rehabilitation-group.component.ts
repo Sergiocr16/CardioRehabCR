@@ -1,12 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IRehabilitationGroup } from 'app/shared/model/rehabilitation-group.model';
-import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { RehabilitationGroupService } from './rehabilitation-group.service';
@@ -19,8 +17,7 @@ import { GlobalVariablesService } from 'app/shared/util/global-variables.service
 })
 export class RehabilitationGroupComponent implements OnInit, OnDestroy {
   rehabilitationGroups: IRehabilitationGroup[];
-  currentAccount: any;
-  eventSubscriber: Subscription;
+  eventSubscriber?: Subscription;
   itemsPerPage: number;
   links: any;
   page: any;
@@ -43,10 +40,10 @@ export class RehabilitationGroupComponent implements OnInit, OnDestroy {
       last: 0
     };
     this.predicate = 'id';
-    this.reverse = true;
+    this.ascending = true;
   }
 
-  loadAll() {
+  loadAll(): void {
     this.rehabilitationGroupService
       .query({
         page: this.page,
@@ -57,39 +54,44 @@ export class RehabilitationGroupComponent implements OnInit, OnDestroy {
       .subscribe((res: HttpResponse<IRehabilitationGroup[]>) => this.paginateRehabilitationGroups(res.body, res.headers));
   }
 
-  reset() {
+  reset(): void {
     this.page = 0;
     this.rehabilitationGroups = [];
     this.loadAll();
   }
 
-  loadPage(page) {
+  loadPage(page: number): void {
     this.page = page;
     this.loadAll();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadAll();
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInRehabilitationGroups();
   }
 
-  ngOnDestroy() {
-    this.eventManager.destroy(this.eventSubscriber);
+  ngOnDestroy(): void {
+    if (this.eventSubscriber) {
+      this.eventManager.destroy(this.eventSubscriber);
+    }
   }
 
-  trackId(index: number, item: IRehabilitationGroup) {
-    return item.id;
+  trackId(index: number, item: IRehabilitationGroup): number {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    return item.id!;
   }
 
-  registerChangeInRehabilitationGroups() {
-    this.eventSubscriber = this.eventManager.subscribe('rehabilitationGroupListModification', response => this.reset());
+  registerChangeInRehabilitationGroups(): void {
+    this.eventSubscriber = this.eventManager.subscribe('rehabilitationGroupListModification', () => this.reset());
   }
 
-  sort() {
-    const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
+  delete(rehabilitationGroup: IRehabilitationGroup): void {
+    const modalRef = this.modalService.open(RehabilitationGroupDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.rehabilitationGroup = rehabilitationGroup;
+  }
+
+  sort(): string[] {
+    const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
     if (this.predicate !== 'id') {
       result.push('id');
     }

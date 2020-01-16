@@ -179,7 +179,7 @@ export class RehabilitationGroupDetailComponent implements OnInit {
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 }

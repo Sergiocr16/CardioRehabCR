@@ -3,9 +3,9 @@ import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { JhiEventManager, JhiParseLinks } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IIncomeDiagnosis } from 'app/shared/model/income-diagnosis.model';
-import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { IncomeDiagnosisService } from './income-diagnosis.service';
@@ -48,10 +48,10 @@ export class IncomeDiagnosisComponent implements OnInit, OnDestroy {
       last: 0
     };
     this.predicate = 'id';
-    this.reverse = true;
+    this.ascending = true;
   }
 
-  loadAll() {
+  loadAll(): void {
     this.incomeDiagnosisService
       .query({
         page: this.page,
@@ -90,26 +90,31 @@ export class IncomeDiagnosisComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loadRC();
     this.loadAll();
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInIncomeDiagnoses();
   }
 
-  ngOnDestroy() {
-    this.eventManager.destroy(this.eventSubscriber);
+  ngOnDestroy(): void {
+    if (this.eventSubscriber) {
+      this.eventManager.destroy(this.eventSubscriber);
+    }
   }
 
-  trackId(index: number, item: IIncomeDiagnosis) {
-    return item.id;
+  trackId(index: number, item: IIncomeDiagnosis): number {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    return item.id!;
   }
 
-  registerChangeInIncomeDiagnoses() {
-    this.eventSubscriber = this.eventManager.subscribe('incomeDiagnosisListModification', response => this.reset());
+  registerChangeInIncomeDiagnoses(): void {
+    this.eventSubscriber = this.eventManager.subscribe('incomeDiagnosisListModification', () => this.reset());
   }
 
-  sort() {
-    const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
+  delete(incomeDiagnosis: IIncomeDiagnosis): void {
+    const modalRef = this.modalService.open(IncomeDiagnosisDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.incomeDiagnosis = incomeDiagnosis;
+  }
+
+  sort(): string[] {
+    const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
     if (this.predicate !== 'id') {
       result.push('id');
     }

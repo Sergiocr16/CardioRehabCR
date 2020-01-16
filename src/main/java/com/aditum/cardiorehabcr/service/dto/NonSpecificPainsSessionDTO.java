@@ -89,7 +89,7 @@ public class NonSpecificPainsSessionDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", nonSpecificPainId=" + getNonSpecificPainId() +
             ", exist='" + isExist() + "'" +
-            ", session=" + getSessionId() +
+            ", sessionId=" + getSessionId() +
             "}";
     }
 }

@@ -306,42 +306,4 @@ public class MinorEventsSessionResourceIT {
         List<MinorEventsSession> minorEventsSessionList = minorEventsSessionRepository.findAll();
         assertThat(minorEventsSessionList).hasSize(databaseSizeBeforeDelete - 1);
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(MinorEventsSession.class);
-        MinorEventsSession minorEventsSession1 = new MinorEventsSession();
-        minorEventsSession1.setId(1L);
-        MinorEventsSession minorEventsSession2 = new MinorEventsSession();
-        minorEventsSession2.setId(minorEventsSession1.getId());
-        assertThat(minorEventsSession1).isEqualTo(minorEventsSession2);
-        minorEventsSession2.setId(2L);
-        assertThat(minorEventsSession1).isNotEqualTo(minorEventsSession2);
-        minorEventsSession1.setId(null);
-        assertThat(minorEventsSession1).isNotEqualTo(minorEventsSession2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(MinorEventsSessionDTO.class);
-        MinorEventsSessionDTO minorEventsSessionDTO1 = new MinorEventsSessionDTO();
-        minorEventsSessionDTO1.setId(1L);
-        MinorEventsSessionDTO minorEventsSessionDTO2 = new MinorEventsSessionDTO();
-        assertThat(minorEventsSessionDTO1).isNotEqualTo(minorEventsSessionDTO2);
-        minorEventsSessionDTO2.setId(minorEventsSessionDTO1.getId());
-        assertThat(minorEventsSessionDTO1).isEqualTo(minorEventsSessionDTO2);
-        minorEventsSessionDTO2.setId(2L);
-        assertThat(minorEventsSessionDTO1).isNotEqualTo(minorEventsSessionDTO2);
-        minorEventsSessionDTO1.setId(null);
-        assertThat(minorEventsSessionDTO1).isNotEqualTo(minorEventsSessionDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(minorEventsSessionMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(minorEventsSessionMapper.fromId(null)).isNull();
-    }
 }

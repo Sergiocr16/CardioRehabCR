@@ -1,27 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
+import { Observable, of, EMPTY } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { FinalAssessment } from 'app/shared/model/final-assessment.model';
+import { IFinalAssessment, FinalAssessment } from 'app/shared/model/final-assessment.model';
 import { FinalAssessmentService } from './final-assessment.service';
 import { FinalAssessmentComponent } from './final-assessment.component';
 import { FinalAssessmentDetailComponent } from './final-assessment-detail.component';
 import { FinalAssessmentUpdateComponent } from './final-assessment-update.component';
-import { FinalAssessmentDeletePopupComponent } from './final-assessment-delete-dialog.component';
-import { IFinalAssessment } from 'app/shared/model/final-assessment.model';
 
 @Injectable({ providedIn: 'root' })
 export class FinalAssessmentResolve implements Resolve<IFinalAssessment> {
-  constructor(private service: FinalAssessmentService) {}
+  constructor(private service: FinalAssessmentService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IFinalAssessment> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IFinalAssessment> | Observable<never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        filter((response: HttpResponse<FinalAssessment>) => response.ok),
-        map((finalAssessment: HttpResponse<FinalAssessment>) => finalAssessment.body)
+        flatMap((finalAssessment: HttpResponse<FinalAssessment>) => {
+          if (finalAssessment.body) {
+            return of(finalAssessment.body);
+          } else {
+            this.router.navigate(['404']);
+            return EMPTY;
+          }
+        })
       );
     }
     return of(new FinalAssessment());
@@ -85,21 +90,5 @@ export const finalAssessmentRoute: Routes = [
       pageTitle: 'cardioRehabCrApp.finalAssessment.home.title'
     },
     canActivate: [UserRouteAccessService]
-  }
-];
-
-export const finalAssessmentPopupRoute: Routes = [
-  {
-    path: ':id/delete',
-    component: FinalAssessmentDeletePopupComponent,
-    resolve: {
-      finalAssessment: FinalAssessmentResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'cardioRehabCrApp.finalAssessment.home.title'
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
   }
 ];

@@ -89,7 +89,7 @@ public class IncomeDiagnosisPatientDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", incomeDiagnosisId=" + getIncomeDiagnosisId() +
             ", exist='" + isExist() + "'" +
-            ", initialAssessment=" + getInitialAssessmentId() +
+            ", initialAssessmentId=" + getInitialAssessmentId() +
             "}";
     }
 }

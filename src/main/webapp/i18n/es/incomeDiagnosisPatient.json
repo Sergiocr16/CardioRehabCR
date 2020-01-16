@@ -5,7 +5,7 @@
         "title": "Income Diagnosis Patients",
         "createLabel": "Crear nuevo Income Diagnosis Patient",
         "createOrEditLabel": "Crear o editar Income Diagnosis Patient",
-        "notFound": "No Income Diagnosis Patients found"
+        "notFound": "Ningún Income Diagnosis Patients encontrado"
       },
       "created": "Un nuevo Income Diagnosis Patient ha sido creado con el identificador {{ param }}",
       "updated": "Un Income Diagnosis Patient ha sido actualizado con el identificador {{ param }}",

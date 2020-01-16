@@ -1,27 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
+import { Observable, of, EMPTY } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { Comorbiditie } from 'app/shared/model/comorbiditie.model';
+import { IComorbiditie, Comorbiditie } from 'app/shared/model/comorbiditie.model';
 import { ComorbiditieService } from './comorbiditie.service';
 import { ComorbiditieComponent } from './comorbiditie.component';
 import { ComorbiditieDetailComponent } from './comorbiditie-detail.component';
 import { ComorbiditieUpdateComponent } from './comorbiditie-update.component';
-import { ComorbiditieDeletePopupComponent } from './comorbiditie-delete-dialog.component';
-import { IComorbiditie } from 'app/shared/model/comorbiditie.model';
 
 @Injectable({ providedIn: 'root' })
 export class ComorbiditieResolve implements Resolve<IComorbiditie> {
-  constructor(private service: ComorbiditieService) {}
+  constructor(private service: ComorbiditieService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IComorbiditie> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IComorbiditie> | Observable<never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        filter((response: HttpResponse<Comorbiditie>) => response.ok),
-        map((comorbiditie: HttpResponse<Comorbiditie>) => comorbiditie.body)
+        flatMap((comorbiditie: HttpResponse<Comorbiditie>) => {
+          if (comorbiditie.body) {
+            return of(comorbiditie.body);
+          } else {
+            this.router.navigate(['404']);
+            return EMPTY;
+          }
+        })
       );
     }
     return of(new Comorbiditie());

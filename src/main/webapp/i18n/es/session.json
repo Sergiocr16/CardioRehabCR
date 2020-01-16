@@ -5,7 +5,7 @@
         "title": "Sessions",
         "createLabel": "Crear nuevo Session",
         "createOrEditLabel": "Crear o editar Session",
-        "notFound": "No Sessions found"
+        "notFound": "Ningún Sessions encontrado"
       },
       "created": "Un nuevo Session ha sido creado con el identificador {{ param }}",
       "updated": "Un Session ha sido actualizado con el identificador {{ param }}",

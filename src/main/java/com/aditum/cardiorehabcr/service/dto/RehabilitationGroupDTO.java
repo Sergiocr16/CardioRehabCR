@@ -121,7 +121,7 @@ public class RehabilitationGroupDTO implements Serializable {
             ", creationDate='" + getCreationDate() + "'" +
             ", programStatus=" + getProgramStatus() +
             ", deleted='" + isDeleted() + "'" +
-            ", rehabilitationCenter=" + getRehabilitationCenterId() +
+            ", rehabilitationCenterId=" + getRehabilitationCenterId() +
             "}";
     }
 }

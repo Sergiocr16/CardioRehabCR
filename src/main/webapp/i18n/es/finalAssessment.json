@@ -5,7 +5,7 @@
         "title": "Final Assessments",
         "createLabel": "Crear nuevo Final Assessment",
         "createOrEditLabel": "Crear o editar Final Assessment",
-        "notFound": "No Final Assessments found"
+        "notFound": "Ningún Final Assessments encontrado"
       },
       "created": "Un nuevo Final Assessment ha sido creado con el identificador {{ param }}",
       "updated": "Un Final Assessment ha sido actualizado con el identificador {{ param }}",
