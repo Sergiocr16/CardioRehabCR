@@ -1,0 +1,4 @@
+diff a/src/test/javascript/spec/app/entities/final-assessment/final-assessment.service.spec.ts b/src/test/javascript/spec/app/entities/final-assessment/final-assessment.service.spec.ts	(rejected hunks)
+@@ -14 +14 @@ describe('Service Tests', () => {
+-    let expectedResult:any;
++    let expectedResult: any;

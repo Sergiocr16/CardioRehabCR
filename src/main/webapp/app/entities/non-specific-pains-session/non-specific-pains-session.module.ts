@@ -5,16 +5,22 @@ import { CardioRehabCrSharedModule } from 'app/shared/shared.module';
 import { NonSpecificPainsSessionComponent } from './non-specific-pains-session.component';
 import { NonSpecificPainsSessionDetailComponent } from './non-specific-pains-session-detail.component';
 import { NonSpecificPainsSessionUpdateComponent } from './non-specific-pains-session-update.component';
-import { NonSpecificPainsSessionDeleteDialogComponent } from './non-specific-pains-session-delete-dialog.component';
-import { nonSpecificPainsSessionRoute } from './non-specific-pains-session.route';
+import {
+  NonSpecificPainsSessionDeletePopupComponent,
+  NonSpecificPainsSessionDeleteDialogComponent
+} from './non-specific-pains-session-delete-dialog.component';
+import { nonSpecificPainsSessionRoute, nonSpecificPainsSessionPopupRoute } from './non-specific-pains-session.route';
+
+const ENTITY_STATES = [...nonSpecificPainsSessionRoute, ...nonSpecificPainsSessionPopupRoute];
 
 @NgModule({
-  imports: [CardioRehabCrSharedModule, RouterModule.forChild(nonSpecificPainsSessionRoute)],
+  imports: [CardioRehabCrSharedModule, RouterModule.forChild(ENTITY_STATES)],
   declarations: [
     NonSpecificPainsSessionComponent,
     NonSpecificPainsSessionDetailComponent,
     NonSpecificPainsSessionUpdateComponent,
-    NonSpecificPainsSessionDeleteDialogComponent
+    NonSpecificPainsSessionDeleteDialogComponent,
+    NonSpecificPainsSessionDeletePopupComponent
   ],
   entryComponents: [NonSpecificPainsSessionDeleteDialogComponent]
 })

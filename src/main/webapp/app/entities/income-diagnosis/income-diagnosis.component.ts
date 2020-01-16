@@ -3,9 +3,9 @@ import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { JhiEventManager, JhiParseLinks } from 'ng-jhipster';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IIncomeDiagnosis } from 'app/shared/model/income-diagnosis.model';
+import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { IncomeDiagnosisService } from './income-diagnosis.service';
@@ -48,10 +48,10 @@ export class IncomeDiagnosisComponent implements OnInit, OnDestroy {
       last: 0
     };
     this.predicate = 'id';
-    this.ascending = true;
+    this.reverse = true;
   }
 
-  loadAll(): void {
+  loadAll() {
     this.incomeDiagnosisService
       .query({
         page: this.page,
@@ -90,31 +90,26 @@ export class IncomeDiagnosisComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loadRC();
     this.loadAll();
+    this.accountService.identity().subscribe(account => {
+      this.currentAccount = account;
+    });
     this.registerChangeInIncomeDiagnoses();
   }
 
-  ngOnDestroy(): void {
-    if (this.eventSubscriber) {
-      this.eventManager.destroy(this.eventSubscriber);
-    }
+  ngOnDestroy() {
+    this.eventManager.destroy(this.eventSubscriber);
   }
 
-  trackId(index: number, item: IIncomeDiagnosis): number {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-    return item.id!;
+  trackId(index: number, item: IIncomeDiagnosis) {
+    return item.id;
   }
 
-  registerChangeInIncomeDiagnoses(): void {
-    this.eventSubscriber = this.eventManager.subscribe('incomeDiagnosisListModification', () => this.reset());
+  registerChangeInIncomeDiagnoses() {
+    this.eventSubscriber = this.eventManager.subscribe('incomeDiagnosisListModification', response => this.reset());
   }
 
-  delete(incomeDiagnosis: IIncomeDiagnosis): void {
-    const modalRef = this.modalService.open(IncomeDiagnosisDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.incomeDiagnosis = incomeDiagnosis;
-  }
-
-  sort(): string[] {
-    const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
+  sort() {
+    const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
     if (this.predicate !== 'id') {
       result.push('id');
     }
@@ -128,7 +123,10 @@ export class IncomeDiagnosisComponent implements OnInit, OnDestroy {
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IIncomeDiagnosis>>) {
-    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+    result.subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
   }
   protected onSaveSuccess() {
     this.reset();

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-
+import { filter, map } from 'rxjs/operators';
+import { JhiAlertService } from 'ng-jhipster';
 import { IInitialAssessment, InitialAssessment } from 'app/shared/model/initial-assessment.model';
 import { InitialAssessmentService } from './initial-assessment.service';
 import { IPatient } from 'app/shared/model/patient.model';
@@ -16,9 +17,9 @@ import { PatientService } from 'app/entities/patient/patient.service';
   templateUrl: './initial-assessment-update.component.html'
 })
 export class InitialAssessmentUpdateComponent implements OnInit {
-  isSaving = false;
+  isSaving: boolean;
 
-  patients: IPatient[] = [];
+  patients: IPatient[];
 
   editForm = this.fb.group({
     id: [],
@@ -36,28 +37,31 @@ export class InitialAssessmentUpdateComponent implements OnInit {
   });
 
   constructor(
+    protected jhiAlertService: JhiAlertService,
     protected initialAssessmentService: InitialAssessmentService,
     protected patientService: PatientService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.isSaving = false;
     this.activatedRoute.data.subscribe(({ initialAssessment }) => {
       this.updateForm(initialAssessment);
-
-      this.patientService
-        .query()
-        .pipe(
-          map((res: HttpResponse<IPatient[]>) => {
-            return res.body ? res.body : [];
-          })
-        )
-        .subscribe((resBody: IPatient[]) => (this.patients = resBody));
     });
+    this.patientService
+      .query()
+      .pipe(
+        filter((mayBeOk: HttpResponse<IPatient[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IPatient[]>) => response.body)
+      )
+      .subscribe(
+        (res: IPatient[]) => (this.patients = res),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
   }
 
-  updateForm(initialAssessment: IInitialAssessment): void {
+  updateForm(initialAssessment: IInitialAssessment) {
     this.editForm.patchValue({
       id: initialAssessment.id,
       smoking: initialAssessment.smoking,
@@ -74,11 +78,11 @@ export class InitialAssessmentUpdateComponent implements OnInit {
     });
   }
 
-  previousState(): void {
+  previousState() {
     window.history.back();
   }
 
-  save(): void {
+  save() {
     this.isSaving = true;
     const initialAssessment = this.createFromForm();
     if (initialAssessment.id !== undefined) {
@@ -91,38 +95,41 @@ export class InitialAssessmentUpdateComponent implements OnInit {
   private createFromForm(): IInitialAssessment {
     return {
       ...new InitialAssessment(),
-      id: this.editForm.get(['id'])!.value,
-      smoking: this.editForm.get(['smoking'])!.value,
-      weight: this.editForm.get(['weight'])!.value,
-      size: this.editForm.get(['size'])!.value,
-      iMC: this.editForm.get(['iMC'])!.value,
-      hbiac: this.editForm.get(['hbiac'])!.value,
-      baselineFunctionalCapacity: this.editForm.get(['baselineFunctionalCapacity'])!.value,
-      lDL: this.editForm.get(['lDL'])!.value,
-      hDL: this.editForm.get(['hDL'])!.value,
-      cardiovascularRisk: this.editForm.get(['cardiovascularRisk'])!.value,
-      deleted: this.editForm.get(['deleted'])!.value,
-      patientId: this.editForm.get(['patientId'])!.value
+      id: this.editForm.get(['id']).value,
+      smoking: this.editForm.get(['smoking']).value,
+      weight: this.editForm.get(['weight']).value,
+      size: this.editForm.get(['size']).value,
+      iMC: this.editForm.get(['iMC']).value,
+      hbiac: this.editForm.get(['hbiac']).value,
+      baselineFunctionalCapacity: this.editForm.get(['baselineFunctionalCapacity']).value,
+      lDL: this.editForm.get(['lDL']).value,
+      hDL: this.editForm.get(['hDL']).value,
+      cardiovascularRisk: this.editForm.get(['cardiovascularRisk']).value,
+      deleted: this.editForm.get(['deleted']).value,
+      patientId: this.editForm.get(['patientId']).value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IInitialAssessment>>): void {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IInitialAssessment>>) {
     result.subscribe(
       () => this.onSaveSuccess(),
       () => this.onSaveError()
     );
   }
 
-  protected onSaveSuccess(): void {
+  protected onSaveSuccess() {
     this.isSaving = false;
     this.previousState();
   }
 
-  protected onSaveError(): void {
+  protected onSaveError() {
     this.isSaving = false;
   }
+  protected onError(errorMessage: string) {
+    this.jhiAlertService.error(errorMessage, null, null);
+  }
 
-  trackById(index: number, item: IPatient): any {
+  trackPatientById(index: number, item: IPatient) {
     return item.id;
   }
 }

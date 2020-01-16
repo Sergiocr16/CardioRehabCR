@@ -1,32 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
-import { Observable, of, EMPTY } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
-
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { IRehabilitationCenter, RehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
+import { Observable, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import { RehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
 import { RehabilitationCenterService } from './rehabilitation-center.service';
 import { RehabilitationCenterComponent } from './rehabilitation-center.component';
 import { RehabilitationCenterDetailComponent } from './rehabilitation-center-detail.component';
 import { RehabilitationCenterUpdateComponent } from './rehabilitation-center-update.component';
+import { RehabilitationCenterDeletePopupComponent } from './rehabilitation-center-delete-dialog.component';
+import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
 
 @Injectable({ providedIn: 'root' })
 export class RehabilitationCenterResolve implements Resolve<IRehabilitationCenter> {
-  constructor(private service: RehabilitationCenterService, private router: Router) {}
+  constructor(private service: RehabilitationCenterService) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IRehabilitationCenter> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IRehabilitationCenter> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        flatMap((rehabilitationCenter: HttpResponse<RehabilitationCenter>) => {
-          if (rehabilitationCenter.body) {
-            return of(rehabilitationCenter.body);
-          } else {
-            this.router.navigate(['404']);
-            return EMPTY;
-          }
-        })
+        filter((response: HttpResponse<RehabilitationCenter>) => response.ok),
+        map((rehabilitationCenter: HttpResponse<RehabilitationCenter>) => rehabilitationCenter.body)
       );
     }
     return of(new RehabilitationCenter());

@@ -8,17 +8,17 @@ import { INonSpecificPainsSession } from 'app/shared/model/non-specific-pains-se
   templateUrl: './non-specific-pains-session-detail.component.html'
 })
 export class NonSpecificPainsSessionDetailComponent implements OnInit {
-  nonSpecificPainsSession: INonSpecificPainsSession | null = null;
+  nonSpecificPainsSession: INonSpecificPainsSession;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.activatedRoute.data.subscribe(({ nonSpecificPainsSession }) => {
       this.nonSpecificPainsSession = nonSpecificPainsSession;
     });
   }
 
-  previousState(): void {
+  previousState() {
     window.history.back();
   }
 }

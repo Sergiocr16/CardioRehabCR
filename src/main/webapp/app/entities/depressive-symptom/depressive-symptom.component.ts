@@ -6,9 +6,9 @@ import { ModalService } from 'app/shared/util/modal.service';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks } from 'ng-jhipster';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IDepressiveSymptom } from 'app/shared/model/depressive-symptom.model';
+import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { DepressiveSymptomService } from './depressive-symptom.service';
@@ -23,7 +23,8 @@ import { IMayorEvent } from 'app/shared/model/mayor-event.model';
 export class DepressiveSymptomComponent implements OnInit, OnDestroy {
   rehabilitationCenters: IRehabilitationCenter[];
   depressiveSymptoms: IDepressiveSymptom[];
-  eventSubscriber?: Subscription;
+  currentAccount: any;
+  eventSubscriber: Subscription;
   itemsPerPage: number;
   links: any;
   page: any;
@@ -49,10 +50,10 @@ export class DepressiveSymptomComponent implements OnInit, OnDestroy {
       last: 0
     };
     this.predicate = 'id';
-    this.ascending = true;
+    this.reverse = true;
   }
 
-  loadAll(): void {
+  loadAll() {
     this.depressiveSymptomService
       .query({
         page: this.page,
@@ -76,13 +77,13 @@ export class DepressiveSymptomComponent implements OnInit, OnDestroy {
     this.rehabilitationCenters = this.global.paginateRehabilitationCenters(data);
   }
 
-  reset(): void {
+  reset() {
     this.page = 0;
     this.depressiveSymptoms = [];
     this.loadAll();
   }
 
-  loadPage(page: number): void {
+  loadPage(page) {
     this.page = page;
 
     this.loadRC();
@@ -101,28 +102,20 @@ export class DepressiveSymptomComponent implements OnInit, OnDestroy {
     this.registerChangeInDepressiveSymptoms();
   }
 
-  ngOnDestroy(): void {
-    if (this.eventSubscriber) {
-      this.eventManager.destroy(this.eventSubscriber);
-    }
+  ngOnDestroy() {
+    this.eventManager.destroy(this.eventSubscriber);
   }
 
-  trackId(index: number, item: IDepressiveSymptom): number {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-    return item.id!;
+  trackId(index: number, item: IDepressiveSymptom) {
+    return item.id;
   }
 
-  registerChangeInDepressiveSymptoms(): void {
-    this.eventSubscriber = this.eventManager.subscribe('depressiveSymptomListModification', () => this.reset());
+  registerChangeInDepressiveSymptoms() {
+    this.eventSubscriber = this.eventManager.subscribe('depressiveSymptomListModification', response => this.reset());
   }
 
-  delete(depressiveSymptom: IDepressiveSymptom): void {
-    const modalRef = this.modalService.open(DepressiveSymptomDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.depressiveSymptom = depressiveSymptom;
-  }
-
-  sort(): string[] {
-    const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
+  sort() {
+    const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
     if (this.predicate !== 'id') {
       result.push('id');
     }
@@ -137,7 +130,10 @@ export class DepressiveSymptomComponent implements OnInit, OnDestroy {
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IMayorEvent>>) {
-    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+    result.subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
   }
 
   protected onSaveSuccess() {

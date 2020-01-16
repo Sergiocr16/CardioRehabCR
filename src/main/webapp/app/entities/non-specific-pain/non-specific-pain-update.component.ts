@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-
+import { filter, map } from 'rxjs/operators';
+import { JhiAlertService } from 'ng-jhipster';
 import { INonSpecificPain, NonSpecificPain } from 'app/shared/model/non-specific-pain.model';
 import { NonSpecificPainService } from './non-specific-pain.service';
 import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
@@ -33,6 +34,7 @@ export class NonSpecificPainUpdateComponent implements OnInit {
   });
 
   constructor(
+    protected jhiAlertService: JhiAlertService,
     protected nonSpecificPainService: NonSpecificPainService,
     protected rehabilitationCenterService: RehabilitationCenterService,
     protected activatedRoute: ActivatedRoute,
@@ -41,7 +43,8 @@ export class NonSpecificPainUpdateComponent implements OnInit {
     private fb: FormBuilder
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.isSaving = false;
     this.activatedRoute.data.subscribe(({ nonSpecificPain }) => {
       this.updateForm(nonSpecificPain);
       this.confirmMessage = !nonSpecificPain.id ? 'new' : 'update';
@@ -78,7 +81,7 @@ export class NonSpecificPainUpdateComponent implements OnInit {
     });
   }
 
-  previousState(): void {
+  previousState() {
     window.history.back();
   }
 
@@ -97,28 +100,28 @@ export class NonSpecificPainUpdateComponent implements OnInit {
   private createFromForm(): INonSpecificPain {
     return {
       ...new NonSpecificPain(),
-      id: this.editForm.get(['id'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      code: this.editForm.get(['code'])!.value,
-      deleted: this.editForm.get(['deleted'])!.value,
-      rehabilitationCenterId: this.editForm.get(['rehabilitationCenterId'])!.value
+      id: this.editForm.get(['id']).value,
+      description: this.editForm.get(['description']).value,
+      code: this.editForm.get(['code']).value,
+      deleted: this.editForm.get(['deleted']).value,
+      rehabilitationCenterId: this.editForm.get(['rehabilitationCenterId']).value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<INonSpecificPain>>): void {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<INonSpecificPain>>) {
     result.subscribe(
       () => this.onSaveSuccess(),
       () => this.onSaveError()
     );
   }
 
-  protected onSaveSuccess(): void {
+  protected onSaveSuccess() {
     this.isSaving = false;
     this.modal.message(this.modalSuccessMessage);
     this.previousState();
   }
 
-  protected onSaveError(): void {
+  protected onSaveError() {
     this.isSaving = false;
   }
 
@@ -126,7 +129,7 @@ export class NonSpecificPainUpdateComponent implements OnInit {
     this.jhiAlertService.error(errorMessage, null, null);
   }
 
-  trackById(index: number, item: IRehabilitationCenter): any {
+  trackRehabilitationCenterById(index: number, item: IRehabilitationCenter) {
     return item.id;
   }
 }

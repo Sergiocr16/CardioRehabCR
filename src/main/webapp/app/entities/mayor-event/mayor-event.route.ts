@@ -1,32 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
-import { Observable, of, EMPTY } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
-
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { IMayorEvent, MayorEvent } from 'app/shared/model/mayor-event.model';
+import { Observable, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import { MayorEvent } from 'app/shared/model/mayor-event.model';
 import { MayorEventService } from './mayor-event.service';
 import { MayorEventComponent } from './mayor-event.component';
 import { MayorEventDetailComponent } from './mayor-event-detail.component';
 import { MayorEventUpdateComponent } from './mayor-event-update.component';
+import { MayorEventDeletePopupComponent } from './mayor-event-delete-dialog.component';
+import { IMayorEvent } from 'app/shared/model/mayor-event.model';
 
 @Injectable({ providedIn: 'root' })
 export class MayorEventResolve implements Resolve<IMayorEvent> {
-  constructor(private service: MayorEventService, private router: Router) {}
+  constructor(private service: MayorEventService) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IMayorEvent> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IMayorEvent> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        flatMap((mayorEvent: HttpResponse<MayorEvent>) => {
-          if (mayorEvent.body) {
-            return of(mayorEvent.body);
-          } else {
-            this.router.navigate(['404']);
-            return EMPTY;
-          }
-        })
+        filter((response: HttpResponse<MayorEvent>) => response.ok),
+        map((mayorEvent: HttpResponse<MayorEvent>) => mayorEvent.body)
       );
     }
     return of(new MayorEvent());

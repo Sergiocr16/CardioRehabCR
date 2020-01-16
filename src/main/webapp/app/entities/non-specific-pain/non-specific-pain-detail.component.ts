@@ -8,17 +8,17 @@ import { INonSpecificPain } from 'app/shared/model/non-specific-pain.model';
   templateUrl: './non-specific-pain-detail.component.html'
 })
 export class NonSpecificPainDetailComponent implements OnInit {
-  nonSpecificPain: INonSpecificPain | null = null;
+  nonSpecificPain: INonSpecificPain;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.activatedRoute.data.subscribe(({ nonSpecificPain }) => {
       this.nonSpecificPain = nonSpecificPain;
     });
   }
 
-  previousState(): void {
+  previousState() {
     window.history.back();
   }
 }

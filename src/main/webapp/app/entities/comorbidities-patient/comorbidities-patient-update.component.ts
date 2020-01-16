@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-
+import { filter, map } from 'rxjs/operators';
+import { JhiAlertService } from 'ng-jhipster';
 import { IComorbiditiesPatient, ComorbiditiesPatient } from 'app/shared/model/comorbidities-patient.model';
 import { ComorbiditiesPatientService } from './comorbidities-patient.service';
 import { IInitialAssessment } from 'app/shared/model/initial-assessment.model';
@@ -16,9 +17,9 @@ import { InitialAssessmentService } from 'app/entities/initial-assessment/initia
   templateUrl: './comorbidities-patient-update.component.html'
 })
 export class ComorbiditiesPatientUpdateComponent implements OnInit {
-  isSaving = false;
+  isSaving: boolean;
 
-  initialassessments: IInitialAssessment[] = [];
+  initialassessments: IInitialAssessment[];
 
   editForm = this.fb.group({
     id: [],
@@ -29,28 +30,31 @@ export class ComorbiditiesPatientUpdateComponent implements OnInit {
   });
 
   constructor(
+    protected jhiAlertService: JhiAlertService,
     protected comorbiditiesPatientService: ComorbiditiesPatientService,
     protected initialAssessmentService: InitialAssessmentService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.isSaving = false;
     this.activatedRoute.data.subscribe(({ comorbiditiesPatient }) => {
       this.updateForm(comorbiditiesPatient);
-
-      this.initialAssessmentService
-        .query()
-        .pipe(
-          map((res: HttpResponse<IInitialAssessment[]>) => {
-            return res.body ? res.body : [];
-          })
-        )
-        .subscribe((resBody: IInitialAssessment[]) => (this.initialassessments = resBody));
     });
+    this.initialAssessmentService
+      .query()
+      .pipe(
+        filter((mayBeOk: HttpResponse<IInitialAssessment[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IInitialAssessment[]>) => response.body)
+      )
+      .subscribe(
+        (res: IInitialAssessment[]) => (this.initialassessments = res),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
   }
 
-  updateForm(comorbiditiesPatient: IComorbiditiesPatient): void {
+  updateForm(comorbiditiesPatient: IComorbiditiesPatient) {
     this.editForm.patchValue({
       id: comorbiditiesPatient.id,
       description: comorbiditiesPatient.description,
@@ -60,11 +64,11 @@ export class ComorbiditiesPatientUpdateComponent implements OnInit {
     });
   }
 
-  previousState(): void {
+  previousState() {
     window.history.back();
   }
 
-  save(): void {
+  save() {
     this.isSaving = true;
     const comorbiditiesPatient = this.createFromForm();
     if (comorbiditiesPatient.id !== undefined) {
@@ -77,31 +81,34 @@ export class ComorbiditiesPatientUpdateComponent implements OnInit {
   private createFromForm(): IComorbiditiesPatient {
     return {
       ...new ComorbiditiesPatient(),
-      id: this.editForm.get(['id'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      comorbiditietId: this.editForm.get(['comorbiditietId'])!.value,
-      exist: this.editForm.get(['exist'])!.value,
-      initialAssessmentId: this.editForm.get(['initialAssessmentId'])!.value
+      id: this.editForm.get(['id']).value,
+      description: this.editForm.get(['description']).value,
+      comorbiditietId: this.editForm.get(['comorbiditietId']).value,
+      exist: this.editForm.get(['exist']).value,
+      initialAssessmentId: this.editForm.get(['initialAssessmentId']).value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IComorbiditiesPatient>>): void {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IComorbiditiesPatient>>) {
     result.subscribe(
       () => this.onSaveSuccess(),
       () => this.onSaveError()
     );
   }
 
-  protected onSaveSuccess(): void {
+  protected onSaveSuccess() {
     this.isSaving = false;
     this.previousState();
   }
 
-  protected onSaveError(): void {
+  protected onSaveError() {
     this.isSaving = false;
   }
+  protected onError(errorMessage: string) {
+    this.jhiAlertService.error(errorMessage, null, null);
+  }
 
-  trackById(index: number, item: IInitialAssessment): any {
+  trackInitialAssessmentById(index: number, item: IInitialAssessment) {
     return item.id;
   }
 }

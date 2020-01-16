@@ -11,7 +11,7 @@ describe('Service Tests', () => {
     let service: FinalAssessmentService;
     let httpMock: HttpTestingController;
     let elemDefault: IFinalAssessment;
-    let expectedResult:any;
+    let expectedResult: any;
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule]

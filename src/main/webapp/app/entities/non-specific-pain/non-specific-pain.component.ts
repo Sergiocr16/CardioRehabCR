@@ -5,9 +5,9 @@ import { GlobalVariablesService } from '../../shared/util/global-variables.servi
 import { ModalService } from 'app/shared/util/modal.service';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { JhiEventManager, JhiParseLinks } from 'ng-jhipster';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { INonSpecificPain } from 'app/shared/model/non-specific-pain.model';
+import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { NonSpecificPainService } from './non-specific-pain.service';
@@ -22,7 +22,8 @@ import { IMayorEvent } from 'app/shared/model/mayor-event.model';
 export class NonSpecificPainComponent implements OnInit, OnDestroy {
   rehabilitationCenters: IRehabilitationCenter[];
   nonSpecificPains: INonSpecificPain[];
-  eventSubscriber?: Subscription;
+  currentAccount: any;
+  eventSubscriber: Subscription;
   itemsPerPage: number;
   links: any;
   page: any;
@@ -48,10 +49,10 @@ export class NonSpecificPainComponent implements OnInit, OnDestroy {
       last: 0
     };
     this.predicate = 'id';
-    this.ascending = true;
+    this.reverse = true;
   }
 
-  loadAll(): void {
+  loadAll() {
     this.nonSpecificPainService
       .query({
         page: this.page,
@@ -82,7 +83,7 @@ export class NonSpecificPainComponent implements OnInit, OnDestroy {
     this.loadAll();
   }
 
-  loadPage(page: number): void {
+  loadPage(page) {
     this.page = page;
     this.loadAll();
   }
@@ -100,28 +101,20 @@ export class NonSpecificPainComponent implements OnInit, OnDestroy {
     this.registerChangeInNonSpecificPains();
   }
 
-  ngOnDestroy(): void {
-    if (this.eventSubscriber) {
-      this.eventManager.destroy(this.eventSubscriber);
-    }
+  ngOnDestroy() {
+    this.eventManager.destroy(this.eventSubscriber);
   }
 
-  trackId(index: number, item: INonSpecificPain): number {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-    return item.id!;
+  trackId(index: number, item: INonSpecificPain) {
+    return item.id;
   }
 
-  registerChangeInNonSpecificPains(): void {
-    this.eventSubscriber = this.eventManager.subscribe('nonSpecificPainListModification', () => this.reset());
+  registerChangeInNonSpecificPains() {
+    this.eventSubscriber = this.eventManager.subscribe('nonSpecificPainListModification', response => this.reset());
   }
 
-  delete(nonSpecificPain: INonSpecificPain): void {
-    const modalRef = this.modalService.open(NonSpecificPainDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.nonSpecificPain = nonSpecificPain;
-  }
-
-  sort(): string[] {
-    const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
+  sort() {
+    const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
     if (this.predicate !== 'id') {
       result.push('id');
     }
@@ -136,7 +129,10 @@ export class NonSpecificPainComponent implements OnInit, OnDestroy {
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IMayorEvent>>) {
-    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+    result.subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
   }
 
   protected onSaveSuccess() {

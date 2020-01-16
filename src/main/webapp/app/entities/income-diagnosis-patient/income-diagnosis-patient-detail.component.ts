@@ -8,17 +8,17 @@ import { IIncomeDiagnosisPatient } from 'app/shared/model/income-diagnosis-patie
   templateUrl: './income-diagnosis-patient-detail.component.html'
 })
 export class IncomeDiagnosisPatientDetailComponent implements OnInit {
-  incomeDiagnosisPatient: IIncomeDiagnosisPatient | null = null;
+  incomeDiagnosisPatient: IIncomeDiagnosisPatient;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.activatedRoute.data.subscribe(({ incomeDiagnosisPatient }) => {
       this.incomeDiagnosisPatient = incomeDiagnosisPatient;
     });
   }
 
-  previousState(): void {
+  previousState() {
     window.history.back();
   }
 }

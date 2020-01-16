@@ -1,14 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks } from 'ng-jhipster';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IAppUser } from 'app/shared/model/app-user.model';
+import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { AppUserService } from './app-user.service';
-import { AppUserDeleteDialogComponent } from './app-user-delete-dialog.component';
 
 @Component({
   selector: 'jhi-app-user',
@@ -16,18 +17,20 @@ import { AppUserDeleteDialogComponent } from './app-user-delete-dialog.component
 })
 export class AppUserComponent implements OnInit, OnDestroy {
   appUsers: IAppUser[];
-  eventSubscriber?: Subscription;
+  currentAccount: any;
+  eventSubscriber: Subscription;
   itemsPerPage: number;
   links: any;
-  page: number;
-  predicate: string;
-  ascending: boolean;
+  page: any;
+  predicate: any;
+  reverse: any;
+  totalItems: number;
 
   constructor(
     protected appUserService: AppUserService,
     protected eventManager: JhiEventManager,
-    protected modalService: NgbModal,
-    protected parseLinks: JhiParseLinks
+    protected parseLinks: JhiParseLinks,
+    protected accountService: AccountService
   ) {
     this.appUsers = [];
     this.itemsPerPage = ITEMS_PER_PAGE;
@@ -36,10 +39,10 @@ export class AppUserComponent implements OnInit, OnDestroy {
       last: 0
     };
     this.predicate = 'id';
-    this.ascending = true;
+    this.reverse = true;
   }
 
-  loadAll(): void {
+  loadAll() {
     this.appUserService
       .query({
         page: this.page,
@@ -49,57 +52,50 @@ export class AppUserComponent implements OnInit, OnDestroy {
       .subscribe((res: HttpResponse<IAppUser[]>) => this.paginateAppUsers(res.body, res.headers));
   }
 
-  reset(): void {
+  reset() {
     this.page = 0;
     this.appUsers = [];
     this.loadAll();
   }
 
-  loadPage(page: number): void {
+  loadPage(page) {
     this.page = page;
     this.loadAll();
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.loadAll();
+    this.accountService.identity().subscribe(account => {
+      this.currentAccount = account;
+    });
     this.registerChangeInAppUsers();
   }
 
-  ngOnDestroy(): void {
-    if (this.eventSubscriber) {
-      this.eventManager.destroy(this.eventSubscriber);
-    }
+  ngOnDestroy() {
+    this.eventManager.destroy(this.eventSubscriber);
   }
 
-  trackId(index: number, item: IAppUser): number {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-    return item.id!;
+  trackId(index: number, item: IAppUser) {
+    return item.id;
   }
 
-  registerChangeInAppUsers(): void {
-    this.eventSubscriber = this.eventManager.subscribe('appUserListModification', () => this.reset());
+  registerChangeInAppUsers() {
+    this.eventSubscriber = this.eventManager.subscribe('appUserListModification', response => this.reset());
   }
 
-  delete(appUser: IAppUser): void {
-    const modalRef = this.modalService.open(AppUserDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.appUser = appUser;
-  }
-
-  sort(): string[] {
-    const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
+  sort() {
+    const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
     if (this.predicate !== 'id') {
       result.push('id');
     }
     return result;
   }
 
-  protected paginateAppUsers(data: IAppUser[] | null, headers: HttpHeaders): void {
-    const headersLink = headers.get('link');
-    this.links = this.parseLinks.parse(headersLink ? headersLink : '');
-    if (data) {
-      for (let i = 0; i < data.length; i++) {
-        this.appUsers.push(data[i]);
-      }
+  protected paginateAppUsers(data: IAppUser[], headers: HttpHeaders) {
+    this.links = this.parseLinks.parse(headers.get('link'));
+    this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
+    for (let i = 0; i < data.length; i++) {
+      this.appUsers.push(data[i]);
     }
   }
 }

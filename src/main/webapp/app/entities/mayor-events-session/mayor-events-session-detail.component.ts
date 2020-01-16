@@ -8,17 +8,17 @@ import { IMayorEventsSession } from 'app/shared/model/mayor-events-session.model
   templateUrl: './mayor-events-session-detail.component.html'
 })
 export class MayorEventsSessionDetailComponent implements OnInit {
-  mayorEventsSession: IMayorEventsSession | null = null;
+  mayorEventsSession: IMayorEventsSession;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.activatedRoute.data.subscribe(({ mayorEventsSession }) => {
       this.mayorEventsSession = mayorEventsSession;
     });
   }
 
-  previousState(): void {
+  previousState() {
     window.history.back();
   }
 }

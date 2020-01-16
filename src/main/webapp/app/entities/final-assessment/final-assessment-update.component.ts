@@ -52,6 +52,7 @@ export class FinalAssessmentUpdateComponent implements OnInit, OnDestroy {
   });
 
   constructor(
+    protected jhiAlertService: JhiAlertService,
     protected finalAssessmentService: FinalAssessmentService,
     protected patientService: PatientService,
     protected activatedRoute: ActivatedRoute,
@@ -61,7 +62,8 @@ export class FinalAssessmentUpdateComponent implements OnInit, OnDestroy {
     private fb: FormBuilder
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.isSaving = false;
     this.activatedRoute.data.subscribe(({ finalAssessment }) => {
       this.updateForm(finalAssessment);
       this.title = finalAssessment.id == null ? 'Evaluación final' : 'Editar paciente';
@@ -110,7 +112,7 @@ export class FinalAssessmentUpdateComponent implements OnInit, OnDestroy {
     });
   }
 
-  previousState(): void {
+  previousState() {
     window.history.back();
   }
 
@@ -155,7 +157,7 @@ export class FinalAssessmentUpdateComponent implements OnInit, OnDestroy {
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IFinalAssessment>>): void {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IFinalAssessment>>) {
     result.subscribe(
       () => this.onSaveSuccess(),
       () => this.onSaveError()
@@ -167,7 +169,10 @@ export class FinalAssessmentUpdateComponent implements OnInit, OnDestroy {
     this.subscribeToSaveResponsePatientt(this.patientService.update(this.patient));
   }
   protected subscribeToSaveResponsePatientt(result: Observable<HttpResponse<IFinalAssessment>>) {
-    result.subscribe(() => this.onSaveSuccessPatient(), () => this.onSaveError());
+    result.subscribe(
+      () => this.onSaveSuccessPatient(),
+      () => this.onSaveError()
+    );
   }
 
   protected onSaveSuccessPatient() {
@@ -178,8 +183,11 @@ export class FinalAssessmentUpdateComponent implements OnInit, OnDestroy {
   protected onSaveError() {
     this.isSaving = false;
   }
+  protected onError(errorMessage: string) {
+    this.jhiAlertService.error(errorMessage, null, null);
+  }
 
-  trackById(index: number, item: IPatient): any {
+  trackPatientById(index: number, item: IPatient) {
     return item.id;
   }
   ngOnDestroy() {

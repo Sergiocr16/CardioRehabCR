@@ -1,14 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks } from 'ng-jhipster';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IInitialAssessment } from 'app/shared/model/initial-assessment.model';
+import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { InitialAssessmentService } from './initial-assessment.service';
-import { InitialAssessmentDeleteDialogComponent } from './initial-assessment-delete-dialog.component';
 
 @Component({
   selector: 'jhi-initial-assessment',
@@ -16,18 +17,20 @@ import { InitialAssessmentDeleteDialogComponent } from './initial-assessment-del
 })
 export class InitialAssessmentComponent implements OnInit, OnDestroy {
   initialAssessments: IInitialAssessment[];
-  eventSubscriber?: Subscription;
+  currentAccount: any;
+  eventSubscriber: Subscription;
   itemsPerPage: number;
   links: any;
-  page: number;
-  predicate: string;
-  ascending: boolean;
+  page: any;
+  predicate: any;
+  reverse: any;
+  totalItems: number;
 
   constructor(
     protected initialAssessmentService: InitialAssessmentService,
     protected eventManager: JhiEventManager,
-    protected modalService: NgbModal,
-    protected parseLinks: JhiParseLinks
+    protected parseLinks: JhiParseLinks,
+    protected accountService: AccountService
   ) {
     this.initialAssessments = [];
     this.itemsPerPage = ITEMS_PER_PAGE;
@@ -36,10 +39,10 @@ export class InitialAssessmentComponent implements OnInit, OnDestroy {
       last: 0
     };
     this.predicate = 'id';
-    this.ascending = true;
+    this.reverse = true;
   }
 
-  loadAll(): void {
+  loadAll() {
     this.initialAssessmentService
       .query({
         page: this.page,
@@ -49,57 +52,50 @@ export class InitialAssessmentComponent implements OnInit, OnDestroy {
       .subscribe((res: HttpResponse<IInitialAssessment[]>) => this.paginateInitialAssessments(res.body, res.headers));
   }
 
-  reset(): void {
+  reset() {
     this.page = 0;
     this.initialAssessments = [];
     this.loadAll();
   }
 
-  loadPage(page: number): void {
+  loadPage(page) {
     this.page = page;
     this.loadAll();
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.loadAll();
+    this.accountService.identity().subscribe(account => {
+      this.currentAccount = account;
+    });
     this.registerChangeInInitialAssessments();
   }
 
-  ngOnDestroy(): void {
-    if (this.eventSubscriber) {
-      this.eventManager.destroy(this.eventSubscriber);
-    }
+  ngOnDestroy() {
+    this.eventManager.destroy(this.eventSubscriber);
   }
 
-  trackId(index: number, item: IInitialAssessment): number {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-    return item.id!;
+  trackId(index: number, item: IInitialAssessment) {
+    return item.id;
   }
 
-  registerChangeInInitialAssessments(): void {
-    this.eventSubscriber = this.eventManager.subscribe('initialAssessmentListModification', () => this.reset());
+  registerChangeInInitialAssessments() {
+    this.eventSubscriber = this.eventManager.subscribe('initialAssessmentListModification', response => this.reset());
   }
 
-  delete(initialAssessment: IInitialAssessment): void {
-    const modalRef = this.modalService.open(InitialAssessmentDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.initialAssessment = initialAssessment;
-  }
-
-  sort(): string[] {
-    const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
+  sort() {
+    const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
     if (this.predicate !== 'id') {
       result.push('id');
     }
     return result;
   }
 
-  protected paginateInitialAssessments(data: IInitialAssessment[] | null, headers: HttpHeaders): void {
-    const headersLink = headers.get('link');
-    this.links = this.parseLinks.parse(headersLink ? headersLink : '');
-    if (data) {
-      for (let i = 0; i < data.length; i++) {
-        this.initialAssessments.push(data[i]);
-      }
+  protected paginateInitialAssessments(data: IInitialAssessment[], headers: HttpHeaders) {
+    this.links = this.parseLinks.parse(headers.get('link'));
+    this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
+    for (let i = 0; i < data.length; i++) {
+      this.initialAssessments.push(data[i]);
     }
   }
 }

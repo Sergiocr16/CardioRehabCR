@@ -5,8 +5,8 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-
+import { filter, map } from 'rxjs/operators';
+import { JhiAlertService } from 'ng-jhipster';
 import { IIncomeDiagnosis, IncomeDiagnosis } from 'app/shared/model/income-diagnosis.model';
 import { IncomeDiagnosisService } from './income-diagnosis.service';
 import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
@@ -34,6 +34,7 @@ export class IncomeDiagnosisUpdateComponent implements OnInit, OnDestroy {
   });
 
   constructor(
+    protected jhiAlertService: JhiAlertService,
     protected incomeDiagnosisService: IncomeDiagnosisService,
     protected rehabilitationCenterService: RehabilitationCenterService,
     protected activatedRoute: ActivatedRoute,
@@ -42,7 +43,8 @@ export class IncomeDiagnosisUpdateComponent implements OnInit, OnDestroy {
     private global: GlobalVariablesService
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.isSaving = false;
     this.activatedRoute.data.subscribe(({ incomeDiagnosis }) => {
       this.updateForm(incomeDiagnosis);
       this.title = !incomeDiagnosis.id ? 'Crear un diagnóstico de ingreso' : 'Editar un diagnóstico de ingreso';
@@ -73,7 +75,7 @@ export class IncomeDiagnosisUpdateComponent implements OnInit, OnDestroy {
     this.global.leavingForm();
   }
 
-  updateForm(incomeDiagnosis: IIncomeDiagnosis): void {
+  updateForm(incomeDiagnosis: IIncomeDiagnosis) {
     this.editForm.patchValue({
       id: incomeDiagnosis.id,
       description: incomeDiagnosis.description,
@@ -82,7 +84,7 @@ export class IncomeDiagnosisUpdateComponent implements OnInit, OnDestroy {
     });
   }
 
-  previousState(): void {
+  previousState() {
     window.history.back();
   }
 
@@ -101,27 +103,27 @@ export class IncomeDiagnosisUpdateComponent implements OnInit, OnDestroy {
   private createFromForm(): IIncomeDiagnosis {
     return {
       ...new IncomeDiagnosis(),
-      id: this.editForm.get(['id'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      deleted: this.editForm.get(['deleted'])!.value,
-      rehabilitationCenterId: this.editForm.get(['rehabilitationCenterId'])!.value
+      id: this.editForm.get(['id']).value,
+      description: this.editForm.get(['description']).value,
+      deleted: this.editForm.get(['deleted']).value,
+      rehabilitationCenterId: this.editForm.get(['rehabilitationCenterId']).value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IIncomeDiagnosis>>): void {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IIncomeDiagnosis>>) {
     result.subscribe(
       () => this.onSaveSuccess(),
       () => this.onSaveError()
     );
   }
 
-  protected onSaveSuccess(): void {
+  protected onSaveSuccess() {
     this.isSaving = false;
     this.modal.message(this.modalSuccessMessage);
     this.previousState();
   }
 
-  protected onSaveError(): void {
+  protected onSaveError() {
     this.isSaving = false;
   }
 
@@ -129,7 +131,7 @@ export class IncomeDiagnosisUpdateComponent implements OnInit, OnDestroy {
     this.jhiAlertService.error(errorMessage, null, null);
   }
 
-  trackById(index: number, item: IRehabilitationCenter): any {
+  trackRehabilitationCenterById(index: number, item: IRehabilitationCenter) {
     return item.id;
   }
 }

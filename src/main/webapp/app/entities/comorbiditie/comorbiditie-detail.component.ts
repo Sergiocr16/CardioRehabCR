@@ -8,17 +8,17 @@ import { IComorbiditie } from 'app/shared/model/comorbiditie.model';
   templateUrl: './comorbiditie-detail.component.html'
 })
 export class ComorbiditieDetailComponent implements OnInit {
-  comorbiditie: IComorbiditie | null = null;
+  comorbiditie: IComorbiditie;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.activatedRoute.data.subscribe(({ comorbiditie }) => {
       this.comorbiditie = comorbiditie;
     });
   }
 
-  previousState(): void {
+  previousState() {
     window.history.back();
   }
 }

@@ -12,6 +12,7 @@ import { filter, map } from 'rxjs/operators';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { AppUserService } from 'app/entities/app-user/app-user.service';
 import { ModalService } from 'app/shared/util/modal.service';
+import { LanguageHelper } from 'app/core/language/language.helper';
 
 @Component({
   selector: 'jhi-user-mgmt-update',
@@ -41,7 +42,7 @@ export class UserManagementUpdateComponent implements OnInit, OnDestroy {
   });
 
   constructor(
-    private languageHelper: JhiLanguageHelper,
+    private languageHelper: LanguageHelper,
     private userService: UserService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -135,9 +136,15 @@ export class UserManagementUpdateComponent implements OnInit, OnDestroy {
       this.isSaving = true;
       this.updateUser(this.user, this.appUser);
       if (this.user.id !== null) {
-        this.userService.update(this.user).subscribe(response => this.onSaveSuccess(response), () => this.onSaveError());
+        this.userService.update(this.user).subscribe(
+          response => this.onSaveSuccess(response),
+          () => this.onSaveError()
+        );
       } else {
-        this.userService.create(this.user).subscribe(response => this.onSaveSuccess(response), () => this.onSaveError());
+        this.userService.create(this.user).subscribe(
+          response => this.onSaveSuccess(response),
+          () => this.onSaveError()
+        );
       }
     });
   }

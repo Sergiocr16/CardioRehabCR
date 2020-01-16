@@ -21,16 +21,22 @@ export class PatientService {
 
   create(patient: IPatient): Observable<EntityResponseType> {
     // const copy = this.convertDateFromClient(patient);
-    return this.http.post<IPatient>(this.resourceUrl, patient, { observe: 'response' }).pipe(map((res: EntityResponseType) => res));
+    return this.http
+      .post<IPatient>(this.resourceUrl, patient, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => res));
   }
 
   update(patient: IPatient): Observable<EntityResponseType> {
     // const copy = this.convertDateFromClient(patient);
-    return this.http.put<IPatient>(this.resourceUrl, patient, { observe: 'response' }).pipe(map((res: EntityResponseType) => res));
+    return this.http
+      .put<IPatient>(this.resourceUrl, patient, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => res));
   }
 
   find(id: number): Observable<EntityResponseType> {
-    return this.http.get<IPatient>(`${this.resourceUrl}/${id}`, { observe: 'response' }).pipe(map((res: EntityResponseType) => res));
+    return this.http
+      .get<IPatient>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => res));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
@@ -40,8 +46,8 @@ export class PatientService {
       .pipe(map((res: EntityArrayResponseType) => res));
   }
 
-  delete(id: number): Observable<HttpResponse<{}>> {
-    return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  delete(id: number): Observable<HttpResponse<any>> {
+    return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
   protected convertDateFromClient(patient: IPatient): IPatient {

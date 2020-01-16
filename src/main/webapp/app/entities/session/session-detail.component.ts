@@ -36,7 +36,7 @@ export class SessionDetailComponent implements OnInit {
     protected minorEventsSessionService: MinorEventsSessionService
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.activatedRoute.data.subscribe(({ session }) => {
       this.session = session;
       this.patientService
@@ -73,7 +73,10 @@ export class SessionDetailComponent implements OnInit {
         filter((mayBeOk: HttpResponse<IMayorEventsSession[]>) => mayBeOk.ok),
         map((response: HttpResponse<IMayorEventsSession[]>) => response.body)
       )
-      .subscribe((res: IMayorEventsSession[]) => (this.mayorEventSessions = res), (res: HttpErrorResponse) => this.onError(res.message));
+      .subscribe(
+        (res: IMayorEventsSession[]) => (this.mayorEventSessions = res),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
   }
   loadMinorEventsSessions(sessionId) {
     this.minorEventsSessionService
@@ -82,7 +85,10 @@ export class SessionDetailComponent implements OnInit {
         filter((mayBeOk: HttpResponse<IMinorEventsSession[]>) => mayBeOk.ok),
         map((response: HttpResponse<IMinorEventsSession[]>) => response.body)
       )
-      .subscribe((res: IMinorEventsSession[]) => (this.minorEventSessions = res), (res: HttpErrorResponse) => this.onError(res.message));
+      .subscribe(
+        (res: IMinorEventsSession[]) => (this.minorEventSessions = res),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
   }
   loadDepressiveSymptomsSessions(sessionId) {
     this.depressiveSymptomsSessionService

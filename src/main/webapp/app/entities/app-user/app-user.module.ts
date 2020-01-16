@@ -5,12 +5,20 @@ import { CardioRehabCrSharedModule } from 'app/shared/shared.module';
 import { AppUserComponent } from './app-user.component';
 import { AppUserDetailComponent } from './app-user-detail.component';
 import { AppUserUpdateComponent } from './app-user-update.component';
-import { AppUserDeleteDialogComponent } from './app-user-delete-dialog.component';
-import { appUserRoute } from './app-user.route';
+import { AppUserDeletePopupComponent, AppUserDeleteDialogComponent } from './app-user-delete-dialog.component';
+import { appUserRoute, appUserPopupRoute } from './app-user.route';
+
+const ENTITY_STATES = [...appUserRoute, ...appUserPopupRoute];
 
 @NgModule({
-  imports: [CardioRehabCrSharedModule, RouterModule.forChild(appUserRoute)],
-  declarations: [AppUserComponent, AppUserDetailComponent, AppUserUpdateComponent, AppUserDeleteDialogComponent],
+  imports: [CardioRehabCrSharedModule, RouterModule.forChild(ENTITY_STATES)],
+  declarations: [
+    AppUserComponent,
+    AppUserDetailComponent,
+    AppUserUpdateComponent,
+    AppUserDeleteDialogComponent,
+    AppUserDeletePopupComponent
+  ],
   entryComponents: [AppUserDeleteDialogComponent]
 })
 export class CardioRehabCrAppUserModule {}

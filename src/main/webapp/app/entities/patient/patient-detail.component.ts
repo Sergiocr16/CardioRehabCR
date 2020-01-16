@@ -37,7 +37,7 @@ export class PatientDetailComponent implements OnInit {
     protected finalAssessmentService: FinalAssessmentService
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.activatedRoute.data.subscribe(({ patient }) => {
       this.patient = patient;
       this.initialAssessmentService
@@ -63,7 +63,10 @@ export class PatientDetailComponent implements OnInit {
         filter((mayBeOk: HttpResponse<IIncomeDiagnosis[]>) => mayBeOk.ok),
         map((response: HttpResponse<IIncomeDiagnosis[]>) => response.body)
       )
-      .subscribe((res: IIncomeDiagnosis[]) => (this.incomeDiagnosis = res), (res: HttpErrorResponse) => this.onError(res.message));
+      .subscribe(
+        (res: IIncomeDiagnosis[]) => (this.incomeDiagnosis = res),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
   }
 
   loadComorbiditiesPatient(initialAssesmentId) {
@@ -73,7 +76,10 @@ export class PatientDetailComponent implements OnInit {
         filter((mayBeOk: HttpResponse<IComorbiditie[]>) => mayBeOk.ok),
         map((response: HttpResponse<IComorbiditie[]>) => response.body)
       )
-      .subscribe((res: IComorbiditie[]) => (this.comorbidities = res), (res: HttpErrorResponse) => this.onError(res.message));
+      .subscribe(
+        (res: IComorbiditie[]) => (this.comorbidities = res),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
   }
 
   sort() {
@@ -89,7 +95,10 @@ export class PatientDetailComponent implements OnInit {
         filter((mayBeOk: HttpResponse<ISession[]>) => mayBeOk.ok),
         map((response: HttpResponse<ISession[]>) => response.body)
       )
-      .subscribe((res: ISession[]) => (this.sessions = res), (res: HttpErrorResponse) => this.onError(res.message));
+      .subscribe(
+        (res: ISession[]) => (this.sessions = res),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
   }
 
   loadFinalAssessments(patientId) {
@@ -99,7 +108,10 @@ export class PatientDetailComponent implements OnInit {
         filter((mayBeOk: HttpResponse<IFinalAssessment[]>) => mayBeOk.ok),
         map((response: HttpResponse<IFinalAssessment[]>) => response.body)
       )
-      .subscribe((res: IFinalAssessment[]) => (this.finalAssessments = res), (res: HttpErrorResponse) => this.onError(res.message));
+      .subscribe(
+        (res: IFinalAssessment[]) => (this.finalAssessments = res),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
   }
 
   setStep(index: number) {

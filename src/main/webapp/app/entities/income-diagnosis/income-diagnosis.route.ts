@@ -1,32 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
-import { Observable, of, EMPTY } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
-
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { IIncomeDiagnosis, IncomeDiagnosis } from 'app/shared/model/income-diagnosis.model';
+import { Observable, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import { IncomeDiagnosis } from 'app/shared/model/income-diagnosis.model';
 import { IncomeDiagnosisService } from './income-diagnosis.service';
 import { IncomeDiagnosisComponent } from './income-diagnosis.component';
 import { IncomeDiagnosisDetailComponent } from './income-diagnosis-detail.component';
 import { IncomeDiagnosisUpdateComponent } from './income-diagnosis-update.component';
+import { IncomeDiagnosisDeletePopupComponent } from './income-diagnosis-delete-dialog.component';
+import { IIncomeDiagnosis } from 'app/shared/model/income-diagnosis.model';
 
 @Injectable({ providedIn: 'root' })
 export class IncomeDiagnosisResolve implements Resolve<IIncomeDiagnosis> {
-  constructor(private service: IncomeDiagnosisService, private router: Router) {}
+  constructor(private service: IncomeDiagnosisService) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IIncomeDiagnosis> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IIncomeDiagnosis> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        flatMap((incomeDiagnosis: HttpResponse<IncomeDiagnosis>) => {
-          if (incomeDiagnosis.body) {
-            return of(incomeDiagnosis.body);
-          } else {
-            this.router.navigate(['404']);
-            return EMPTY;
-          }
-        })
+        filter((response: HttpResponse<IncomeDiagnosis>) => response.ok),
+        map((incomeDiagnosis: HttpResponse<IncomeDiagnosis>) => incomeDiagnosis.body)
       );
     }
     return of(new IncomeDiagnosis());

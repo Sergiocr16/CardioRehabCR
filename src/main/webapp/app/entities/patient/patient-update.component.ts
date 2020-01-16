@@ -107,7 +107,8 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
     protected incomeDiagnosisPatientService: IncomeDiagnosisPatientService
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.isSaving = false;
     this.activatedRoute.data.subscribe(({ patient }) => {
       this.patient = patient;
       this.updateFormInitialInfo(patient);
@@ -146,7 +147,10 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
         filter((mayBeOk: HttpResponse<IIncomeDiagnosis[]>) => mayBeOk.ok),
         map((response: HttpResponse<IIncomeDiagnosis[]>) => response.body)
       )
-      .subscribe((res: IIncomeDiagnosis[]) => this.formatInconeDiagnoses(res), (res: HttpErrorResponse) => this.onError(res.message));
+      .subscribe(
+        (res: IIncomeDiagnosis[]) => this.formatInconeDiagnoses(res),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
   }
 
   loadComorbidities() {
@@ -160,7 +164,10 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
         filter((mayBeOk: HttpResponse<IIncomeDiagnosis[]>) => mayBeOk.ok),
         map((response: HttpResponse<IIncomeDiagnosis[]>) => response.body)
       )
-      .subscribe((res: IIncomeDiagnosis[]) => this.formatComorbidities(res), (res: HttpErrorResponse) => this.onError(res.message));
+      .subscribe(
+        (res: IIncomeDiagnosis[]) => this.formatComorbidities(res),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
   }
 
   setInvalidForm(isSaving) {
@@ -257,7 +264,7 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
       );
   }
 
-  previousState(): void {
+  previousState() {
     window.history.back();
   }
 
@@ -375,11 +382,17 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPatient>>) {
-    result.subscribe(data => this.onSaveSuccess(data), () => this.onSaveError());
+    result.subscribe(
+      data => this.onSaveSuccess(data),
+      () => this.onSaveError()
+    );
   }
 
   protected subscribeToSaveResponseInitial(result: Observable<HttpResponse<IInitialAssessment>>) {
-    result.subscribe(data => this.onSaveSuccessInitialAssessmentService(data.body), () => this.onSaveError());
+    result.subscribe(
+      data => this.onSaveSuccessInitialAssessmentService(data.body),
+      () => this.onSaveError()
+    );
   }
 
   protected onSaveSuccess(result) {
@@ -457,7 +470,7 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
     return newIncomeDiagnosis;
   }
 
-  protected onSaveError(): void {
+  protected onSaveError() {
     this.isSaving = false;
   }
 

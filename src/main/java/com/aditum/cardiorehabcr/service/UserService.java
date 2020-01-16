@@ -11,6 +11,7 @@ import com.aditum.cardiorehabcr.security.SecurityUtils;
 import com.aditum.cardiorehabcr.service.dto.AppUserDTO;
 import com.aditum.cardiorehabcr.service.dto.UserDTO;
 
+import com.aditum.cardiorehabcr.service.impl.AppUserServiceImpl;
 import io.github.jhipster.security.RandomUtil;
 
 import org.slf4j.Logger;

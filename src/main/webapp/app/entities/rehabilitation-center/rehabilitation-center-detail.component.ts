@@ -8,17 +8,17 @@ import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.mo
   templateUrl: './rehabilitation-center-detail.component.html'
 })
 export class RehabilitationCenterDetailComponent implements OnInit {
-  rehabilitationCenter: IRehabilitationCenter | null = null;
+  rehabilitationCenter: IRehabilitationCenter;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.activatedRoute.data.subscribe(({ rehabilitationCenter }) => {
       this.rehabilitationCenter = rehabilitationCenter;
     });
   }
 
-  previousState(): void {
+  previousState() {
     window.history.back();
   }
 }

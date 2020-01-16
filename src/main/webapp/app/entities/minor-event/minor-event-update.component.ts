@@ -5,8 +5,8 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-
+import { filter, map } from 'rxjs/operators';
+import { JhiAlertService } from 'ng-jhipster';
 import { IMinorEvent, MinorEvent } from 'app/shared/model/minor-event.model';
 import { MinorEventService } from './minor-event.service';
 import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.model';
@@ -34,6 +34,7 @@ export class MinorEventUpdateComponent implements OnInit, OnDestroy {
   });
 
   constructor(
+    protected jhiAlertService: JhiAlertService,
     protected minorEventService: MinorEventService,
     protected rehabilitationCenterService: RehabilitationCenterService,
     protected activatedRoute: ActivatedRoute,
@@ -42,7 +43,8 @@ export class MinorEventUpdateComponent implements OnInit, OnDestroy {
     private fb: FormBuilder
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.isSaving = false;
     this.activatedRoute.data.subscribe(({ minorEvent }) => {
       this.updateForm(minorEvent);
       this.confirmMessage = !minorEvent.id ? 'new' : 'update';
@@ -81,7 +83,7 @@ export class MinorEventUpdateComponent implements OnInit, OnDestroy {
     });
   }
 
-  previousState(): void {
+  previousState() {
     window.history.back();
   }
 
@@ -100,28 +102,28 @@ export class MinorEventUpdateComponent implements OnInit, OnDestroy {
   private createFromForm(): IMinorEvent {
     return {
       ...new MinorEvent(),
-      id: this.editForm.get(['id'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      code: this.editForm.get(['code'])!.value,
-      deleted: this.editForm.get(['deleted'])!.value,
-      rehabilitationCenterId: this.editForm.get(['rehabilitationCenterId'])!.value
+      id: this.editForm.get(['id']).value,
+      description: this.editForm.get(['description']).value,
+      code: this.editForm.get(['code']).value,
+      deleted: this.editForm.get(['deleted']).value,
+      rehabilitationCenterId: this.editForm.get(['rehabilitationCenterId']).value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IMinorEvent>>): void {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IMinorEvent>>) {
     result.subscribe(
       () => this.onSaveSuccess(),
       () => this.onSaveError()
     );
   }
 
-  protected onSaveSuccess(): void {
+  protected onSaveSuccess() {
     this.isSaving = false;
     this.modal.message(this.modalSuccessMessage);
     this.previousState();
   }
 
-  protected onSaveError(): void {
+  protected onSaveError() {
     this.isSaving = false;
   }
 
@@ -129,7 +131,7 @@ export class MinorEventUpdateComponent implements OnInit, OnDestroy {
     this.jhiAlertService.error(errorMessage, null, null);
   }
 
-  trackById(index: number, item: IRehabilitationCenter): any {
+  trackRehabilitationCenterById(index: number, item: IRehabilitationCenter) {
     return item.id;
   }
 }

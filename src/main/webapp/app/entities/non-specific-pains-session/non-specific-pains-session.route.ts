@@ -1,32 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
-import { Observable, of, EMPTY } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
-
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { INonSpecificPainsSession, NonSpecificPainsSession } from 'app/shared/model/non-specific-pains-session.model';
+import { Observable, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import { NonSpecificPainsSession } from 'app/shared/model/non-specific-pains-session.model';
 import { NonSpecificPainsSessionService } from './non-specific-pains-session.service';
 import { NonSpecificPainsSessionComponent } from './non-specific-pains-session.component';
 import { NonSpecificPainsSessionDetailComponent } from './non-specific-pains-session-detail.component';
 import { NonSpecificPainsSessionUpdateComponent } from './non-specific-pains-session-update.component';
+import { NonSpecificPainsSessionDeletePopupComponent } from './non-specific-pains-session-delete-dialog.component';
+import { INonSpecificPainsSession } from 'app/shared/model/non-specific-pains-session.model';
 
 @Injectable({ providedIn: 'root' })
 export class NonSpecificPainsSessionResolve implements Resolve<INonSpecificPainsSession> {
-  constructor(private service: NonSpecificPainsSessionService, private router: Router) {}
+  constructor(private service: NonSpecificPainsSessionService) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<INonSpecificPainsSession> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<INonSpecificPainsSession> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        flatMap((nonSpecificPainsSession: HttpResponse<NonSpecificPainsSession>) => {
-          if (nonSpecificPainsSession.body) {
-            return of(nonSpecificPainsSession.body);
-          } else {
-            this.router.navigate(['404']);
-            return EMPTY;
-          }
-        })
+        filter((response: HttpResponse<NonSpecificPainsSession>) => response.ok),
+        map((nonSpecificPainsSession: HttpResponse<NonSpecificPainsSession>) => nonSpecificPainsSession.body)
       );
     }
     return of(new NonSpecificPainsSession());
@@ -78,5 +73,21 @@ export const nonSpecificPainsSessionRoute: Routes = [
       pageTitle: 'cardioRehabCrApp.nonSpecificPainsSession.home.title'
     },
     canActivate: [UserRouteAccessService]
+  }
+];
+
+export const nonSpecificPainsSessionPopupRoute: Routes = [
+  {
+    path: ':id/delete',
+    component: NonSpecificPainsSessionDeletePopupComponent,
+    resolve: {
+      nonSpecificPainsSession: NonSpecificPainsSessionResolve
+    },
+    data: {
+      authorities: ['ROLE_USER'],
+      pageTitle: 'cardioRehabCrApp.nonSpecificPainsSession.home.title'
+    },
+    canActivate: [UserRouteAccessService],
+    outlet: 'popup'
   }
 ];

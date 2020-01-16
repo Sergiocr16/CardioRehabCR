@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-
+import { filter, map } from 'rxjs/operators';
+import { JhiAlertService } from 'ng-jhipster';
 import { IAppUser, AppUser } from 'app/shared/model/app-user.model';
 import { AppUserService } from './app-user.service';
 import { IUser } from 'app/core/user/user.model';
@@ -14,18 +15,16 @@ import { IRehabilitationCenter } from 'app/shared/model/rehabilitation-center.mo
 import { RehabilitationCenterService } from 'app/entities/rehabilitation-center/rehabilitation-center.service';
 import { ModalService } from 'app/shared/util/modal.service';
 
-type SelectableEntity = IUser | IRehabilitationCenter;
-
 @Component({
   selector: 'jhi-app-user-update',
   templateUrl: './app-user-update.component.html'
 })
 export class AppUserUpdateComponent implements OnInit {
-  isSaving = false;
+  isSaving: boolean;
 
-  users: IUser[] = [];
+  users: IUser[];
 
-  rehabilitationcenters: IRehabilitationCenter[] = [];
+  rehabilitationcenters: IRehabilitationCenter[];
 
   editForm = this.fb.group({
     id: [],
@@ -38,6 +37,7 @@ export class AppUserUpdateComponent implements OnInit {
   });
 
   constructor(
+    protected jhiAlertService: JhiAlertService,
     protected appUserService: AppUserService,
     protected userService: UserService,
     protected rehabilitationCenterService: RehabilitationCenterService,
@@ -46,31 +46,34 @@ export class AppUserUpdateComponent implements OnInit {
     private modal: ModalService
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.isSaving = false;
     this.activatedRoute.data.subscribe(({ appUser }) => {
       this.updateForm(appUser);
-
-      this.userService
-        .query()
-        .pipe(
-          map((res: HttpResponse<IUser[]>) => {
-            return res.body ? res.body : [];
-          })
-        )
-        .subscribe((resBody: IUser[]) => (this.users = resBody));
-
-      this.rehabilitationCenterService
-        .query()
-        .pipe(
-          map((res: HttpResponse<IRehabilitationCenter[]>) => {
-            return res.body ? res.body : [];
-          })
-        )
-        .subscribe((resBody: IRehabilitationCenter[]) => (this.rehabilitationcenters = resBody));
     });
+    this.userService
+      .query()
+      .pipe(
+        filter((mayBeOk: HttpResponse<IUser[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IUser[]>) => response.body)
+      )
+      .subscribe(
+        (res: IUser[]) => (this.users = res),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
+    this.rehabilitationCenterService
+      .query()
+      .pipe(
+        filter((mayBeOk: HttpResponse<IRehabilitationCenter[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IRehabilitationCenter[]>) => response.body)
+      )
+      .subscribe(
+        (res: IRehabilitationCenter[]) => (this.rehabilitationcenters = res),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
   }
 
-  updateForm(appUser: IAppUser): void {
+  updateForm(appUser: IAppUser) {
     this.editForm.patchValue({
       id: appUser.id,
       name: appUser.name,
@@ -82,11 +85,11 @@ export class AppUserUpdateComponent implements OnInit {
     });
   }
 
-  previousState(): void {
+  previousState() {
     window.history.back();
   }
 
-  save(): void {
+  save() {
     this.isSaving = true;
     const appUser = this.createFromForm();
     if (appUser.id !== undefined) {
@@ -99,30 +102,40 @@ export class AppUserUpdateComponent implements OnInit {
   private createFromForm(): IAppUser {
     return {
       ...new AppUser(),
-      id: this.editForm.get(['id'])!.value,
-      name: this.editForm.get(['name'])!.value,
-      lastName: this.editForm.get(['lastName'])!.value,
-      authorityType: this.editForm.get(['authorityType'])!.value,
-      status: this.editForm.get(['status'])!.value,
-      userId: this.editForm.get(['userId'])!.value,
-      rehabilitationCenterId: this.editForm.get(['rehabilitationCenterId'])!.value
+      id: this.editForm.get(['id']).value,
+      name: this.editForm.get(['name']).value,
+      lastName: this.editForm.get(['lastName']).value,
+      authorityType: this.editForm.get(['authorityType']).value,
+      status: this.editForm.get(['status']).value,
+      userId: this.editForm.get(['userId']).value,
+      rehabilitationCenterId: this.editForm.get(['rehabilitationCenterId']).value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IAppUser>>): void {
-    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IAppUser>>) {
+    result.subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
   }
 
-  protected onSaveSuccess(): void {
+  protected onSaveSuccess() {
     this.isSaving = false;
     this.previousState();
   }
 
-  protected onSaveError(): void {
+  protected onSaveError() {
     this.isSaving = false;
   }
+  protected onError(errorMessage: string) {
+    this.jhiAlertService.error(errorMessage, null, null);
+  }
 
-  trackById(index: number, item: SelectableEntity): any {
+  trackUserById(index: number, item: IUser) {
+    return item.id;
+  }
+
+  trackRehabilitationCenterById(index: number, item: IRehabilitationCenter) {
     return item.id;
   }
 }

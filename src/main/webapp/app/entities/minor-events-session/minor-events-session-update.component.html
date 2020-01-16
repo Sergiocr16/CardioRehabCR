@@ -4,7 +4,7 @@
             <h2 id="jhi-minor-events-session-heading" jhiTranslate="cardioRehabCrApp.minorEventsSession.home.createOrEditLabel">Create or edit a Minor Events Session</h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                <div class="form-group" [hidden]="!editForm.get('id').value">
                     <label for="id" jhiTranslate="global.field.id">ID</label>
                     <input type="text" class="form-control" id="id" name="id" formControlName="id"
                         readonly />
@@ -18,9 +18,9 @@
                     <label class="form-control-label" jhiTranslate="cardioRehabCrApp.minorEventsSession.minorEventId" for="field_minorEventId">Minor Event Id</label>
                     <input type="number" class="form-control" name="minorEventId" id="field_minorEventId"
                            formControlName="minorEventId"/>
-                    <div *ngIf="editForm.get('minorEventId')!.invalid && (editForm.get('minorEventId')!.dirty || editForm.get('minorEventId')!.touched)">
+                    <div *ngIf="editForm.get('minorEventId').invalid && (editForm.get('minorEventId').dirty || editForm.get('minorEventId').touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('minorEventId')?.errors?.required" jhiTranslate="entity.validation.required">
+                               *ngIf="editForm.get('minorEventId').errors.required" jhiTranslate="entity.validation.required">
                         This field is required.
                         </small>
                         <small class="form-text text-danger"
@@ -33,9 +33,9 @@
                     <label class="form-control-label" jhiTranslate="cardioRehabCrApp.minorEventsSession.exist" for="field_exist">Exist</label>
                     <input type="checkbox" class="form-control" name="exist" id="field_exist"
                            formControlName="exist"/>
-                    <div *ngIf="editForm.get('exist')!.invalid && (editForm.get('exist')!.dirty || editForm.get('exist')!.touched)">
+                    <div *ngIf="editForm.get('exist').invalid && (editForm.get('exist').dirty || editForm.get('exist').touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('exist')?.errors?.required" jhiTranslate="entity.validation.required">
+                               *ngIf="editForm.get('exist').errors.required" jhiTranslate="entity.validation.required">
                         This field is required.
                         </small>
                     </div>
@@ -45,7 +45,7 @@
                     <label class="form-control-label" jhiTranslate="cardioRehabCrApp.minorEventsSession.session" for="field_session">Session</label>
                     <select class="form-control" id="field_session" name="session" formControlName="sessionId">
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="sessionOption.id" *ngFor="let sessionOption of sessions; trackBy: trackById">{{sessionOption.id}}</option>
+                        <option [ngValue]="sessionOption.id" *ngFor="let sessionOption of sessions; trackBy: trackSessionById">{{sessionOption.id}}</option>
                     </select>
                 </div>
             </div>

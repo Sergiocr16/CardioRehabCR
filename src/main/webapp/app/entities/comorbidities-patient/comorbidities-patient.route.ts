@@ -1,32 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
-import { Observable, of, EMPTY } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
-
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { IComorbiditiesPatient, ComorbiditiesPatient } from 'app/shared/model/comorbidities-patient.model';
+import { Observable, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import { ComorbiditiesPatient } from 'app/shared/model/comorbidities-patient.model';
 import { ComorbiditiesPatientService } from './comorbidities-patient.service';
 import { ComorbiditiesPatientComponent } from './comorbidities-patient.component';
 import { ComorbiditiesPatientDetailComponent } from './comorbidities-patient-detail.component';
 import { ComorbiditiesPatientUpdateComponent } from './comorbidities-patient-update.component';
+import { ComorbiditiesPatientDeletePopupComponent } from './comorbidities-patient-delete-dialog.component';
+import { IComorbiditiesPatient } from 'app/shared/model/comorbidities-patient.model';
 
 @Injectable({ providedIn: 'root' })
 export class ComorbiditiesPatientResolve implements Resolve<IComorbiditiesPatient> {
-  constructor(private service: ComorbiditiesPatientService, private router: Router) {}
+  constructor(private service: ComorbiditiesPatientService) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IComorbiditiesPatient> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IComorbiditiesPatient> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        flatMap((comorbiditiesPatient: HttpResponse<ComorbiditiesPatient>) => {
-          if (comorbiditiesPatient.body) {
-            return of(comorbiditiesPatient.body);
-          } else {
-            this.router.navigate(['404']);
-            return EMPTY;
-          }
-        })
+        filter((response: HttpResponse<ComorbiditiesPatient>) => response.ok),
+        map((comorbiditiesPatient: HttpResponse<ComorbiditiesPatient>) => comorbiditiesPatient.body)
       );
     }
     return of(new ComorbiditiesPatient());

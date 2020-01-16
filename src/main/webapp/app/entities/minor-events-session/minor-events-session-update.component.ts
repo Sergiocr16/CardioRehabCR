@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-
+import { filter, map } from 'rxjs/operators';
+import { JhiAlertService } from 'ng-jhipster';
 import { IMinorEventsSession, MinorEventsSession } from 'app/shared/model/minor-events-session.model';
 import { MinorEventsSessionService } from './minor-events-session.service';
 import { ISession } from 'app/shared/model/session.model';
@@ -16,9 +17,9 @@ import { SessionService } from 'app/entities/session/session.service';
   templateUrl: './minor-events-session-update.component.html'
 })
 export class MinorEventsSessionUpdateComponent implements OnInit {
-  isSaving = false;
+  isSaving: boolean;
 
-  sessions: ISession[] = [];
+  sessions: ISession[];
 
   editForm = this.fb.group({
     id: [],
@@ -29,28 +30,31 @@ export class MinorEventsSessionUpdateComponent implements OnInit {
   });
 
   constructor(
+    protected jhiAlertService: JhiAlertService,
     protected minorEventsSessionService: MinorEventsSessionService,
     protected sessionService: SessionService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.isSaving = false;
     this.activatedRoute.data.subscribe(({ minorEventsSession }) => {
       this.updateForm(minorEventsSession);
-
-      this.sessionService
-        .query()
-        .pipe(
-          map((res: HttpResponse<ISession[]>) => {
-            return res.body ? res.body : [];
-          })
-        )
-        .subscribe((resBody: ISession[]) => (this.sessions = resBody));
     });
+    this.sessionService
+      .query()
+      .pipe(
+        filter((mayBeOk: HttpResponse<ISession[]>) => mayBeOk.ok),
+        map((response: HttpResponse<ISession[]>) => response.body)
+      )
+      .subscribe(
+        (res: ISession[]) => (this.sessions = res),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
   }
 
-  updateForm(minorEventsSession: IMinorEventsSession): void {
+  updateForm(minorEventsSession: IMinorEventsSession) {
     this.editForm.patchValue({
       id: minorEventsSession.id,
       description: minorEventsSession.description,
@@ -60,11 +64,11 @@ export class MinorEventsSessionUpdateComponent implements OnInit {
     });
   }
 
-  previousState(): void {
+  previousState() {
     window.history.back();
   }
 
-  save(): void {
+  save() {
     this.isSaving = true;
     const minorEventsSession = this.createFromForm();
     if (minorEventsSession.id !== undefined) {
@@ -77,31 +81,34 @@ export class MinorEventsSessionUpdateComponent implements OnInit {
   private createFromForm(): IMinorEventsSession {
     return {
       ...new MinorEventsSession(),
-      id: this.editForm.get(['id'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      minorEventId: this.editForm.get(['minorEventId'])!.value,
-      exist: this.editForm.get(['exist'])!.value,
-      sessionId: this.editForm.get(['sessionId'])!.value
+      id: this.editForm.get(['id']).value,
+      description: this.editForm.get(['description']).value,
+      minorEventId: this.editForm.get(['minorEventId']).value,
+      exist: this.editForm.get(['exist']).value,
+      sessionId: this.editForm.get(['sessionId']).value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IMinorEventsSession>>): void {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IMinorEventsSession>>) {
     result.subscribe(
       () => this.onSaveSuccess(),
       () => this.onSaveError()
     );
   }
 
-  protected onSaveSuccess(): void {
+  protected onSaveSuccess() {
     this.isSaving = false;
     this.previousState();
   }
 
-  protected onSaveError(): void {
+  protected onSaveError() {
     this.isSaving = false;
   }
+  protected onError(errorMessage: string) {
+    this.jhiAlertService.error(errorMessage, null, null);
+  }
 
-  trackById(index: number, item: ISession): any {
+  trackSessionById(index: number, item: ISession) {
     return item.id;
   }
 }

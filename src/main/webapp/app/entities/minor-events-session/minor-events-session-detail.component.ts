@@ -8,17 +8,17 @@ import { IMinorEventsSession } from 'app/shared/model/minor-events-session.model
   templateUrl: './minor-events-session-detail.component.html'
 })
 export class MinorEventsSessionDetailComponent implements OnInit {
-  minorEventsSession: IMinorEventsSession | null = null;
+  minorEventsSession: IMinorEventsSession;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.activatedRoute.data.subscribe(({ minorEventsSession }) => {
       this.minorEventsSession = minorEventsSession;
     });
   }
 
-  previousState(): void {
+  previousState() {
     window.history.back();
   }
 }

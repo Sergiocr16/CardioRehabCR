@@ -5,12 +5,20 @@ import { CardioRehabCrSharedModule } from 'app/shared/shared.module';
 import { SessionComponent } from './session.component';
 import { SessionDetailComponent } from './session-detail.component';
 import { SessionUpdateComponent } from './session-update.component';
-import { SessionDeleteDialogComponent } from './session-delete-dialog.component';
-import { sessionRoute } from './session.route';
+import { SessionDeletePopupComponent, SessionDeleteDialogComponent } from './session-delete-dialog.component';
+import { sessionRoute, sessionPopupRoute } from './session.route';
+
+const ENTITY_STATES = [...sessionRoute, ...sessionPopupRoute];
 
 @NgModule({
-  imports: [CardioRehabCrSharedModule, RouterModule.forChild(sessionRoute)],
-  declarations: [SessionComponent, SessionDetailComponent, SessionUpdateComponent, SessionDeleteDialogComponent],
+  imports: [CardioRehabCrSharedModule, RouterModule.forChild(ENTITY_STATES)],
+  declarations: [
+    SessionComponent,
+    SessionDetailComponent,
+    SessionUpdateComponent,
+    SessionDeleteDialogComponent,
+    SessionDeletePopupComponent
+  ],
   entryComponents: [SessionDeleteDialogComponent]
 })
 export class CardioRehabCrSessionModule {}

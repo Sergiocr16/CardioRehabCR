@@ -6,9 +6,9 @@ import { ModalService } from 'app/shared/util/modal.service';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks } from 'ng-jhipster';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IMinorEvent } from 'app/shared/model/minor-event.model';
+import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { MinorEventService } from './minor-event.service';
@@ -23,7 +23,8 @@ import { IMayorEvent } from 'app/shared/model/mayor-event.model';
 export class MinorEventComponent implements OnInit, OnDestroy {
   rehabilitationCenters: IRehabilitationCenter[];
   minorEvents: IMinorEvent[];
-  eventSubscriber?: Subscription;
+  currentAccount: any;
+  eventSubscriber: Subscription;
   itemsPerPage: number;
   links: any;
   page: any;
@@ -49,10 +50,10 @@ export class MinorEventComponent implements OnInit, OnDestroy {
       last: 0
     };
     this.predicate = 'id';
-    this.ascending = true;
+    this.reverse = true;
   }
 
-  loadAll(): void {
+  loadAll() {
     this.minorEventService
       .query({
         page: this.page,
@@ -80,7 +81,7 @@ export class MinorEventComponent implements OnInit, OnDestroy {
     this.loadAll();
   }
 
-  loadPage(page: number): void {
+  loadPage(page) {
     this.page = page;
     this.loadAll();
   }
@@ -98,28 +99,20 @@ export class MinorEventComponent implements OnInit, OnDestroy {
     this.registerChangeInMinorEvents();
   }
 
-  ngOnDestroy(): void {
-    if (this.eventSubscriber) {
-      this.eventManager.destroy(this.eventSubscriber);
-    }
+  ngOnDestroy() {
+    this.eventManager.destroy(this.eventSubscriber);
   }
 
-  trackId(index: number, item: IMinorEvent): number {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-    return item.id!;
+  trackId(index: number, item: IMinorEvent) {
+    return item.id;
   }
 
-  registerChangeInMinorEvents(): void {
-    this.eventSubscriber = this.eventManager.subscribe('minorEventListModification', () => this.reset());
+  registerChangeInMinorEvents() {
+    this.eventSubscriber = this.eventManager.subscribe('minorEventListModification', response => this.reset());
   }
 
-  delete(minorEvent: IMinorEvent): void {
-    const modalRef = this.modalService.open(MinorEventDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.minorEvent = minorEvent;
-  }
-
-  sort(): string[] {
-    const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
+  sort() {
+    const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
     if (this.predicate !== 'id') {
       result.push('id');
     }
@@ -134,7 +127,10 @@ export class MinorEventComponent implements OnInit, OnDestroy {
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IMayorEvent>>) {
-    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+    result.subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
   }
 
   protected onSaveSuccess() {

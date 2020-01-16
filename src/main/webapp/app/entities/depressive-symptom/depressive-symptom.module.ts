@@ -5,16 +5,22 @@ import { CardioRehabCrSharedModule } from 'app/shared/shared.module';
 import { DepressiveSymptomComponent } from './depressive-symptom.component';
 import { DepressiveSymptomDetailComponent } from './depressive-symptom-detail.component';
 import { DepressiveSymptomUpdateComponent } from './depressive-symptom-update.component';
-import { DepressiveSymptomDeleteDialogComponent } from './depressive-symptom-delete-dialog.component';
-import { depressiveSymptomRoute } from './depressive-symptom.route';
+import {
+  DepressiveSymptomDeletePopupComponent,
+  DepressiveSymptomDeleteDialogComponent
+} from './depressive-symptom-delete-dialog.component';
+import { depressiveSymptomRoute, depressiveSymptomPopupRoute } from './depressive-symptom.route';
+
+const ENTITY_STATES = [...depressiveSymptomRoute, ...depressiveSymptomPopupRoute];
 
 @NgModule({
-  imports: [CardioRehabCrSharedModule, RouterModule.forChild(depressiveSymptomRoute)],
+  imports: [CardioRehabCrSharedModule, RouterModule.forChild(ENTITY_STATES)],
   declarations: [
     DepressiveSymptomComponent,
     DepressiveSymptomDetailComponent,
     DepressiveSymptomUpdateComponent,
-    DepressiveSymptomDeleteDialogComponent
+    DepressiveSymptomDeleteDialogComponent,
+    DepressiveSymptomDeletePopupComponent
   ],
   entryComponents: [DepressiveSymptomDeleteDialogComponent]
 })

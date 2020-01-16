@@ -4,7 +4,7 @@
             <h2 id="jhi-initial-assessment-heading" jhiTranslate="cardioRehabCrApp.initialAssessment.home.createOrEditLabel">Create or edit a Initial Assessment</h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                <div class="form-group" [hidden]="!editForm.get('id').value">
                     <label for="id" jhiTranslate="global.field.id">ID</label>
                     <input type="text" class="form-control" id="id" name="id" formControlName="id"
                         readonly />
@@ -13,9 +13,9 @@
                     <label class="form-control-label" jhiTranslate="cardioRehabCrApp.initialAssessment.smoking" for="field_smoking">Smoking</label>
                     <input type="text" class="form-control" name="smoking" id="field_smoking"
                            formControlName="smoking"/>
-                    <div *ngIf="editForm.get('smoking')!.invalid && (editForm.get('smoking')!.dirty || editForm.get('smoking')!.touched)">
+                    <div *ngIf="editForm.get('smoking').invalid && (editForm.get('smoking').dirty || editForm.get('smoking').touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('smoking')?.errors?.required" jhiTranslate="entity.validation.required">
+                               *ngIf="editForm.get('smoking').errors.required" jhiTranslate="entity.validation.required">
                         This field is required.
                         </small>
                     </div>
@@ -24,9 +24,9 @@
                     <label class="form-control-label" jhiTranslate="cardioRehabCrApp.initialAssessment.weight" for="field_weight">Weight</label>
                     <input type="text" class="form-control" name="weight" id="field_weight"
                            formControlName="weight"/>
-                    <div *ngIf="editForm.get('weight')!.invalid && (editForm.get('weight')!.dirty || editForm.get('weight')!.touched)">
+                    <div *ngIf="editForm.get('weight').invalid && (editForm.get('weight').dirty || editForm.get('weight').touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('weight')?.errors?.required" jhiTranslate="entity.validation.required">
+                               *ngIf="editForm.get('weight').errors.required" jhiTranslate="entity.validation.required">
                         This field is required.
                         </small>
                     </div>
@@ -35,9 +35,9 @@
                     <label class="form-control-label" jhiTranslate="cardioRehabCrApp.initialAssessment.size" for="field_size">Size</label>
                     <input type="text" class="form-control" name="size" id="field_size"
                            formControlName="size"/>
-                    <div *ngIf="editForm.get('size')!.invalid && (editForm.get('size')!.dirty || editForm.get('size')!.touched)">
+                    <div *ngIf="editForm.get('size').invalid && (editForm.get('size').dirty || editForm.get('size').touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('size')?.errors?.required" jhiTranslate="entity.validation.required">
+                               *ngIf="editForm.get('size').errors.required" jhiTranslate="entity.validation.required">
                         This field is required.
                         </small>
                     </div>
@@ -46,9 +46,9 @@
                     <label class="form-control-label" jhiTranslate="cardioRehabCrApp.initialAssessment.iMC" for="field_iMC">I MC</label>
                     <input type="text" class="form-control" name="iMC" id="field_iMC"
                            formControlName="iMC"/>
-                    <div *ngIf="editForm.get('iMC')!.invalid && (editForm.get('iMC')!.dirty || editForm.get('iMC')!.touched)">
+                    <div *ngIf="editForm.get('iMC').invalid && (editForm.get('iMC').dirty || editForm.get('iMC').touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('iMC')?.errors?.required" jhiTranslate="entity.validation.required">
+                               *ngIf="editForm.get('iMC').errors.required" jhiTranslate="entity.validation.required">
                         This field is required.
                         </small>
                     </div>
@@ -88,7 +88,7 @@
                     <label class="form-control-label" jhiTranslate="cardioRehabCrApp.initialAssessment.patient" for="field_patient">Patient</label>
                     <select class="form-control" id="field_patient" name="patient" formControlName="patientId">
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="patientOption.id" *ngFor="let patientOption of patients; trackBy: trackById">{{patientOption.id}}</option>
+                        <option [ngValue]="patientOption.id" *ngFor="let patientOption of patients; trackBy: trackPatientById">{{patientOption.id}}</option>
                     </select>
                 </div>
             </div>
