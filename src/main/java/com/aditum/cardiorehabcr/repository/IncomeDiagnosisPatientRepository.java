@@ -14,6 +14,6 @@ import java.util.Optional;
 @Repository
 public interface IncomeDiagnosisPatientRepository extends JpaRepository<IncomeDiagnosisPatient, Long> {
     List<IncomeDiagnosisPatient> findByInitialAssessmentId(Long initialAssessmentId);
-    Optional<IncomeDiagnosisPatient> findFirstByInitialAssessmentIdAndIncomeDiagnosisId(Long initialAssessmentId,Long incomeDiagnosisId);
+    Optional<IncomeDiagnosisPatient> findFirstByInitialAssessmentIdAndIncomeDiagnosisRelation(Long initialAssessmentId,Long incomeDiagnosisId);
 
 }

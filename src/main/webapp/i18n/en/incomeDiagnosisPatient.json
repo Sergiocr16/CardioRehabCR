@@ -17,8 +17,8 @@
         "title": "Income Diagnosis Patient"
       },
       "description": "Description",
-      "incomeDiagnosisId": "Income Diagnosis Id",
       "exist": "Exist",
+      "incomeDiagnosisRelation": "Income Diagnosis Relation",
       "initialAssessment": "Initial Assessment"
     }
   }

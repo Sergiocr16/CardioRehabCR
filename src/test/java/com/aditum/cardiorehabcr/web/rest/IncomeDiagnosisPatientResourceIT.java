@@ -40,11 +40,11 @@ public class IncomeDiagnosisPatientResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final Long DEFAULT_INCOME_DIAGNOSIS_ID = 1L;
-    private static final Long UPDATED_INCOME_DIAGNOSIS_ID = 2L;
-
     private static final Boolean DEFAULT_EXIST = false;
     private static final Boolean UPDATED_EXIST = true;
+
+    private static final Long DEFAULT_INCOME_DIAGNOSIS_RELATION = 1L;
+    private static final Long UPDATED_INCOME_DIAGNOSIS_RELATION = 2L;
 
     @Autowired
     private IncomeDiagnosisPatientRepository incomeDiagnosisPatientRepository;
@@ -95,8 +95,8 @@ public class IncomeDiagnosisPatientResourceIT {
     public static IncomeDiagnosisPatient createEntity(EntityManager em) {
         IncomeDiagnosisPatient incomeDiagnosisPatient = new IncomeDiagnosisPatient()
             .description(DEFAULT_DESCRIPTION)
-            .incomeDiagnosisId(DEFAULT_INCOME_DIAGNOSIS_ID)
-            .exist(DEFAULT_EXIST);
+            .exist(DEFAULT_EXIST)
+            .incomeDiagnosisRelation(DEFAULT_INCOME_DIAGNOSIS_RELATION);
         return incomeDiagnosisPatient;
     }
     /**
@@ -108,8 +108,8 @@ public class IncomeDiagnosisPatientResourceIT {
     public static IncomeDiagnosisPatient createUpdatedEntity(EntityManager em) {
         IncomeDiagnosisPatient incomeDiagnosisPatient = new IncomeDiagnosisPatient()
             .description(UPDATED_DESCRIPTION)
-            .incomeDiagnosisId(UPDATED_INCOME_DIAGNOSIS_ID)
-            .exist(UPDATED_EXIST);
+            .exist(UPDATED_EXIST)
+            .incomeDiagnosisRelation(UPDATED_INCOME_DIAGNOSIS_RELATION);
         return incomeDiagnosisPatient;
     }
 
@@ -135,8 +135,8 @@ public class IncomeDiagnosisPatientResourceIT {
         assertThat(incomeDiagnosisPatientList).hasSize(databaseSizeBeforeCreate + 1);
         IncomeDiagnosisPatient testIncomeDiagnosisPatient = incomeDiagnosisPatientList.get(incomeDiagnosisPatientList.size() - 1);
         assertThat(testIncomeDiagnosisPatient.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testIncomeDiagnosisPatient.getIncomeDiagnosisId()).isEqualTo(DEFAULT_INCOME_DIAGNOSIS_ID);
         assertThat(testIncomeDiagnosisPatient.isExist()).isEqualTo(DEFAULT_EXIST);
+        assertThat(testIncomeDiagnosisPatient.getIncomeDiagnosisRelation()).isEqualTo(DEFAULT_INCOME_DIAGNOSIS_RELATION);
     }
 
     @Test
@@ -159,25 +159,6 @@ public class IncomeDiagnosisPatientResourceIT {
         assertThat(incomeDiagnosisPatientList).hasSize(databaseSizeBeforeCreate);
     }
 
-
-    @Test
-    @Transactional
-    public void checkIncomeDiagnosisIdIsRequired() throws Exception {
-        int databaseSizeBeforeTest = incomeDiagnosisPatientRepository.findAll().size();
-        // set the field null
-        incomeDiagnosisPatient.setIncomeDiagnosisId(null);
-
-        // Create the IncomeDiagnosisPatient, which fails.
-        IncomeDiagnosisPatientDTO incomeDiagnosisPatientDTO = incomeDiagnosisPatientMapper.toDto(incomeDiagnosisPatient);
-
-        restIncomeDiagnosisPatientMockMvc.perform(post("/api/income-diagnosis-patients")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(incomeDiagnosisPatientDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<IncomeDiagnosisPatient> incomeDiagnosisPatientList = incomeDiagnosisPatientRepository.findAll();
-        assertThat(incomeDiagnosisPatientList).hasSize(databaseSizeBeforeTest);
-    }
 
     @Test
     @Transactional
@@ -210,8 +191,8 @@ public class IncomeDiagnosisPatientResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(incomeDiagnosisPatient.getId().intValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].incomeDiagnosisId").value(hasItem(DEFAULT_INCOME_DIAGNOSIS_ID.intValue())))
-            .andExpect(jsonPath("$.[*].exist").value(hasItem(DEFAULT_EXIST.booleanValue())));
+            .andExpect(jsonPath("$.[*].exist").value(hasItem(DEFAULT_EXIST.booleanValue())))
+            .andExpect(jsonPath("$.[*].incomeDiagnosisRelation").value(hasItem(DEFAULT_INCOME_DIAGNOSIS_RELATION.intValue())));
     }
 
     @Test
@@ -226,8 +207,8 @@ public class IncomeDiagnosisPatientResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(incomeDiagnosisPatient.getId().intValue()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.incomeDiagnosisId").value(DEFAULT_INCOME_DIAGNOSIS_ID.intValue()))
-            .andExpect(jsonPath("$.exist").value(DEFAULT_EXIST.booleanValue()));
+            .andExpect(jsonPath("$.exist").value(DEFAULT_EXIST.booleanValue()))
+            .andExpect(jsonPath("$.incomeDiagnosisRelation").value(DEFAULT_INCOME_DIAGNOSIS_RELATION.intValue()));
     }
 
     @Test
@@ -252,8 +233,8 @@ public class IncomeDiagnosisPatientResourceIT {
         em.detach(updatedIncomeDiagnosisPatient);
         updatedIncomeDiagnosisPatient
             .description(UPDATED_DESCRIPTION)
-            .incomeDiagnosisId(UPDATED_INCOME_DIAGNOSIS_ID)
-            .exist(UPDATED_EXIST);
+            .exist(UPDATED_EXIST)
+            .incomeDiagnosisRelation(UPDATED_INCOME_DIAGNOSIS_RELATION);
         IncomeDiagnosisPatientDTO incomeDiagnosisPatientDTO = incomeDiagnosisPatientMapper.toDto(updatedIncomeDiagnosisPatient);
 
         restIncomeDiagnosisPatientMockMvc.perform(put("/api/income-diagnosis-patients")
@@ -266,8 +247,8 @@ public class IncomeDiagnosisPatientResourceIT {
         assertThat(incomeDiagnosisPatientList).hasSize(databaseSizeBeforeUpdate);
         IncomeDiagnosisPatient testIncomeDiagnosisPatient = incomeDiagnosisPatientList.get(incomeDiagnosisPatientList.size() - 1);
         assertThat(testIncomeDiagnosisPatient.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testIncomeDiagnosisPatient.getIncomeDiagnosisId()).isEqualTo(UPDATED_INCOME_DIAGNOSIS_ID);
         assertThat(testIncomeDiagnosisPatient.isExist()).isEqualTo(UPDATED_EXIST);
+        assertThat(testIncomeDiagnosisPatient.getIncomeDiagnosisRelation()).isEqualTo(UPDATED_INCOME_DIAGNOSIS_RELATION);
     }
 
     @Test
@@ -305,43 +286,5 @@ public class IncomeDiagnosisPatientResourceIT {
         // Validate the database contains one less item
         List<IncomeDiagnosisPatient> incomeDiagnosisPatientList = incomeDiagnosisPatientRepository.findAll();
         assertThat(incomeDiagnosisPatientList).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(IncomeDiagnosisPatient.class);
-        IncomeDiagnosisPatient incomeDiagnosisPatient1 = new IncomeDiagnosisPatient();
-        incomeDiagnosisPatient1.setId(1L);
-        IncomeDiagnosisPatient incomeDiagnosisPatient2 = new IncomeDiagnosisPatient();
-        incomeDiagnosisPatient2.setId(incomeDiagnosisPatient1.getId());
-        assertThat(incomeDiagnosisPatient1).isEqualTo(incomeDiagnosisPatient2);
-        incomeDiagnosisPatient2.setId(2L);
-        assertThat(incomeDiagnosisPatient1).isNotEqualTo(incomeDiagnosisPatient2);
-        incomeDiagnosisPatient1.setId(null);
-        assertThat(incomeDiagnosisPatient1).isNotEqualTo(incomeDiagnosisPatient2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(IncomeDiagnosisPatientDTO.class);
-        IncomeDiagnosisPatientDTO incomeDiagnosisPatientDTO1 = new IncomeDiagnosisPatientDTO();
-        incomeDiagnosisPatientDTO1.setId(1L);
-        IncomeDiagnosisPatientDTO incomeDiagnosisPatientDTO2 = new IncomeDiagnosisPatientDTO();
-        assertThat(incomeDiagnosisPatientDTO1).isNotEqualTo(incomeDiagnosisPatientDTO2);
-        incomeDiagnosisPatientDTO2.setId(incomeDiagnosisPatientDTO1.getId());
-        assertThat(incomeDiagnosisPatientDTO1).isEqualTo(incomeDiagnosisPatientDTO2);
-        incomeDiagnosisPatientDTO2.setId(2L);
-        assertThat(incomeDiagnosisPatientDTO1).isNotEqualTo(incomeDiagnosisPatientDTO2);
-        incomeDiagnosisPatientDTO1.setId(null);
-        assertThat(incomeDiagnosisPatientDTO1).isNotEqualTo(incomeDiagnosisPatientDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(incomeDiagnosisPatientMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(incomeDiagnosisPatientMapper.fromId(null)).isNull();
     }
 }

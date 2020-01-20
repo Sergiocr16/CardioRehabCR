@@ -303,7 +303,7 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
   formatArrayCheckedIncomeDiagnosis(fullArray, filterArray) {
     for (const fA of fullArray) {
       for (const sA of filterArray) {
-        if (sA.incomeDiagnosisId === fA.id) {
+        if (sA.incomeDiagnosisRelation === fA.id) {
           if (sA.exist) {
             fA.checked = true;
           }
@@ -462,7 +462,7 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
         ...new IncomeDiagnosisPatient(),
         id: null,
         description: incomeDiagnosis.description,
-        incomeDiagnosisId: incomeDiagnosis.id,
+        incomeDiagnosisRelation: incomeDiagnosis.id,
         exist: incomeDiagnosis.checked,
         initialAssessmentId: initialAssesment.id
       });

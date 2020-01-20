@@ -23,12 +23,11 @@ public class IncomeDiagnosisPatient implements Serializable {
     private String description;
 
     @NotNull
-    @Column(name = "income_diagnosis_id", nullable = false)
-    private Long incomeDiagnosisId;
-
-    @NotNull
     @Column(name = "exist", nullable = false)
     private Boolean exist;
+
+    @Column(name = "income_diagnosis_relation")
+    private Long incomeDiagnosisRelation;
 
     @ManyToOne
     @JsonIgnoreProperties("incomeDiagnosisPatients")
@@ -56,19 +55,6 @@ public class IncomeDiagnosisPatient implements Serializable {
         this.description = description;
     }
 
-    public Long getIncomeDiagnosisId() {
-        return incomeDiagnosisId;
-    }
-
-    public IncomeDiagnosisPatient incomeDiagnosisId(Long incomeDiagnosisId) {
-        this.incomeDiagnosisId = incomeDiagnosisId;
-        return this;
-    }
-
-    public void setIncomeDiagnosisId(Long incomeDiagnosisId) {
-        this.incomeDiagnosisId = incomeDiagnosisId;
-    }
-
     public Boolean isExist() {
         return exist;
     }
@@ -80,6 +66,19 @@ public class IncomeDiagnosisPatient implements Serializable {
 
     public void setExist(Boolean exist) {
         this.exist = exist;
+    }
+
+    public Long getIncomeDiagnosisRelation() {
+        return incomeDiagnosisRelation;
+    }
+
+    public IncomeDiagnosisPatient incomeDiagnosisRelation(Long incomeDiagnosisRelation) {
+        this.incomeDiagnosisRelation = incomeDiagnosisRelation;
+        return this;
+    }
+
+    public void setIncomeDiagnosisRelation(Long incomeDiagnosisRelation) {
+        this.incomeDiagnosisRelation = incomeDiagnosisRelation;
     }
 
     public InitialAssessment getInitialAssessment() {
@@ -117,8 +116,8 @@ public class IncomeDiagnosisPatient implements Serializable {
         return "IncomeDiagnosisPatient{" +
             "id=" + getId() +
             ", description='" + getDescription() + "'" +
-            ", incomeDiagnosisId=" + getIncomeDiagnosisId() +
             ", exist='" + isExist() + "'" +
+            ", incomeDiagnosisRelation=" + getIncomeDiagnosisRelation() +
             "}";
     }
 }

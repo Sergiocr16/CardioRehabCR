@@ -13,10 +13,9 @@ public class IncomeDiagnosisPatientDTO implements Serializable {
     private String description;
 
     @NotNull
-    private Long incomeDiagnosisId;
-
-    @NotNull
     private Boolean exist;
+
+    private Long incomeDiagnosisRelation;
 
 
     private Long initialAssessmentId;
@@ -37,20 +36,20 @@ public class IncomeDiagnosisPatientDTO implements Serializable {
         this.description = description;
     }
 
-    public Long getIncomeDiagnosisId() {
-        return incomeDiagnosisId;
-    }
-
-    public void setIncomeDiagnosisId(Long incomeDiagnosisId) {
-        this.incomeDiagnosisId = incomeDiagnosisId;
-    }
-
     public Boolean isExist() {
         return exist;
     }
 
     public void setExist(Boolean exist) {
         this.exist = exist;
+    }
+
+    public Long getIncomeDiagnosisRelation() {
+        return incomeDiagnosisRelation;
+    }
+
+    public void setIncomeDiagnosisRelation(Long incomeDiagnosisRelation) {
+        this.incomeDiagnosisRelation = incomeDiagnosisRelation;
     }
 
     public Long getInitialAssessmentId() {
@@ -87,9 +86,9 @@ public class IncomeDiagnosisPatientDTO implements Serializable {
         return "IncomeDiagnosisPatientDTO{" +
             "id=" + getId() +
             ", description='" + getDescription() + "'" +
-            ", incomeDiagnosisId=" + getIncomeDiagnosisId() +
             ", exist='" + isExist() + "'" +
-            ", initialAssessment=" + getInitialAssessmentId() +
+            ", incomeDiagnosisRelation=" + getIncomeDiagnosisRelation() +
+            ", initialAssessmentId=" + getInitialAssessmentId() +
             "}";
     }
 }
