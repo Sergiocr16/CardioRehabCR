@@ -147,7 +147,10 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
         filter((mayBeOk: HttpResponse<IIncomeDiagnosis[]>) => mayBeOk.ok),
         map((response: HttpResponse<IIncomeDiagnosis[]>) => response.body)
       )
-      .subscribe((res: IIncomeDiagnosis[]) => this.formatInconeDiagnoses(res), (res: HttpErrorResponse) => this.onError(res.message));
+      .subscribe(
+        (res: IIncomeDiagnosis[]) => this.formatInconeDiagnoses(res),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
   }
 
   loadComorbidities() {
@@ -161,7 +164,10 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
         filter((mayBeOk: HttpResponse<IIncomeDiagnosis[]>) => mayBeOk.ok),
         map((response: HttpResponse<IIncomeDiagnosis[]>) => response.body)
       )
-      .subscribe((res: IIncomeDiagnosis[]) => this.formatComorbidities(res), (res: HttpErrorResponse) => this.onError(res.message));
+      .subscribe(
+        (res: IIncomeDiagnosis[]) => this.formatComorbidities(res),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
   }
 
   setInvalidForm(isSaving) {
@@ -309,7 +315,7 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
   formatArrayCheckedComorbiditie(fullArray, filterArray) {
     for (const fA of fullArray) {
       for (const sA of filterArray) {
-        if (sA.comorbiditietId === fA.id) {
+        if (sA.comorbiditieRelation === fA.id) {
           if (sA.exist) {
             fA.checked = true;
           }
@@ -376,11 +382,17 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPatient>>) {
-    result.subscribe(data => this.onSaveSuccess(data), () => this.onSaveError());
+    result.subscribe(
+      data => this.onSaveSuccess(data),
+      () => this.onSaveError()
+    );
   }
 
   protected subscribeToSaveResponseInitial(result: Observable<HttpResponse<IInitialAssessment>>) {
-    result.subscribe(data => this.onSaveSuccessInitialAssessmentService(data.body), () => this.onSaveError());
+    result.subscribe(
+      data => this.onSaveSuccessInitialAssessmentService(data.body),
+      () => this.onSaveError()
+    );
   }
 
   protected onSaveSuccess(result) {
@@ -435,7 +447,7 @@ export class PatientUpdateComponent implements OnInit, OnDestroy {
         ...new ComorbiditiesPatient(),
         id: null,
         description: comorbiditie.description,
-        comorbiditietId: comorbiditie.id,
+        comorbiditieRelation: comorbiditie.id,
         exist: comorbiditie.checked,
         initialAssessmentId: initialAssesment.id
       });

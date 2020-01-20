@@ -17,8 +17,8 @@
         "title": "Comorbidities Patient"
       },
       "description": "Description",
-      "comorbiditietId": "Comorbiditiet Id",
       "exist": "Exist",
+      "comorbiditieRelation": "Comorbiditie Relation",
       "initialAssessment": "Initial Assessment"
     }
   }

@@ -16,6 +16,6 @@ public interface ComorbiditiesPatientRepository extends JpaRepository<Comorbidit
 
     List<ComorbiditiesPatient> findByInitialAssessmentId(Long initialAssessmentId);
 
-    Optional<ComorbiditiesPatient> findFirstByInitialAssessmentIdAndComorbiditietId(Long initialAssessmentId,Long comorbiditietId);
+    Optional<ComorbiditiesPatient> findFirstByInitialAssessmentIdAndComorbiditieRelation(Long initialAssessmentId,Long comorbiditietId);
 
 }

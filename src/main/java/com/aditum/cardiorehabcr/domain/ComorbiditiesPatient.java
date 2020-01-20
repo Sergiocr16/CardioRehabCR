@@ -23,12 +23,11 @@ public class ComorbiditiesPatient implements Serializable {
     private String description;
 
     @NotNull
-    @Column(name = "comorbiditiet_id", nullable = false)
-    private Long comorbiditietId;
-
-    @NotNull
     @Column(name = "exist", nullable = false)
     private Boolean exist;
+
+    @Column(name = "comorbiditie_relation")
+    private Long comorbiditieRelation;
 
     @ManyToOne
     @JsonIgnoreProperties("comorbiditiesPatients")
@@ -56,19 +55,6 @@ public class ComorbiditiesPatient implements Serializable {
         this.description = description;
     }
 
-    public Long getComorbiditietId() {
-        return comorbiditietId;
-    }
-
-    public ComorbiditiesPatient comorbiditietId(Long comorbiditietId) {
-        this.comorbiditietId = comorbiditietId;
-        return this;
-    }
-
-    public void setComorbiditietId(Long comorbiditietId) {
-        this.comorbiditietId = comorbiditietId;
-    }
-
     public Boolean isExist() {
         return exist;
     }
@@ -80,6 +66,19 @@ public class ComorbiditiesPatient implements Serializable {
 
     public void setExist(Boolean exist) {
         this.exist = exist;
+    }
+
+    public Long getComorbiditieRelation() {
+        return comorbiditieRelation;
+    }
+
+    public ComorbiditiesPatient comorbiditieRelation(Long comorbiditieRelation) {
+        this.comorbiditieRelation = comorbiditieRelation;
+        return this;
+    }
+
+    public void setComorbiditieRelation(Long comorbiditieRelation) {
+        this.comorbiditieRelation = comorbiditieRelation;
     }
 
     public InitialAssessment getInitialAssessment() {
@@ -117,8 +116,8 @@ public class ComorbiditiesPatient implements Serializable {
         return "ComorbiditiesPatient{" +
             "id=" + getId() +
             ", description='" + getDescription() + "'" +
-            ", comorbiditietId=" + getComorbiditietId() +
             ", exist='" + isExist() + "'" +
+            ", comorbiditieRelation=" + getComorbiditieRelation() +
             "}";
     }
 }

@@ -6,18 +6,15 @@
             "fieldType": "String"
         },
         {
-            "fieldName": "comorbiditietId",
-            "fieldType": "Long",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "exist",
             "fieldType": "Boolean",
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "comorbiditieRelation",
+            "fieldType": "Long"
         }
     ],
     "relationships": [
@@ -38,5 +35,7 @@
     "fluentMethods": true,
     "readOnly": false,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "searchEngine": false,
+    "databaseType": "sql"
 }

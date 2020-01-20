@@ -40,11 +40,11 @@ public class ComorbiditiesPatientResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final Long DEFAULT_COMORBIDITIET_ID = 1L;
-    private static final Long UPDATED_COMORBIDITIET_ID = 2L;
-
     private static final Boolean DEFAULT_EXIST = false;
     private static final Boolean UPDATED_EXIST = true;
+
+    private static final Long DEFAULT_COMORBIDITIE_RELATION = 1L;
+    private static final Long UPDATED_COMORBIDITIE_RELATION = 2L;
 
     @Autowired
     private ComorbiditiesPatientRepository comorbiditiesPatientRepository;
@@ -95,8 +95,8 @@ public class ComorbiditiesPatientResourceIT {
     public static ComorbiditiesPatient createEntity(EntityManager em) {
         ComorbiditiesPatient comorbiditiesPatient = new ComorbiditiesPatient()
             .description(DEFAULT_DESCRIPTION)
-            .comorbiditietId(DEFAULT_COMORBIDITIET_ID)
-            .exist(DEFAULT_EXIST);
+            .exist(DEFAULT_EXIST)
+            .comorbiditieRelation(DEFAULT_COMORBIDITIE_RELATION);
         return comorbiditiesPatient;
     }
     /**
@@ -108,8 +108,8 @@ public class ComorbiditiesPatientResourceIT {
     public static ComorbiditiesPatient createUpdatedEntity(EntityManager em) {
         ComorbiditiesPatient comorbiditiesPatient = new ComorbiditiesPatient()
             .description(UPDATED_DESCRIPTION)
-            .comorbiditietId(UPDATED_COMORBIDITIET_ID)
-            .exist(UPDATED_EXIST);
+            .exist(UPDATED_EXIST)
+            .comorbiditieRelation(UPDATED_COMORBIDITIE_RELATION);
         return comorbiditiesPatient;
     }
 
@@ -135,8 +135,8 @@ public class ComorbiditiesPatientResourceIT {
         assertThat(comorbiditiesPatientList).hasSize(databaseSizeBeforeCreate + 1);
         ComorbiditiesPatient testComorbiditiesPatient = comorbiditiesPatientList.get(comorbiditiesPatientList.size() - 1);
         assertThat(testComorbiditiesPatient.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testComorbiditiesPatient.getComorbiditietId()).isEqualTo(DEFAULT_COMORBIDITIET_ID);
         assertThat(testComorbiditiesPatient.isExist()).isEqualTo(DEFAULT_EXIST);
+        assertThat(testComorbiditiesPatient.getComorbiditieRelation()).isEqualTo(DEFAULT_COMORBIDITIE_RELATION);
     }
 
     @Test
@@ -159,25 +159,6 @@ public class ComorbiditiesPatientResourceIT {
         assertThat(comorbiditiesPatientList).hasSize(databaseSizeBeforeCreate);
     }
 
-
-    @Test
-    @Transactional
-    public void checkComorbiditietIdIsRequired() throws Exception {
-        int databaseSizeBeforeTest = comorbiditiesPatientRepository.findAll().size();
-        // set the field null
-        comorbiditiesPatient.setComorbiditietId(null);
-
-        // Create the ComorbiditiesPatient, which fails.
-        ComorbiditiesPatientDTO comorbiditiesPatientDTO = comorbiditiesPatientMapper.toDto(comorbiditiesPatient);
-
-        restComorbiditiesPatientMockMvc.perform(post("/api/comorbidities-patients")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(comorbiditiesPatientDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<ComorbiditiesPatient> comorbiditiesPatientList = comorbiditiesPatientRepository.findAll();
-        assertThat(comorbiditiesPatientList).hasSize(databaseSizeBeforeTest);
-    }
 
     @Test
     @Transactional
@@ -210,8 +191,8 @@ public class ComorbiditiesPatientResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(comorbiditiesPatient.getId().intValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].comorbiditietId").value(hasItem(DEFAULT_COMORBIDITIET_ID.intValue())))
-            .andExpect(jsonPath("$.[*].exist").value(hasItem(DEFAULT_EXIST.booleanValue())));
+            .andExpect(jsonPath("$.[*].exist").value(hasItem(DEFAULT_EXIST.booleanValue())))
+            .andExpect(jsonPath("$.[*].comorbiditieRelation").value(hasItem(DEFAULT_COMORBIDITIE_RELATION.intValue())));
     }
 
     @Test
@@ -226,8 +207,8 @@ public class ComorbiditiesPatientResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(comorbiditiesPatient.getId().intValue()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.comorbiditietId").value(DEFAULT_COMORBIDITIET_ID.intValue()))
-            .andExpect(jsonPath("$.exist").value(DEFAULT_EXIST.booleanValue()));
+            .andExpect(jsonPath("$.exist").value(DEFAULT_EXIST.booleanValue()))
+            .andExpect(jsonPath("$.comorbiditieRelation").value(DEFAULT_COMORBIDITIE_RELATION.intValue()));
     }
 
     @Test
@@ -252,8 +233,8 @@ public class ComorbiditiesPatientResourceIT {
         em.detach(updatedComorbiditiesPatient);
         updatedComorbiditiesPatient
             .description(UPDATED_DESCRIPTION)
-            .comorbiditietId(UPDATED_COMORBIDITIET_ID)
-            .exist(UPDATED_EXIST);
+            .exist(UPDATED_EXIST)
+            .comorbiditieRelation(UPDATED_COMORBIDITIE_RELATION);
         ComorbiditiesPatientDTO comorbiditiesPatientDTO = comorbiditiesPatientMapper.toDto(updatedComorbiditiesPatient);
 
         restComorbiditiesPatientMockMvc.perform(put("/api/comorbidities-patients")
@@ -266,8 +247,8 @@ public class ComorbiditiesPatientResourceIT {
         assertThat(comorbiditiesPatientList).hasSize(databaseSizeBeforeUpdate);
         ComorbiditiesPatient testComorbiditiesPatient = comorbiditiesPatientList.get(comorbiditiesPatientList.size() - 1);
         assertThat(testComorbiditiesPatient.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testComorbiditiesPatient.getComorbiditietId()).isEqualTo(UPDATED_COMORBIDITIET_ID);
         assertThat(testComorbiditiesPatient.isExist()).isEqualTo(UPDATED_EXIST);
+        assertThat(testComorbiditiesPatient.getComorbiditieRelation()).isEqualTo(UPDATED_COMORBIDITIE_RELATION);
     }
 
     @Test
@@ -305,43 +286,5 @@ public class ComorbiditiesPatientResourceIT {
         // Validate the database contains one less item
         List<ComorbiditiesPatient> comorbiditiesPatientList = comorbiditiesPatientRepository.findAll();
         assertThat(comorbiditiesPatientList).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ComorbiditiesPatient.class);
-        ComorbiditiesPatient comorbiditiesPatient1 = new ComorbiditiesPatient();
-        comorbiditiesPatient1.setId(1L);
-        ComorbiditiesPatient comorbiditiesPatient2 = new ComorbiditiesPatient();
-        comorbiditiesPatient2.setId(comorbiditiesPatient1.getId());
-        assertThat(comorbiditiesPatient1).isEqualTo(comorbiditiesPatient2);
-        comorbiditiesPatient2.setId(2L);
-        assertThat(comorbiditiesPatient1).isNotEqualTo(comorbiditiesPatient2);
-        comorbiditiesPatient1.setId(null);
-        assertThat(comorbiditiesPatient1).isNotEqualTo(comorbiditiesPatient2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ComorbiditiesPatientDTO.class);
-        ComorbiditiesPatientDTO comorbiditiesPatientDTO1 = new ComorbiditiesPatientDTO();
-        comorbiditiesPatientDTO1.setId(1L);
-        ComorbiditiesPatientDTO comorbiditiesPatientDTO2 = new ComorbiditiesPatientDTO();
-        assertThat(comorbiditiesPatientDTO1).isNotEqualTo(comorbiditiesPatientDTO2);
-        comorbiditiesPatientDTO2.setId(comorbiditiesPatientDTO1.getId());
-        assertThat(comorbiditiesPatientDTO1).isEqualTo(comorbiditiesPatientDTO2);
-        comorbiditiesPatientDTO2.setId(2L);
-        assertThat(comorbiditiesPatientDTO1).isNotEqualTo(comorbiditiesPatientDTO2);
-        comorbiditiesPatientDTO1.setId(null);
-        assertThat(comorbiditiesPatientDTO1).isNotEqualTo(comorbiditiesPatientDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(comorbiditiesPatientMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(comorbiditiesPatientMapper.fromId(null)).isNull();
     }
 }

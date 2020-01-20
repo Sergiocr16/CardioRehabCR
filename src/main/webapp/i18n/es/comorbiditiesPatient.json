@@ -5,7 +5,7 @@
         "title": "Comorbidities Patients",
         "createLabel": "Crear nuevo Comorbidities Patient",
         "createOrEditLabel": "Crear o editar Comorbidities Patient",
-        "notFound": "No Comorbidities Patients found"
+        "notFound": "Ningún Comorbidities Patients encontrado"
       },
       "created": "Un nuevo Comorbidities Patient ha sido creado con el identificador {{ param }}",
       "updated": "Un Comorbidities Patient ha sido actualizado con el identificador {{ param }}",
@@ -17,8 +17,8 @@
         "title": "Comorbidities Patient"
       },
       "description": "Description",
-      "comorbiditietId": "Comorbiditiet Id",
       "exist": "Exist",
+      "comorbiditieRelation": "Comorbiditie Relation",
       "initialAssessment": "Initial Assessment"
     }
   }

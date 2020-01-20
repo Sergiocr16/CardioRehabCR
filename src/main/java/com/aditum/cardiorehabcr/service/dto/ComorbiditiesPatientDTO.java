@@ -13,10 +13,9 @@ public class ComorbiditiesPatientDTO implements Serializable {
     private String description;
 
     @NotNull
-    private Long comorbiditietId;
-
-    @NotNull
     private Boolean exist;
+
+    private Long comorbiditieRelation;
 
 
     private Long initialAssessmentId;
@@ -37,20 +36,20 @@ public class ComorbiditiesPatientDTO implements Serializable {
         this.description = description;
     }
 
-    public Long getComorbiditietId() {
-        return comorbiditietId;
-    }
-
-    public void setComorbiditietId(Long comorbiditietId) {
-        this.comorbiditietId = comorbiditietId;
-    }
-
     public Boolean isExist() {
         return exist;
     }
 
     public void setExist(Boolean exist) {
         this.exist = exist;
+    }
+
+    public Long getComorbiditieRelation() {
+        return comorbiditieRelation;
+    }
+
+    public void setComorbiditieRelation(Long comorbiditieRelation) {
+        this.comorbiditieRelation = comorbiditieRelation;
     }
 
     public Long getInitialAssessmentId() {
@@ -87,9 +86,9 @@ public class ComorbiditiesPatientDTO implements Serializable {
         return "ComorbiditiesPatientDTO{" +
             "id=" + getId() +
             ", description='" + getDescription() + "'" +
-            ", comorbiditietId=" + getComorbiditietId() +
             ", exist='" + isExist() + "'" +
-            ", initialAssessment=" + getInitialAssessmentId() +
+            ", comorbiditieRelation=" + getComorbiditieRelation() +
+            ", initialAssessmentId=" + getInitialAssessmentId() +
             "}";
     }
 }
