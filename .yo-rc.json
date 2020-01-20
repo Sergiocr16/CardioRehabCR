@@ -39,6 +39,6 @@
     "languages": ["es", "en"],
     "blueprints": [],
     "herokuAppName": "rehabicorcr",
-    "herokuDeployType": "git"
+    "herokuDeployType": "jar"
   }
 }
