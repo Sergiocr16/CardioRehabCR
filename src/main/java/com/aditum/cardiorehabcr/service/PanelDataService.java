@@ -55,6 +55,67 @@ public class PanelDataService {
         this.mayorEventService = mayorEventService;
     }
 
+
+    public List<MinorEventDTO> distributionMinorEventPerSessions(Long groupId, Long rehabilitationCenterId, Long minorEventId) {
+        Set<PatientDTO> patients = rehabilitationGroupService.findOne(groupId).get().getPatients();
+        List<MinorEventDTO> minorEventDTOS = new ArrayList<>();
+        for (int i = 0; i < 60; i++) {
+            MinorEventDTO minorEventDTO = new MinorEventDTO();
+            minorEventDTO.setCode(i + "");
+            minorEventDTO.setDescription(0 + "");
+            minorEventDTOS.add(minorEventDTO);
+        }
+        for (PatientDTO patient : patients) {
+            List<SessionDTO> patientSessions = this.sessionService.findAllByPatient(null, patient.getId()).getContent();
+            for (int i = 0; i < patientSessions.size(); i++) {
+                SessionDTO sessionDTO = patientSessions.get(i);
+                sessionDTO.setMinorEventsSessions(setIdCeroMinor(this.minorEventsSessionService.findAllBySessionId(null, sessionDTO.getId()).getContent()));
+                for (MinorEventsSessionDTO minorEventsSessionDTO : sessionDTO.getMinorEventsSessions()) {
+                    if (minorEventsSessionDTO.isExist()) {
+                        if (minorEventsSessionDTO.getMinorEventId() == minorEventId) {
+                            minorEventDTOS.get(i).setDescription((Integer.parseInt(minorEventDTOS.get(i).getDescription()) + 1) + "");
+//                            MinorEventsSessionDTO exist = this.existEventMinor(minorEvents, minorEventsSessionDTO);
+//                            if (exist != null) { // <- look for item!
+//                                minorEvents.add(minorEventsSessionDTO);
+//                            }
+                        }
+                    }
+                }
+            }
+        }
+        return minorEventDTOS;
+    }
+    public List<MayorEventDTO> distributionMayorEventPerSessions(Long groupId, Long rehabilitationCenterId, Long mayorEventId) {
+        Set<PatientDTO> patients = rehabilitationGroupService.findOne(groupId).get().getPatients();
+        List<MayorEventDTO> mayorEventDTOS = new ArrayList<>();
+        for (int i = 0; i < 60; i++) {
+            MayorEventDTO mayorEventDTO = new MayorEventDTO();
+            mayorEventDTO.setCode(i + "");
+            mayorEventDTO.setDescription(0 + "");
+            mayorEventDTOS.add(mayorEventDTO);
+        }
+        for (PatientDTO patient : patients) {
+            List<SessionDTO> patientSessions = this.sessionService.findAllByPatient(null, patient.getId()).getContent();
+            List<MayorEventsSessionDTO> mayorEvents = new ArrayList<>();
+            for (int i = 0; i < patientSessions.size(); i++) {
+                SessionDTO sessionDTO = patientSessions.get(i);
+                sessionDTO.setMayorEventsSessions(this.mayorEventsSessionService.findAllBySession(null, sessionDTO.getId()).getContent());
+                for (MayorEventsSessionDTO mayorEventsSessionDTO : sessionDTO.getMayorEventsSessions()) {
+                    if (mayorEventsSessionDTO.isExist()) {
+                        if (mayorEventsSessionDTO.getMayorEventId() == mayorEventId) {
+                            mayorEventDTOS.get(i).setDescription((Integer.parseInt(mayorEventDTOS.get(i).getDescription()) + 1) + "");
+//                            MinorEventsSessionDTO exist = this.existEventMinor(minorEvents, minorEventsSessionDTO);
+//                            if (exist != null) { // <- look for item!
+//                                minorEvents.add(minorEventsSessionDTO);
+//                            }
+                        }
+                    }
+                }
+            }
+        }
+        return mayorEventDTOS;
+    }
+
     public PanelDataDTO calculatePanelDataPerGroup(RehabilitationGroupDTO rehabilitationGroup) {
         PanelDataDTO panelDataDTO = new PanelDataDTO();
         Set<PatientDTO> patients = rehabilitationGroup.getPatients();
@@ -181,12 +242,12 @@ public class PanelDataService {
 
     private Integer weightReductionPercentage(PatientDTO patient, InitialAssessmentDTO initialAssessment, FinalAssessmentDTO finalAssessment) {
         if (patient.getRehabStatus() >= 2) {
-            double fivePercent = Double.parseDouble(initialAssessment.getWeight());
+            double fivePercent = Double.parseDouble(initialAssessment.getWeight()) * 0.05;
             double differenceWeight = Double.parseDouble(initialAssessment.getWeight()) - Double.parseDouble(finalAssessment.getWeight());
-            if(differenceWeight<0){
+            if (differenceWeight < 0) {
                 differenceWeight = differenceWeight + differenceWeight;
             }
-            if(differenceWeight>=fivePercent){
+            if (differenceWeight >= fivePercent) {
                 return 1;
             }
         }
@@ -238,7 +299,7 @@ public class PanelDataService {
             sesionDistributionDTO.setMayorEventsPerSesion(0);
             sesionDistributionDTO.setMinorEventsPerSesion(0);
             sesionDistributionDTO.setMinorEvents(this.toMinorSessionDTO(this.minorEventService.findAll(null, rehabilitationCenterId).getContent()));
-            sesionDistributionDTO.setMayorEvents(this.toMayorSessionDTO(this.mayorEventService.findAll(null,rehabilitationCenterId).getContent()));
+            sesionDistributionDTO.setMayorEvents(this.toMayorSessionDTO(this.mayorEventService.findAll(null, rehabilitationCenterId).getContent()));
             sesionDistribution.add(sesionDistributionDTO);
         }
         for (PatientDTO patient : patients) {
@@ -280,7 +341,7 @@ public class PanelDataService {
         List<MinorEventsSessionDTO> minorEventsSessionDTOS = new ArrayList<>();
         for (MinorEventDTO minorEventDTO : minorEvents) {
             MinorEventsSessionDTO minorEventsSessionDTO = new MinorEventsSessionDTO();
-            minorEventsSessionDTO.setId((long)0);
+            minorEventsSessionDTO.setId((long) 0);
             minorEventsSessionDTO.setDescription(minorEventDTO.getDescription());
             minorEventsSessionDTOS.add(minorEventsSessionDTO);
         }
@@ -291,7 +352,7 @@ public class PanelDataService {
         List<MayorEventsSessionDTO> mayorEventsSessionDTOS = new ArrayList<>();
         for (MayorEventDTO mayorEventDTO : mayorEvents) {
             MayorEventsSessionDTO mayorEventsSessionDTO = new MayorEventsSessionDTO();
-            mayorEventsSessionDTO.setId((long)0);
+            mayorEventsSessionDTO.setId((long) 0);
             mayorEventsSessionDTO.setDescription(mayorEventDTO.getDescription());
             mayorEventsSessionDTOS.add(mayorEventsSessionDTO);
         }
@@ -324,7 +385,7 @@ public class PanelDataService {
             }
         }
         for (MinorEventsSessionDTO minorEventsSessionGlobal : minorSessionListGlobal) {
-            if(minorEventsSessionGlobal.getId()>0){
+            if (minorEventsSessionGlobal.getId() > 0) {
                 minorSessionListGlobalFiltered.add(minorEventsSessionGlobal);
             }
         }
@@ -341,7 +402,7 @@ public class PanelDataService {
             }
         }
         for (MayorEventsSessionDTO minorEventsSessionGlobal : mayorSessionListGlobal) {
-            if(minorEventsSessionGlobal.getId()>0){
+            if (minorEventsSessionGlobal.getId() > 0) {
                 mayorSessionListGlobalFiltered.add(minorEventsSessionGlobal);
             }
         }

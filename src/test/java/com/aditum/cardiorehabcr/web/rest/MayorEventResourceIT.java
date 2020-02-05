@@ -4,6 +4,7 @@ import com.aditum.cardiorehabcr.CardioRehabCrApp;
 import com.aditum.cardiorehabcr.domain.MayorEvent;
 import com.aditum.cardiorehabcr.repository.MayorEventRepository;
 import com.aditum.cardiorehabcr.service.MayorEventService;
+import com.aditum.cardiorehabcr.service.PanelDataService;
 import com.aditum.cardiorehabcr.service.dto.MayorEventDTO;
 import com.aditum.cardiorehabcr.service.impl.MayorEventServiceImpl;
 import com.aditum.cardiorehabcr.service.mapper.MayorEventMapper;
@@ -56,6 +57,9 @@ public class MayorEventResourceIT {
     private MayorEventServiceImpl mayorEventService;
 
     @Autowired
+    private PanelDataService panelDataService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -77,7 +81,7 @@ public class MayorEventResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final MayorEventResource mayorEventResource = new MayorEventResource(mayorEventService);
+        final MayorEventResource mayorEventResource = new MayorEventResource(mayorEventService, panelDataService);
         this.restMayorEventMockMvc = MockMvcBuilders.standaloneSetup(mayorEventResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

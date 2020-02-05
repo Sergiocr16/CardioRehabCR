@@ -4,6 +4,7 @@ import com.aditum.cardiorehabcr.CardioRehabCrApp;
 import com.aditum.cardiorehabcr.domain.MinorEvent;
 import com.aditum.cardiorehabcr.repository.MinorEventRepository;
 import com.aditum.cardiorehabcr.service.MinorEventService;
+import com.aditum.cardiorehabcr.service.PanelDataService;
 import com.aditum.cardiorehabcr.service.dto.MinorEventDTO;
 import com.aditum.cardiorehabcr.service.impl.MinorEventServiceImpl;
 import com.aditum.cardiorehabcr.service.mapper.MinorEventMapper;
@@ -56,6 +57,9 @@ public class MinorEventResourceIT {
     private MinorEventServiceImpl minorEventService;
 
     @Autowired
+    private PanelDataService panelDataService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -77,7 +81,7 @@ public class MinorEventResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final MinorEventResource minorEventResource = new MinorEventResource(minorEventService);
+        final MinorEventResource minorEventResource = new MinorEventResource(minorEventService,panelDataService);
         this.restMinorEventMockMvc = MockMvcBuilders.standaloneSetup(minorEventResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
