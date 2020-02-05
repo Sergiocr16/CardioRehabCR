@@ -40,10 +40,41 @@
                     [colors]="lineChartColorsDistribution">
             </canvas>
         </div>
-
+        <div style="display: block;margin-top:20px">
+                     <span class="primary-color margin-left-20" style="font-size: 18px;font-weight:bold;">
+                                  Distribución de evento por sesiones</span>
+            <div style="margin-left: 20px;margin-top: 20px;" fxLayout="column">
+                <div>
+                    <label id="example-radio-group-label">Seleccione el tipo de evento</label>
+                </div>
+                <mat-radio-group  aria-labelledby="example-radio-group-label" [(ngModel)]="eventType" (ngModelChange)="selectEventType($event)">
+                    <mat-radio-button value="1">Evento mayor</mat-radio-button>
+                    <mat-radio-button value="2">Evento menor</mat-radio-button>
+                </mat-radio-group>
+                <mat-form-field >
+                    <mat-label>{{labelEventType}}</mat-label>
+                    <mat-select [(ngModel)]="eventPerSessionId" (ngModelChange)="showGraphEventPerSessions($event)">
+                        <mat-option
+                            *ngFor="let event of graphicEventsPerSessions;let i = index;"
+                            [value]="event.id">
+                            {{event.description}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <canvas baseChart height="100" *ngIf="displayEventsSessionsGraph"
+                    [datasets]="barChartDataEventsPerSessionDistribution"
+                    [labels]="barChartEventsPerSessionDistributionLabels"
+                    [options]="barChartOptionsEventsPerSessionDistribution"
+                    [legend]="barChartEventsPerSessionDistributionLegend"
+                    [chartType]="barChartEventsPerSessionDistributionType"
+                    [colors]="barChartEventsPerSessionDistributionColors">
+            </canvas>
+        </div>
         <div style="display: block;margin-top:20px" fxLayout="column">
-            <div style="display: block;">
-                <h4>Distribución de eventos por sesión</h4>
+              <span class="primary-color margin-left-20" style="font-size: 18px;font-weight:bold;">
+                                  Distribución de eventos por sesión</span>
+            <div style="display: block;" style="margin-left: 20px;margin-top: 20px;">
                 <mat-form-field>
                     <mat-label>Seleccionar sesión</mat-label>
                     <mat-select [(ngModel)]="selectedSesion" (ngModelChange)="selectSesion($event)">

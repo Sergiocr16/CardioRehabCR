@@ -42,11 +42,11 @@ export class FinalAssessmentUpdateComponent implements OnInit, OnDestroy {
     lDL: [],
     hDL: [],
     cardiovascularRisk: [],
-    isWorking: [],
-    deceased: [],
-    abandonment: [],
-    abandonmentMedicCause: [],
-    hospitalized: [],
+    isWorking: [false],
+    deceased: [false],
+    abandonment: [false],
+    abandonmentMedicCause: [false],
+    hospitalized: [false],
     deleted: [],
     patientId: []
   });
@@ -86,7 +86,11 @@ export class FinalAssessmentUpdateComponent implements OnInit, OnDestroy {
       });
     this.global.enteringForm();
   }
-
+  calculateIMC() {
+    this.editForm
+      .get('iMC')
+      .setValue(parseFloat(this.editForm.get('weight').value / Math.pow(this.editForm.get('size').value, 2) + '').toFixed(3));
+  }
   setInvalidForm(isSaving) {
     this.global.setFormStatus(isSaving);
   }

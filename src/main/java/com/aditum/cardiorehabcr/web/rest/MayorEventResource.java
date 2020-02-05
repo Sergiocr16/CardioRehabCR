@@ -1,6 +1,7 @@
 package com.aditum.cardiorehabcr.web.rest;
 
 import com.aditum.cardiorehabcr.service.MayorEventService;
+import com.aditum.cardiorehabcr.service.PanelDataService;
 import com.aditum.cardiorehabcr.service.impl.MayorEventServiceImpl;
 import com.aditum.cardiorehabcr.web.rest.errors.BadRequestAlertException;
 import com.aditum.cardiorehabcr.service.dto.MayorEventDTO;
@@ -41,9 +42,12 @@ public class MayorEventResource {
     private String applicationName;
 
     private final MayorEventServiceImpl mayorEventService;
+    private final PanelDataService panelDataService;
 
-    public MayorEventResource(MayorEventServiceImpl mayorEventService) {
+
+    public MayorEventResource(MayorEventServiceImpl mayorEventService, PanelDataService panelDataService) {
         this.mayorEventService = mayorEventService;
+        this.panelDataService = panelDataService;
     }
 
     /**
@@ -101,7 +105,13 @@ public class MayorEventResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
-
+    @GetMapping("/mayor-events/graph")
+    public ResponseEntity<List<MayorEventDTO>> getSessionsPerMayorEvent(Long groupId, Long rehabilitationId,Long mayorEventId) {
+        log.debug("REST request to get a page of MayorEvents");
+        List<MayorEventDTO> result = this.panelDataService.distributionMayorEventPerSessions(groupId,rehabilitationId,mayorEventId);
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), null);
+        return ResponseEntity.ok().headers(null).body(result);
+    }
     /**
      * {@code GET  /mayor-events/:id} : get the "id" mayorEvent.
      *
