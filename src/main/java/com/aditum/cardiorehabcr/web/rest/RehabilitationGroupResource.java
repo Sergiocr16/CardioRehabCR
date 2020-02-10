@@ -1,6 +1,8 @@
 package com.aditum.cardiorehabcr.web.rest;
 
+import com.aditum.cardiorehabcr.service.PanelDataService;
 import com.aditum.cardiorehabcr.service.RehabilitationGroupService;
+import com.aditum.cardiorehabcr.service.dto.GroupCharacteristicsDTO;
 import com.aditum.cardiorehabcr.service.impl.RehabilitationGroupServiceImpl;
 import com.aditum.cardiorehabcr.web.rest.errors.BadRequestAlertException;
 import com.aditum.cardiorehabcr.service.dto.RehabilitationGroupDTO;
@@ -41,6 +43,7 @@ public class RehabilitationGroupResource {
     private String applicationName;
 
     private final RehabilitationGroupServiceImpl rehabilitationGroupService;
+
 
     public RehabilitationGroupResource(RehabilitationGroupServiceImpl rehabilitationGroupService) {
         this.rehabilitationGroupService = rehabilitationGroupService;
@@ -118,6 +121,13 @@ public class RehabilitationGroupResource {
         log.debug("REST request to get RehabilitationGroup : {}", id);
         Optional<RehabilitationGroupDTO> rehabilitationGroupDTO = rehabilitationGroupService.findOne(id);
         return ResponseUtil.wrapOrNotFound(rehabilitationGroupDTO);
+    }
+
+    @GetMapping("/rehabilitation-groups/clinical-characteristics/{id}")
+    public GroupCharacteristicsDTO getRehabilitationGroupClinicalCharacteristics(@PathVariable Long id) {
+        log.debug("REST request to get RehabilitationGroup : {}", id);
+        GroupCharacteristicsDTO groupCharacteristicsDTO = rehabilitationGroupService.findCharacteristics(id);
+        return groupCharacteristicsDTO;
     }
 
     /**

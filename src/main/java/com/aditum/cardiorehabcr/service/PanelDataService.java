@@ -34,6 +34,14 @@ public class PanelDataService {
 
     private MayorEventService mayorEventService;
 
+    private IncomeDiagnosisService incomeDiagnosisService;
+
+    private ComorbiditieService comorbiditieService;
+
+    private IncomeDiagnosisPatientService incomeDiagnosisPatientService;
+
+    private ComorbiditiesPatientService comorbiditiesPatientService;
+
     public PanelDataService(PatientServiceImpl patientService,
                             RehabilitationGroupServiceImpl rehabilitationGroupService,
                             InitialAssessmentServiceImpl initialAssessmentService,
@@ -42,7 +50,11 @@ public class PanelDataService {
                             MinorEventsSessionService minorEventsSessionService,
                             MayorEventsSessionService mayorEventsSessionService,
                             MinorEventService minorEventService,
-                            MayorEventService mayorEventService
+                            MayorEventService mayorEventService,
+                            IncomeDiagnosisService incomeDiagnosisService,
+                            ComorbiditieService comorbiditieService,
+                            IncomeDiagnosisPatientService incomeDiagnosisPatientService,
+                            ComorbiditiesPatientService comorbiditiesPatientService
     ) {
         this.patientService = patientService;
         this.rehabilitationGroupService = rehabilitationGroupService;
@@ -53,6 +65,10 @@ public class PanelDataService {
         this.mayorEventsSessionService = mayorEventsSessionService;
         this.minorEventService = minorEventService;
         this.mayorEventService = mayorEventService;
+        this.comorbiditieService = comorbiditieService;
+        this.incomeDiagnosisService = incomeDiagnosisService;
+        this.incomeDiagnosisPatientService = incomeDiagnosisPatientService;
+        this.comorbiditiesPatientService = comorbiditiesPatientService;
     }
 
 
@@ -85,6 +101,7 @@ public class PanelDataService {
         }
         return minorEventDTOS;
     }
+
     public List<MayorEventDTO> distributionMayorEventPerSessions(Long groupId, Long rehabilitationCenterId, Long mayorEventId) {
         Set<PatientDTO> patients = rehabilitationGroupService.findOne(groupId).get().getPatients();
         List<MayorEventDTO> mayorEventDTOS = new ArrayList<>();
@@ -104,10 +121,6 @@ public class PanelDataService {
                     if (mayorEventsSessionDTO.isExist()) {
                         if (mayorEventsSessionDTO.getMayorEventId() == mayorEventId) {
                             mayorEventDTOS.get(i).setDescription((Integer.parseInt(mayorEventDTOS.get(i).getDescription()) + 1) + "");
-//                            MinorEventsSessionDTO exist = this.existEventMinor(minorEvents, minorEventsSessionDTO);
-//                            if (exist != null) { // <- look for item!
-//                                minorEvents.add(minorEventsSessionDTO);
-//                            }
                         }
                     }
                 }
@@ -452,9 +465,165 @@ public class PanelDataService {
 
     private List<SesionDistributionDTO> distributionMayorEvents() {
         List<SesionDistributionDTO> sesionDistribution = new ArrayList<>();
-
         return sesionDistribution;
-
     }
 
+
+    public GroupCharacteristicsDTO groupCharacteristics(RehabilitationGroupDTO rehabilitationGroup) {
+        GroupCharacteristicsDTO groupCharacteristics = new GroupCharacteristicsDTO();
+
+        List<IncomeDiagnosisDTO> incomeDiagnosisList = this.incomeDiagnosisService.findAllNoPage(rehabilitationGroup.getId());
+        for (int i = 0; i < incomeDiagnosisList.size(); i++) {
+            IncomeDiagnosisDTO incomeDiagnosisDTO = incomeDiagnosisList.get(i);
+            incomeDiagnosisDTO.setRehabilitationCenterId(Long.parseLong(0 + ""));
+            groupCharacteristics.getIncomeDiagnosisDistribution().add(incomeDiagnosisDTO);
+        }
+
+        List<ComorbiditieDTO> comorbiditieList = this.comorbiditieService.findAllNoPage(rehabilitationGroup.getId());
+        for (int i = 0; i < comorbiditieList.size(); i++) {
+            ComorbiditieDTO comorbiditieDTO = comorbiditieList.get(i);
+            comorbiditieDTO.setRehabilitationCenterId(Long.parseLong(0 + ""));
+            groupCharacteristics.getComorbiditieDistribution().add(comorbiditieDTO);
+        }
+
+        Set<PatientDTO> patients = rehabilitationGroup.getPatients();
+        int ageTotal = 0;
+        int lastEventOcurredTotal = 0;
+        int tabaquismTotal = 0;
+        double hbiacTotal = 0;
+        double functionalCapacityTotal = 0;
+
+        for (PatientDTO patient : patients) {
+            InitialAssessmentDTO initialAssessment = this.initialAssessmentService.findOneByPatient(patient.getId()).get();
+            distributionGenderPatient(patient, groupCharacteristics);
+            distributionScholarity(patient, groupCharacteristics);
+            distributionCardiovascularRisk(initialAssessment, groupCharacteristics);
+            distributionIMC(initialAssessment, groupCharacteristics);
+            distributionIncomeDiagnosisPatient(initialAssessment, incomeDiagnosisList, groupCharacteristics);
+            distributionComorbiditiesPatient(initialAssessment, comorbiditieList, groupCharacteristics);
+//            totals
+            ageTotal += patient.getAge();
+            lastEventOcurredTotal += patient.getLastEventOcurred();
+            tabaquismTotal += initialAssessment.getSmoking().equals("Activo") ? 1 : 0;
+            hbiacTotal += Double.parseDouble(initialAssessment.getHbiac());
+            functionalCapacityTotal += Double.parseDouble(initialAssessment.getBaselineFunctionalCapacity());
+        }
+
+        groupCharacteristics.setAverageAge(ageTotal / patients.size());
+        groupCharacteristics.setAverageLastEvent(lastEventOcurredTotal / patients.size());
+        groupCharacteristics.setTabaquismPercentaje((tabaquismTotal * 100) / patients.size());
+        groupCharacteristics.setAverageHb1Ac(hbiacTotal / patients.size());
+        groupCharacteristics.setAverageFunctionalCapacity(functionalCapacityTotal / patients.size());
+
+        groupCharacteristics.setRehabilitationGroupDTO(rehabilitationGroup);
+        return groupCharacteristics;
+    }
+
+    private void distributionGenderPatient(PatientDTO patientDTO, GroupCharacteristicsDTO groupCharacteristics) {
+        if (patientDTO.getSex().equals("Masculino")) {
+            groupCharacteristics.increaseSex(0);
+        } else {
+            groupCharacteristics.increaseSex(1);
+        }
+    }
+
+    private void distributionIncomeDiagnosisPatient(InitialAssessmentDTO initialAssessmentDTO, List<IncomeDiagnosisDTO> incomeDiagnosisList, GroupCharacteristicsDTO groupCharacteristics) {
+        List<IncomeDiagnosisPatientDTO> incomeDiagnosisPatientDTOS = this.incomeDiagnosisPatientService.findAllByInitialAsessment(initialAssessmentDTO.getId());
+        for (IncomeDiagnosisDTO incomeDiagnosis : incomeDiagnosisList) {
+            for (IncomeDiagnosisPatientDTO incomeDiagnosisPatient : incomeDiagnosisPatientDTOS) {
+                if (incomeDiagnosis.getId() == incomeDiagnosisPatient.getIncomeDiagnosisId()) {
+                    if (incomeDiagnosisPatient.isExist()) {
+                        incomeDiagnosis.setRehabilitationCenterId(incomeDiagnosis.getRehabilitationCenterId() + 1);
+                    }
+                }
+            }
+        }
+    }
+
+    private void distributionComorbiditiesPatient(InitialAssessmentDTO initialAssessmentDTO, List<ComorbiditieDTO> comorbiditieDTOList, GroupCharacteristicsDTO groupCharacteristics) {
+        List<ComorbiditiesPatientDTO> comorbiditiesPatientDTOS = this.comorbiditiesPatientService.findAllByInitialAsessment(initialAssessmentDTO.getId());
+        for (ComorbiditieDTO comorbiditieDTO : comorbiditieDTOList) {
+            for (ComorbiditiesPatientDTO comorbiditiesPatientDTO : comorbiditiesPatientDTOS) {
+                if (comorbiditieDTO.getId() == comorbiditiesPatientDTO.getComorbiditietId()) {
+                    if (comorbiditiesPatientDTO.isExist()) {
+                        comorbiditieDTO.setRehabilitationCenterId(comorbiditieDTO.getRehabilitationCenterId() + 1);
+                    }
+                }
+            }
+        }
+    }
+
+
+    private void distributionScholarity(PatientDTO patientDTO, GroupCharacteristicsDTO groupCharacteristics) {
+//            '0 - Ninguna',
+//            '1 - Primaria Incompleta',
+//            '2 - Primaria completa',
+//            '3 - Secundaria Incompleta',
+//            '4 - Secundaria completa',
+//            '5 - Universitaria Incompleta',
+//            '6 - Universitaria completa',
+//            '7 - Parauniversitaria'
+        switch (patientDTO.getScholarship()) {
+            case "Ninguna":
+                groupCharacteristics.increaseScholarity(0);
+                break;
+            case "Primaria Incompleta":
+                groupCharacteristics.increaseScholarity(1);
+                break;
+            case "Primaria completa":
+                groupCharacteristics.increaseScholarity(2);
+                break;
+            case "Secundaria Incompleta":
+                groupCharacteristics.increaseScholarity(3);
+                break;
+            case "Secundaria completa":
+                groupCharacteristics.increaseScholarity(4);
+                break;
+            case "Universitaria Incompleta":
+                groupCharacteristics.increaseScholarity(5);
+                break;
+            case "Universitaria completa":
+                groupCharacteristics.increaseScholarity(6);
+                break;
+            case "Parauniversitaria":
+                groupCharacteristics.increaseScholarity(7);
+                break;
+        }
+    }
+
+    private void distributionCardiovascularRisk(InitialAssessmentDTO initialAssessment, GroupCharacteristicsDTO groupCharacteristics) {
+//        '0 - Alto', '1 - Moderado', '2 - Bajo'
+        switch (initialAssessment.getCardiovascularRisk()) {
+            case "Alto":
+                groupCharacteristics.increaseCardiovascularRisk(0);
+                break;
+            case "Moderado":
+                groupCharacteristics.increaseCardiovascularRisk(1);
+                break;
+            case "Bajo":
+                groupCharacteristics.increaseCardiovascularRisk(2);
+                break;
+        }
+    }
+
+    private void distributionIMC(InitialAssessmentDTO initialAssessment, GroupCharacteristicsDTO groupCharacteristics) {
+//     -Promedio de IMC  en rangos de [0](-19)delgadez  [1](20-25)normal  [2](26-30)sobrepeso [3](30 o mas) obesidad
+
+        double imc = Double.parseDouble(initialAssessment.getiMC());
+        if (imc <= 19) {
+            groupCharacteristics.increaseIMC(0);
+        }
+        if (imc >= 20 && imc <= 25) {
+            groupCharacteristics.increaseIMC(1);
+
+        }
+        if (imc >= 26 && imc <= 30) {
+            groupCharacteristics.increaseIMC(2);
+
+        }
+        if (imc >= 30) {
+            groupCharacteristics.increaseIMC(3);
+
+        }
+    }
 }

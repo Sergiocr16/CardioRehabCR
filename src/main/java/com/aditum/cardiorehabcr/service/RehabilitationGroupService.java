@@ -1,5 +1,6 @@
 package com.aditum.cardiorehabcr.service;
 
+import com.aditum.cardiorehabcr.service.dto.GroupCharacteristicsDTO;
 import com.aditum.cardiorehabcr.service.dto.RehabilitationGroupDTO;
 
 import org.springframework.data.domain.Page;
@@ -42,6 +43,9 @@ public interface RehabilitationGroupService {
      * @return the entity.
      */
     Optional<RehabilitationGroupDTO> findOne(Long id);
+
+
+    GroupCharacteristicsDTO findCharacteristics(Long id);
 
     /**
      * Delete the "id" rehabilitationGroup.

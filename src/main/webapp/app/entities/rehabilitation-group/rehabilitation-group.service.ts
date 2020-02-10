@@ -39,6 +39,18 @@ export class RehabilitationGroupService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  findClinicalCharasteristics(id: number): Observable<EntityResponseType> {
+    return this.http
+      .get<{}>(`${this.resourceUrl}/clinical-characteristics/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  findCharacteristics(id: number): Observable<EntityResponseType> {
+    return this.http
+      .get<{}>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http

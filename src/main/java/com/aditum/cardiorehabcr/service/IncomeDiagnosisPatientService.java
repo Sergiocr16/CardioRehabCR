@@ -5,6 +5,7 @@ import com.aditum.cardiorehabcr.service.dto.IncomeDiagnosisPatientDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -28,7 +29,7 @@ public interface IncomeDiagnosisPatientService {
      */
     Page<IncomeDiagnosisPatientDTO> findAll(Pageable pageable);
 
-
+    List<IncomeDiagnosisPatientDTO> findAllByInitialAsessment(Long initialAsessmentId);
     /**
      * Get the "id" incomeDiagnosisPatient.
      *

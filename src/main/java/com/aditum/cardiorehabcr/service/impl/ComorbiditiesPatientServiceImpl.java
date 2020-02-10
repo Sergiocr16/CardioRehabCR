@@ -73,7 +73,7 @@ public class ComorbiditiesPatientServiceImpl implements ComorbiditiesPatientServ
         return comorbiditiesPatientRepository.findAll(pageable)
             .map(comorbiditiesPatientMapper::toDto);
     }
-
+    @Override
     @Transactional(readOnly = true)
     public List<ComorbiditiesPatientDTO> findAllByInitialAsessment(Long initialAsessmentId) {
         log.debug("Request to get all ComorbiditiesPatients");

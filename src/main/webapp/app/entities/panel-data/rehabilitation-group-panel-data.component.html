@@ -16,8 +16,14 @@
                     </mat-card-subtitle>
                 </mat-card-title>
                 <div fxLayoutAlign="center center">
+                    <button [routerLink]="['/rehabilitation-group', rehabilitationGroup.id, 'clinical-characteristics' ]" mat-flat-button color="primary"><mat-icon>donut_small</mat-icon> Características clínicas</button>
+                </div>
+                <div fxLayoutAlign="center center">
                     <button [routerLink]="['/panel-data', rehabilitationGroup.id , 'view' ]" mat-flat-button color="accent"><mat-icon>assessment</mat-icon> Ver panel de datos</button>
                 </div>
+
+
+
             </mat-card-header>
         </mat-card>
     </div>

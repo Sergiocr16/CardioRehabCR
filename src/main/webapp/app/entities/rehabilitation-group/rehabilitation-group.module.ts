@@ -13,6 +13,7 @@ import {
 } from './rehabilitation-group-delete-dialog.component';
 import { rehabilitationGroupRoute, rehabilitationGroupPopupRoute } from './rehabilitation-group.route';
 import { RehabilitationGroupPanelComponent } from 'app/entities/rehabilitation-group/rehabilitation-group-panel.component';
+import { RehabilitationGroupClinicalCharacteristicsComponent } from 'app/entities/rehabilitation-group/rehabilitation-group-clinical-characteristics.component';
 
 const ENTITY_STATES = [...rehabilitationGroupRoute, ...rehabilitationGroupPopupRoute];
 
@@ -24,7 +25,8 @@ const ENTITY_STATES = [...rehabilitationGroupRoute, ...rehabilitationGroupPopupR
     RehabilitationGroupUpdateComponent,
     RehabilitationGroupDeleteDialogComponent,
     RehabilitationGroupDeletePopupComponent,
-    RehabilitationGroupPanelComponent
+    RehabilitationGroupPanelComponent,
+    RehabilitationGroupClinicalCharacteristicsComponent
   ],
   entryComponents: [RehabilitationGroupDeleteDialogComponent]
 })

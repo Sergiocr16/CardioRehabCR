@@ -82,6 +82,8 @@ public class IncomeDiagnosisPatientServiceImpl implements IncomeDiagnosisPatient
         return incomeDiagnosisPatientRepository.findById(id)
             .map(incomeDiagnosisPatientMapper::toDto);
     }
+
+    @Override
     @Transactional(readOnly = true)
     public List<IncomeDiagnosisPatientDTO> findAllByInitialAsessment(Long initialAsessmentId) {
         log.debug("Request to get all ComorbiditiesPatients");

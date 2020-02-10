@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -61,7 +63,18 @@ public class ComorbiditieServiceImpl implements ComorbiditieService {
             .map(comorbiditieMapper::toDto);
     }
 
-
+    @Override
+    @Transactional(readOnly = true)
+    public List<ComorbiditieDTO> findAllNoPage(Long rehabilitationId) {
+        log.debug("Request to get all IncomeDiagnoses");
+        List<ComorbiditieDTO> comorbiditieDTOS = new ArrayList<>();
+        comorbiditieRepository.findByRehabilitationCenterIdAndAndDeleted(rehabilitationId, false).forEach(
+            incomeDiagnosis -> {
+                comorbiditieDTOS.add(this.comorbiditieMapper.toDto(incomeDiagnosis));
+            }
+        );
+        return comorbiditieDTOS;
+    }
     /**
      * Get one comorbiditie by id.
      *

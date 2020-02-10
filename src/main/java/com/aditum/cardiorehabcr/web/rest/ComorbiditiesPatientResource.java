@@ -40,9 +40,9 @@ public class ComorbiditiesPatientResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ComorbiditiesPatientServiceImpl comorbiditiesPatientService;
+    private final ComorbiditiesPatientService comorbiditiesPatientService;
 
-    public ComorbiditiesPatientResource(ComorbiditiesPatientServiceImpl comorbiditiesPatientService) {
+    public ComorbiditiesPatientResource(ComorbiditiesPatientService comorbiditiesPatientService) {
         this.comorbiditiesPatientService = comorbiditiesPatientService;
     }
 

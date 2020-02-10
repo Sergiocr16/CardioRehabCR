@@ -136,6 +136,11 @@
                                     <mat-icon>assessment</mat-icon>
                                     <span>Consultar panel de datos</span>
                                 </button>
+                                <button mat-menu-item
+                                        [routerLink]="['/rehabilitation-group', rehabilitationGroup.id, 'clinical-characteristics' ]">
+                                    <mat-icon>donut_small</mat-icon>
+                                    <span>Características del grupo</span>
+                                </button>
                             </mat-menu>
                         </div>
                     </td>

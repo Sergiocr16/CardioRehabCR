@@ -4,6 +4,7 @@ import com.aditum.cardiorehabcr.service.PanelDataService;
 import com.aditum.cardiorehabcr.service.RehabilitationGroupService;
 import com.aditum.cardiorehabcr.domain.RehabilitationGroup;
 import com.aditum.cardiorehabcr.repository.RehabilitationGroupRepository;
+import com.aditum.cardiorehabcr.service.dto.GroupCharacteristicsDTO;
 import com.aditum.cardiorehabcr.service.dto.RehabilitationGroupDTO;
 import com.aditum.cardiorehabcr.service.mapper.RehabilitationGroupMapper;
 import org.slf4j.Logger;
@@ -92,6 +93,17 @@ public class RehabilitationGroupServiceImpl implements RehabilitationGroupServic
                 rehabilitationGroupDTO.setPanelData(this.panelDataService.calculatePanelDataPerGroup(rehabilitationGroupDTO));
                 return  rehabilitationGroupDTO;
             });
+    }
+
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public GroupCharacteristicsDTO findCharacteristics(Long id) {
+        log.debug("Request to get RehabilitationGroup : {}", id);
+        Optional<RehabilitationGroup> rehabilitationGroup = rehabilitationGroupRepository.findOneWithEagerRelationships(id);
+        RehabilitationGroupDTO rehabilitationGroupDTO =rehabilitationGroupMapper.toDto(rehabilitationGroup.get());
+        return this.panelDataService.groupCharacteristics(rehabilitationGroupDTO);
     }
 
     /**

@@ -12,6 +12,7 @@ import { RehabilitationGroupUpdateComponent } from './rehabilitation-group-updat
 import { RehabilitationGroupDeletePopupComponent } from './rehabilitation-group-delete-dialog.component';
 import { IRehabilitationGroup } from 'app/shared/model/rehabilitation-group.model';
 import { RehabilitationGroupPanelComponent } from 'app/entities/rehabilitation-group/rehabilitation-group-panel.component';
+import { RehabilitationGroupClinicalCharacteristicsComponent } from 'app/entities/rehabilitation-group/rehabilitation-group-clinical-characteristics.component';
 
 @Injectable({ providedIn: 'root' })
 export class RehabilitationGroupResolve implements Resolve<IRehabilitationGroup> {
@@ -59,6 +60,18 @@ export const rehabilitationGroupRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_USER', 'ROLE_MANAGER'],
+      pageTitle: 'cardioRehabCrApp.rehabilitationGroup.home.title'
+    },
+    canActivate: [UserRouteAccessService]
+  },
+  {
+    path: ':id/clinical-characteristics',
+    component: RehabilitationGroupClinicalCharacteristicsComponent,
+    resolve: {
+      rehabilitationGroup: RehabilitationGroupResolve
+    },
+    data: {
+      authorities: ['ROLE_USER', 'ROLE_MANAGER', 'ROLE_CONSULTANT'],
       pageTitle: 'cardioRehabCrApp.rehabilitationGroup.home.title'
     },
     canActivate: [UserRouteAccessService]

@@ -5,6 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 /**
  * Spring Data  repository for the IncomeDiagnosis entity.
@@ -16,5 +18,5 @@ public interface IncomeDiagnosisRepository extends JpaRepository<IncomeDiagnosis
 
     Page<IncomeDiagnosis> findByRehabilitationCenterIdAndAndDeleted(Pageable pageable, Long rehabilitationId, boolean deleted);
 
-
+    List<IncomeDiagnosis> findByRehabilitationCenterIdAndAndDeleted(Long rehabilitationId, boolean deleted);
 }

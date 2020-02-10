@@ -40,9 +40,9 @@ public class IncomeDiagnosisPatientResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final IncomeDiagnosisPatientServiceImpl incomeDiagnosisPatientService;
+    private final IncomeDiagnosisPatientService incomeDiagnosisPatientService;
 
-    public IncomeDiagnosisPatientResource(IncomeDiagnosisPatientServiceImpl incomeDiagnosisPatientService) {
+    public IncomeDiagnosisPatientResource(IncomeDiagnosisPatientService incomeDiagnosisPatientService) {
         this.incomeDiagnosisPatientService = incomeDiagnosisPatientService;
     }
 
